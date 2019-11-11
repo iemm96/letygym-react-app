@@ -68,16 +68,19 @@ export default class AdminIndex extends React.Component{
                             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <a className="nav-link active" href="#">Anuncios</a>
+                                        <a className="nav-link active" href="#">Socios y Visitantes</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Finanzas</a>
+                                        <a className="nav-link" href="#">Ventas</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Eventos</a>
+                                        <a className="nav-link" href="#">Asistencia de Socios</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Áreas Comunes</a>
+                                        <a className="nav-link" href="#">Catálogo de Productos</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="#">Membresías</a>
                                     </li>
                                 </ul>
                             </div>

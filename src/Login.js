@@ -49,7 +49,7 @@ export default class Login extends React.Component{
                     <div id="cardLogin" className="login card card-nav-tabs animate fadeInUp one">
                         <div className="card-body">
                             <form id="formLogin" className="center" onSubmit={this.submitForm}>
-                                <h3>Bienvenid@</h3>
+                                <h3>Bienvenid@ a LetyGym</h3>
                                 <div className="form-group">
                                     <input id="inputEmail" type="text" className="input-form" name="username"
                                            aria-describedby="emailHelp" placeholder="Nombre de Usuario"
