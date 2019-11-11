@@ -59,7 +59,7 @@ export default class AdminIndex extends React.Component{
                     <nav className="header-dashboard navbar navbar-expand-lg navbar-light top-navbar  animate fadeInDown one" data-toggle="sticky-onscroll">
                         <div className="container">
 
-                            <a className="navbar-brand" href="#">CondoSpace</a>
+                            <a className="navbar-brand" href="#">LetyGym</a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse"
                                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
