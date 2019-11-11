@@ -71,7 +71,7 @@ export default class AdminIndex extends React.Component{
                                         <a className="nav-link active" href="#">Socios y Visitantes</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Ventas</a>
+                                        <a className="nav-link" href="#">Venta de Productos</a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#">Asistencia de Socios</a>

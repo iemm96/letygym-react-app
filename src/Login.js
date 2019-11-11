@@ -17,32 +17,6 @@ export default class Login extends React.Component{
     }
 
 
-    /*
-    render() {
-        return (
-            <div className="center">
-            <div className="container-fluid h-100">
-                <div className="row justify-content-center align-items-center h-100">
-                    <div className="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <form action="">
-                            <div className="form-group">
-                                <input _ngcontent-c0="" className="form-control form-control-lg"
-                                       placeholder="User email" type="text"/>
-                            </div>
-                            <div className="form-group">
-                                <input className="form-control form-control-lg" placeholder="Password" type="password"/>
-                            </div>
-                            <div className="form-group">
-                                <button className="btn btn-info btn-lg btn-block">Sign In</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            </div>
-        );
-    }*/
-
     render() {
         return (
             <div className="row justify-content-center h-100">
