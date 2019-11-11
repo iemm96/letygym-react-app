@@ -148,13 +148,14 @@ header .container {
     border-radius: 15px;
   }
 }
+
 .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
   color: white !important;
   background: rgba(255,255,255,0.2);
   border-radius: 20px;
 }
 
-.navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover
+.navbar-light .navbar-brand, .navbar-light .navbar-brand:hover
 {
   color: white !important;
 }
