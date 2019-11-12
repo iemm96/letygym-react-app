@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import {NavItem, NavLink, TabContent, TabPane, UncontrolledDropdown} from "reactstrap";
+import Header from "../common/Header";
+import {useParams} from 'react-router-dom';
+import DropdownToggle from "reactstrap/es/DropdownToggle";
 import DropdownMenu from "reactstrap/es/DropdownMenu";
 import DropdownItem from "reactstrap/es/DropdownItem";
-import DropdownToggle from "reactstrap/es/DropdownToggle";
-import Dropdown from "reactstrap/es/Dropdown";
-
-export default class AdminIndex extends React.Component{
+export default class Dashboard extends React.Component{
 
     constructor(props) {
         super(props);
+
         this.state = {
             setActiveTab: 1,
-            activeTab: 1,
+            activeTab: 0,
             dropDownValue: 'Select action',
             dropdownOpen: false
         }
@@ -22,6 +23,8 @@ export default class AdminIndex extends React.Component{
         let self = this;
         var elements = document.querySelectorAll('[data-toggle="sticky-onscroll"]');
         // Find all data-toggle="sticky-onscroll" elements
+
+        const url = this.props.match.path;
 
 
         [].forEach.call(elements, function(element) {
@@ -50,16 +53,23 @@ export default class AdminIndex extends React.Component{
         this.setState({dropDownValue: e.currentTarget.textContent})
     }
 
+    toggle(tab) {
+        console.log(tab);
+        if(this.state.activeTab !== tab) {
+            this.setState({activeTab:tab})
+        }
+    }
+
     render() {
 
-
         return (
+
             <div className="mt-3">
                 <header className="">
                     <nav className="header-dashboard navbar navbar-expand-lg navbar-light top-navbar  animate fadeInDown one" data-toggle="sticky-onscroll">
                         <div className="container">
 
-                            <a className="navbar-brand" href="#">LetyGym</a>
+                            <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
                             <button className="navbar-toggler" type="button" data-toggle="collapse"
                                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -68,19 +78,19 @@ export default class AdminIndex extends React.Component{
                             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <a className="nav-link active" href="#">Socios y Visitantes</a>
+                                        <NavLink className="nav-link" onClick={() => {this.toggle(1)}}>Socios y Visitantes</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Venta de Productos</a>
+                                        <NavLink className="nav-link" onClick={() => {this.toggle(2)}} >Venta de Productos</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Asistencia de Socios</a>
+                                        <NavLink className="nav-link" onClick={() => {this.toggle(3)}}>Asistencia de Socios</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Catálogo de Productos</a>
+                                        <NavLink className="nav-link"  onClick={() => {this.toggle(4)}}>Catálogo de Productos</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#">Membresías</a>
+                                        <NavLink className="nav-link"   onClick={() => {this.toggle(5)}}>Membresías</NavLink>
                                     </li>
                                 </ul>
                             </div>
@@ -104,16 +114,16 @@ export default class AdminIndex extends React.Component{
                 </header>
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
-                        <TabPane tabId="1">
+                        <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
                             <p>1</p>
                         </TabPane>
-                        <TabPane tabId="2">
+                        <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
                             <p>2</p>
                         </TabPane>
-                        <TabPane tabId="3">
+                        <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="3">
                             <p>3</p>
                         </TabPane>
-                        <TabPane tabId="4">
+                        <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="4">
                             <p>4</p>
                         </TabPane>
                     </TabContent>
