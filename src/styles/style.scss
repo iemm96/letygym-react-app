@@ -287,30 +287,97 @@ div.login {
   }
 
   button[type="submit"] {
-    background: none;
     display: block;
+    background: linear-gradient(40deg,#008dd5,#531cb3);
+    border: none;
     margin: 20px auto;
     text-align: center;
-    border: 2px solid $greenColor;
     padding: 14px 10px;
-    width: 120px;
     outline: none;
     border-radius: 50px;
     transition: 0.25s;
     color: white;
 
+    width: 120px;
     &:hover {
-      background: $greenColor;
+      background: linear-gradient(120deg,#008dd5,#531cb3);
+      box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.25);
+
       display: block;
       margin: 20px auto;
       text-align: center;
-      border: 2px solid $greenColor;
       padding: 14px 10px;
-      width: 140px;
       outline: none;
       border-radius: 50px;
       color: white;
+      transition: 0.25s;
+
     }
+  }
+}
+
+.list-group-item {
+  color: #3c4858;
+}
+
+.actionButton{
+  background: linear-gradient(40deg,#008dd5,#531cb3);
+  border-radius: 60px !important;
+  outline: none;
+  transition: 0.25s;
+
+  &:hover {
+    background: linear-gradient(120deg,#008dd5,#531cb3);
+    box-shadow: 4px 4px 2px -1px rgba(0,0,0,0.25);
+    text-align: center;
+    outline: none;
+    border-radius: 60px;
+    color: white;
+    transition: 0.25s;
+  }
+}
+
+.addButton {
+  border-radius: 50px;
+  border: 2px solid $greenColor;
+  color: $darkGrayColor;
+  background: none;
+  width: 130px;
+  outline: none;
+  transition: 0.25s;
+
+  &:hover {
+    background: $greenColor;
+    text-align: center;
+    outline: none;
+    border-radius: 60px;
+    color: white;
+  }
+}
+
+.neutralButton{
+  color: black;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid $greenColor;
+  padding: 14px 10px;
+  width: 80px;
+  outline: none;
+  border-radius: 50px;
+  transition: 0.25s;
+
+  &:hover {
+    background: $greenColor;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid $greenColor;
+    padding: 14px 10px;
+    outline: none;
+    border-radius: 50px;
+    color: white;
   }
 }
 

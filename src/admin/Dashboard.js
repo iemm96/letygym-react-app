@@ -1,10 +1,23 @@
 import React, {useState} from 'react';
-import {NavItem, NavLink, TabContent, TabPane, UncontrolledDropdown} from "reactstrap";
-import Header from "../common/Header";
-import {useParams} from 'react-router-dom';
+import {Row, Col, Button, NavLink, TabContent, TabPane, UncontrolledDropdown} from "reactstrap";
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory, { PaginationProvider, PaginationListStandalone } from 'react-bootstrap-table2-paginator';
+
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import DropdownToggle from "reactstrap/es/DropdownToggle";
 import DropdownMenu from "reactstrap/es/DropdownMenu";
 import DropdownItem from "reactstrap/es/DropdownItem";
+import NuevoSocio from "./modals/NuevoSocio";
+import ActionsFormatter from "./actions/ActionsFormatter";
+import SociosTable from "./tables/SociosTable";
+import VistantesTable from "./tables/VisitantesTable";
+import VentasTable from "./tables/VentasTable";
+import ProductosTable from "./tables/ProductosTable";
+
+const { SearchBar } = Search;
+
+
+
 export default class Dashboard extends React.Component{
 
     constructor(props) {
@@ -12,13 +25,44 @@ export default class Dashboard extends React.Component{
 
         this.state = {
             setActiveTab: 1,
-            activeTab: 0,
+            activeTab: 1,
             dropDownValue: 'Select action',
             dropdownOpen: false
         }
     }
 
+    toggleModal = ( modal ) => {
+
+        switch (modal) {
+            case 1: {
+                this.state.modalAnuncio ? this.setState({modalAnuncio: false}) : this.setState({modalAnuncio: true});
+
+                break;
+            }
+            case 2:{
+                this.state.modalEvento ? this.setState({modalEvento: false}) : this.setState({modalEvento: true});
+                break;
+            }
+            case 3: {
+
+                break;
+            }
+            case 4: {
+
+                break;
+            }
+
+            default: {
+
+            }
+        }
+    };
+
     componentDidMount() {
+
+        //var searchInput = document.getElementById('search-bar-0');
+
+        //searchInput.placeholder = 'Buscar';
 
         let self = this;
         var elements = document.querySelectorAll('[data-toggle="sticky-onscroll"]');
@@ -48,8 +92,7 @@ export default class Dashboard extends React.Component{
 
     }
 
-    changeValue(e)
-    {
+    changeValue(e) {
         this.setState({dropDownValue: e.currentTarget.textContent})
     }
 
@@ -59,6 +102,7 @@ export default class Dashboard extends React.Component{
             this.setState({activeTab:tab})
         }
     }
+
 
     render() {
 
@@ -78,19 +122,13 @@ export default class Dashboard extends React.Component{
                             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" onClick={() => {this.toggle(1)}}>Socios y Visitantes</NavLink>
+                                        <NavLink className="nav-link" href="#" onClick={() => {this.toggle(1)}} className={this.state.activeTab === 1 ? 'active' : ''}>Socios y Visitantes</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" onClick={() => {this.toggle(2)}} >Venta de Productos</NavLink>
+                                        <NavLink className="nav-link" href="#" onClick={() => {this.toggle(2)}} className={this.state.activeTab === 2 ? 'active' : ''}>Venta de Productos</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" onClick={() => {this.toggle(3)}}>Asistencia de Socios</NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link"  onClick={() => {this.toggle(4)}}>Catálogo de Productos</NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link"   onClick={() => {this.toggle(5)}}>Membresías</NavLink>
+                                        <NavLink className="nav-link" href="#"  onClick={() => {this.toggle(3)}} className={this.state.activeTab === 3 ? 'active' : ''}>Catálogo de Productos</NavLink>
                                     </li>
                                 </ul>
                             </div>
@@ -115,16 +153,61 @@ export default class Dashboard extends React.Component{
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <p>1</p>
+                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <Row className="p-5 justify-content-end">
+                            <Col className="col-3">
+                                <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Socio</Button>
+                            </Col>
+                        </Row>
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <SociosTable/>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row className="p-5 justify-content-end">
+                                <Col className="col-3">
+                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Visitante</Button>
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <VistantesTable/>
+                                    </div>
+                                </Col>
+                            </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
-                            <p>2</p>
+                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <Row className="p-5 justify-content-end">
+                                <Col className="col-3">
+                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Registrar Venta</Button>
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <VentasTable/>
+                                    </div>
+                                </Col>
+                            </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="3">
-                            <p>3</p>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="4">
-                            <p>4</p>
+                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <Row className="p-5 justify-content-end">
+                                <Col className="col-3">
+                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Producto</Button>
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <ProductosTable/>
+                                    </div>
+                                </Col>
+                            </Row>
                         </TabPane>
                     </TabContent>
                 </div>
