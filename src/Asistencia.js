@@ -62,7 +62,6 @@ export default class Asistencia extends React.Component{
 
     };
 
-
     toggleModal = () => (this.state.modalMembresia ? this.setState({modalMembresia: false}) : this.setState({modalMembresia: true}));
 
     handleMouseHover = () => (this.setState(this.toogleHoverState));

@@ -13,10 +13,13 @@ import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
 import VentasTable from "./tables/VentasTable";
 import ProductosTable from "./tables/ProductosTable";
+import RenovarMembresia from "./modals/RenovarMembresia";
+import MembresiasTable from "./tables/MembresiasTable";
+import NuevoVisitante from "./modals/NuevoVisitante";
+import RegistrarVenta from "./modals/RegistrarVenta";
+import NuevoProducto from "./modals/NuevoProducto";
 
 const { SearchBar } = Search;
-
-
 
 export default class Dashboard extends React.Component{
 
@@ -27,7 +30,8 @@ export default class Dashboard extends React.Component{
             setActiveTab: 1,
             activeTab: 1,
             dropDownValue: 'Select action',
-            dropdownOpen: false
+            dropdownOpen: false,
+            modalMembresia: false,
         }
     }
 
@@ -35,20 +39,20 @@ export default class Dashboard extends React.Component{
 
         switch (modal) {
             case 1: {
-                this.state.modalAnuncio ? this.setState({modalAnuncio: false}) : this.setState({modalAnuncio: true});
+                this.state.modalSocio ? this.setState({modalSocio: false}) : this.setState({modalSocio: true});
 
                 break;
             }
             case 2:{
-                this.state.modalEvento ? this.setState({modalEvento: false}) : this.setState({modalEvento: true});
+                this.state.modalVisitante ? this.setState({modalVisitante: false}) : this.setState({modalVisitante: true});
                 break;
             }
             case 3: {
-
+                this.state.modalVenta ? this.setState({modalVenta: false}) : this.setState({modalVenta: true});
                 break;
             }
             case 4: {
-
+                this.state.modalProducto ? this.setState({modalProducto: false}) : this.setState({modalProducto: true});
                 break;
             }
 
@@ -56,6 +60,10 @@ export default class Dashboard extends React.Component{
 
             }
         }
+    };
+
+    toggleMembresiaModal = () => {
+        this.state.modalMembresia ? this.setState({modalMembresia: false}) : this.setState({modalMembresia: true});
     };
 
     componentDidMount() {
@@ -107,10 +115,14 @@ export default class Dashboard extends React.Component{
     render() {
 
         return (
-
             <div className="mt-3">
+                <RenovarMembresia toggleMembresiaModal={this.toggleMembresiaModal} nombreSocio="Paula"
+                                  nombreCompleto="Paula Gutierréz"
+                                  modalMembresia={this.state.modalMembresia}/>
+
                 <header className="">
-                    <nav className="header-dashboard navbar navbar-expand-lg navbar-light top-navbar  animate fadeInDown one" data-toggle="sticky-onscroll">
+                    <nav className="header-dashboard navbar navbar-expand-lg navbar-light top-navbar  animate fadeInDown one"
+                         data-toggle="sticky-onscroll">
                         <div className="container">
 
                             <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
@@ -122,13 +134,28 @@ export default class Dashboard extends React.Component{
                             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#" onClick={() => {this.toggle(1)}} className={this.state.activeTab === 1 ? 'active' : ''}>Socios y Visitantes</NavLink>
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(1)}}
+                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Socios y Visitantes
+                                        </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#" onClick={() => {this.toggle(2)}} className={this.state.activeTab === 2 ? 'active' : ''}>Venta de Productos</NavLink>
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(2)}}
+                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Venta de Productos
+                                        </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"  onClick={() => {this.toggle(3)}} className={this.state.activeTab === 3 ? 'active' : ''}>Catálogo de Productos</NavLink>
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(3)}}
+                                                 className={this.state.activeTab === 3 ? 'active' : ''}>Catálogo de Productos
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(4)}}
+                                                 className={this.state.activeTab === 4 ? 'active' : ''}>Membresías
+                                        </NavLink>
                                     </li>
                                 </ul>
                             </div>
@@ -153,7 +180,8 @@ export default class Dashboard extends React.Component{
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <NuevoSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio}/>
+                            <NuevoVisitante toggleModal={this.toggleModal} modalVisitante={this.state.modalVisitante}/>
                             <Row className="p-5 justify-content-end">
                             <Col className="col-3">
                                 <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Socio</Button>
@@ -168,7 +196,7 @@ export default class Dashboard extends React.Component{
                             </Row>
                             <Row className="p-5 justify-content-end">
                                 <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Visitante</Button>
+                                    <Button className="actionButton" onClick={() => this.toggleModal(2)}>Nuevo Visitante</Button>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">
@@ -180,10 +208,10 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
-                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <RegistrarVenta toggleModal={this.toggleModal} modalVenta={this.state.modalVenta}/>
                             <Row className="p-5 justify-content-end">
                                 <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Registrar Venta</Button>
+                                    <Button className="actionButton" onClick={() => this.toggleModal(3)}>Registrar Venta</Button>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">
@@ -195,16 +223,25 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="3">
-                            <NuevoSocio toggleModal={this.toggleModal} modalAnuncio={this.state.modalAnuncio}/>
+                            <NuevoProducto toggleModal={this.toggleModal} modalProducto={this.state.modalProducto}/>
                             <Row className="p-5 justify-content-end">
                                 <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Producto</Button>
+                                    <Button className="actionButton" onClick={() => this.toggleModal(4)}>Nuevo Producto</Button>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <ProductosTable/>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="4">
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <MembresiasTable/>
                                     </div>
                                 </Col>
                             </Row>

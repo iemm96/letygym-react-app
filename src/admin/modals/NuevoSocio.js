@@ -8,30 +8,29 @@ const NuevoSocio = (props ) => {
         className
     } = props;
 
-    return(<Modal isOpen={props.modalAnuncio} toggle={() => props.toggleModal(1)} className={className}>
+    return(<Modal isOpen={props.modalSocio} toggle={() => props.toggleModal(1)} className={className}>
         <ModalHeader toggle={() => props.toggleModal(1)}>Nuevo Socio</ModalHeader>
         <ModalBody>
             <Form>
                 <FormGroup>
-                    <Input type="text" name="nombre" id="" placeholder="* Nombre" />
+                    <label>* Nombre completo</label>
+                    <Input type="text" name="nombre" id="" />
                 </FormGroup>
                 <FormGroup>
+                    <label>Membresía</label>
                     <Input type="select" name="id_membresia" id="">
-                        <option value="">Membresía</option>
-                    </Input>
-                </FormGroup>
-                <FormGroup>
-                    <Input type="select" name="id_status" id="">
-                        <option value="">Status</option>
-                        <option value="1">Activo</option>
-                        <option value="2">Inactivo</option>
+                        <option value="">Sin membresía</option>
+                        <option value="">1 Semana</option>
+                        <option value="">3 Semanas</option>
+                        <option value="">1 Mes</option>
+                        <option value="">1 Año</option>
                     </Input>
                 </FormGroup>
             </Form>
         </ModalBody>
         <ModalFooter>
-            <Button color="primary" onClick={() => props.toggleModal(1)}>Agregar Socio</Button>{' '}
             <Button color="secondary" onClick={() => props.toggleModal(1)}>Cancelar</Button>
+            <Button color="primary" onClick={() => props.toggleModal(1)}>Agregar Socio</Button>{' '}
         </ModalFooter>
     </Modal>);
 };

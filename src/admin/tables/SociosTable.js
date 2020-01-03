@@ -11,6 +11,7 @@ let socios = [{
     nombre: "María Cárdenas Jímenez",
     membresia: "Semanal",
     status: "Activa",
+    hasta: "12/05/2020",
 }];
 
 class SociosTable extends React.Component {
@@ -30,8 +31,11 @@ class SociosTable extends React.Component {
                  dataField: 'membresia',
                  text: 'Membresía',
                  sort: true,
-             },
-             {
+             },{
+                 dataField: 'hasta',
+                 text: 'Membresía hasta',
+                 sort: true,
+             },{
                  dataField: 'status',
                  text: 'Status',
                  sort: true,
@@ -58,7 +62,6 @@ class SociosTable extends React.Component {
              showTotal: true,
              totalSize: socios.length
          };
-
 
          const contentTable = ({ paginationProps, paginationTableProps }) => (
              <div>
