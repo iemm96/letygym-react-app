@@ -7,7 +7,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import DropdownToggle from "reactstrap/es/DropdownToggle";
 import DropdownMenu from "reactstrap/es/DropdownMenu";
 import DropdownItem from "reactstrap/es/DropdownItem";
-import NuevoSocio from "./modals/NuevoSocio";
+import ModalSocio from "./modals/ModalSocio";
 import ActionsFormatter from "./actions/ActionsFormatter";
 import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
@@ -180,17 +180,15 @@ export default class Dashboard extends React.Component{
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <NuevoSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio}/>
+                            <ModalSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio}/>
                             <NuevoVisitante toggleModal={this.toggleModal} modalVisitante={this.state.modalVisitante}/>
                             <Row className="p-5 justify-content-end">
-                            <Col className="col-3">
-                                <Button className="actionButton" onClick={() => this.toggleModal(1)}>Nuevo Socio</Button>
-                            </Col>
-                        </Row>
+
+                            </Row>
                             <Row className="justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <SociosTable/>
+                                        <SociosTable toggleModal={() => this.toggleModal(1)}/>
                                     </div>
                                 </Col>
                             </Row>
