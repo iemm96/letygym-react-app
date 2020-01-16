@@ -13,11 +13,14 @@ import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
 import VentasTable from "./tables/VentasTable";
 import ProductosTable from "./tables/ProductosTable";
+import AsistenciasTable from "./tables/AsistenciasTable";
+import PagosTable from "./tables/PagosTable";
 import RenovarMembresia from "./modals/RenovarMembresia";
 import MembresiasTable from "./tables/MembresiasTable";
 import NuevoVisitante from "./modals/NuevoVisitante";
 import RegistrarVenta from "./modals/RegistrarVenta";
 import NuevoProducto from "./modals/NuevoProducto";
+import Asistencia from "../Asistencia";
 
 const { SearchBar } = Search;
 
@@ -157,6 +160,18 @@ export default class Dashboard extends React.Component{
                                                  className={this.state.activeTab === 4 ? 'active' : ''}>Membresías
                                         </NavLink>
                                     </li>
+                                    <li className="nav-item">
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(5)}}
+                                                 className={this.state.activeTab === 5 ? 'active' : ''}>Asistencias
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(6)}}
+                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Pagos
+                                        </NavLink>
+                                    </li>
                                 </ul>
                             </div>
                             <div className="justify-content-end" id="navbarSupportedContent">
@@ -240,6 +255,24 @@ export default class Dashboard extends React.Component{
                                 <Col className="col-11">
                                     <div>
                                         <MembresiasTable/>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 5 ? 'active' : ''} tabId="4">
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <AsistenciasTable/>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 6 ? 'active' : ''} tabId="4">
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        <PagosTable/>
                                     </div>
                                 </Col>
                             </Row>

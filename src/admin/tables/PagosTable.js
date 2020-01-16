@@ -8,13 +8,15 @@ import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ModalSocio from "../modals/ModalSocio";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
-import {url_base} from '../../constants/api_url';
 
 const { SearchBar } = Search;
-const api_url = url_base;
 
 let socios = [{
-
+    id: 1,
+    socio: "María Cárdenas Jímenez",
+    concepto: "Renovación membresía 1 semana",
+    monto: "$150.00",
+    fechaHora: "12/09/2020 12:00PM",
 }];
 
 const Buscador = (props) => {
@@ -44,37 +46,10 @@ class SociosTable extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             socios: socios,
             edit: false,
-            idSocio: null,
-            nombre: '',
-            apellidoPaterno: '',
-            apellidoMaterno: '',
-            id_membresia: ''
         };
-    }
-
-    componentDidMount() {
-
-        fetch(`${api_url}socios`, {
-            // mode: 'no-cors',
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-            },
-        },)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Something went wrong ...');
-                }
-
-            }).then(response =>
-                this.setState({socios: response})
-        );
     }
 
     toggleModal = () => {
@@ -83,36 +58,11 @@ class SociosTable extends React.Component {
 
     prepareNewModal = () => {
         this.setState({edit: false});
-
         this.toggleModal();
     }
 
-    prepareEditModal = id => {
-        this.setState({edit: true, idSocio: id});
-
-        fetch(`${api_url}socios/${id}`, {
-            // mode: 'no-cors',
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-            },
-        },)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Something went wrong ...');
-                }
-
-            }).then(response =>
-            this.setState({
-                nombre: response.nombre,
-                apellidoPaterno: response.apellidoPaterno,
-                apellidoMaterno: response.apellidoMaterno,
-                id_membresia: response.id_membresia
-            })
-        );
-
+    prepareEditModal = () => {
+        this.setState({edit: true});
         this.toggleModal();
     }
 
@@ -120,91 +70,30 @@ class SociosTable extends React.Component {
         this.state.deleteModal ? this.setState({deleteModal: false}) : this.setState({deleteModal: true});
     }
 
-    handleInputChange = event => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        console.log(value);
-
-        this.setState({
-            [name]: value
-        });
-    }
-
-    handleNewSocio = event => {
-
-        event.preventDefault();
-        fetch(`${api_url}socios`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-            },
-            body:JSON.stringify({
-                nombre:this.state.nombre,
-                apellidoPaterno:this.state.apellidoPaterno,
-                apellidoMaterno:this.state.apellidoMaterno,
-                id_membresia:this.state.id_membresia,
-            })
-        }).then((res) => res.json())
-            .then((data) =>  console.log(data))
-            .catch((err)=>console.log(err))
-
-    }
-
-    handleEditSocio = event => {
-
-        event.preventDefault();
-        fetch(`${api_url}socios/${this.state.idSocio}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-            },
-            body:JSON.stringify({
-                nombre:this.state.nombre,
-                apellidoPaterno:this.state.apellidoPaterno,
-                apellidoMaterno:this.state.apellidoMaterno,
-                id_membresia:this.state.id_membresia,
-            })
-        }).then((res) => res.json())
-            .then((data) =>  console.log(data))
-            .catch((err)=>console.log(err))
-    }
-
     prepareDeleteModal = () => {
 
     }
 
      actionsFormatter = (cell, row) => (<div>
-         <Button type="Button" onClick={() => this.prepareEditModal(row.id)} className="btn mr-2 btn-primary"><FontAwesomeIcon icon={faEdit}/></Button>
          <Button type="Button" onClick={this.toggleDeleteModal} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
      </div>);
 
      render() {
-
-         const {error} = this.state;
-
-         if(error) {
-             alert(error.message);
-             return;
-         }
-
          const columns = [{
-             dataField: 'nombre',
-             text: 'Nombre',
+             dataField: 'socio',
+             text: 'Socio',
              sort: true,
          },{
-             dataField: 'apellidoPaterno',
-             text: 'Membresía',
+             dataField: 'concepto',
+             text: 'Concepto',
              sort: true,
          },{
-             dataField: 'apellidoMaterno',
-             text: 'Membresía hasta',
+             dataField: 'monto',
+             text: 'Monto',
              sort: true,
          },{
-             dataField: 'id_membresia',
-             text: 'Status',
+             dataField: 'fechaHora',
+             text: 'Fecha y Hora',
              sort: true,
          },{
              dataField: 'actions',
@@ -232,19 +121,7 @@ class SociosTable extends React.Component {
 
          const contentTable = ({ paginationProps, paginationTableProps }) => (
              <div>
-                 <ModalSocio
-                     toggleModal={this.toggleModal}
-                     handleNewSocio={this.handleNewSocio}
-                     handleEditSocio={this.handleEditSocio}
-                     handleInputChange={this.handleInputChange}
-                     modalSocio={this.state.modalSocio}
-                     editMode={this.state.edit}
-                     idSocio={this.state.idSocio}
-                     nombre={this.state.nombre}
-                     apellidoPaterno={this.state.apellidoPaterno}
-                     apellidoMaterno={this.state.apellidoMaterno}
-                     id_membresia={this.state.id_membresia}
-                 />
+                 <ModalSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio} editMode={this.state.edit} getData={false}/>
                  <EliminarRegistroModal toggleDeleteModal={this.toggleDeleteModal} deleteModal={this.state.deleteModal}/>
                  <ToolkitProvider
                      keyField="id"
