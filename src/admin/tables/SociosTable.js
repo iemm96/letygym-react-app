@@ -124,7 +124,6 @@ class SociosTable extends React.Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        console.log(value);
 
         this.setState({
             [name]: value
@@ -172,13 +171,28 @@ class SociosTable extends React.Component {
             .catch((err)=>console.log(err))
     }
 
-    prepareDeleteModal = () => {
+    prepareDeleteModal = (id,nombre) => {
+        this.setState({idSocio: id, nombre: nombre});
 
+        this.toggleDeleteModal();
     }
 
-     actionsFormatter = (cell, row) => (<div>
+    deleteRegister = () => {
+        fetch(`${api_url}socios/${this.state.idSocio}`, {
+            method: 'DELETE',
+        }).then((res) => res)
+            .then((data) =>  {
+                if(data.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch((err)=>console.log(err))
+    }
+
+
+    actionsFormatter = (cell, row) => (<div>
          <Button type="Button" onClick={() => this.prepareEditModal(row.id)} className="btn mr-2 btn-primary"><FontAwesomeIcon icon={faEdit}/></Button>
-         <Button type="Button" onClick={this.toggleDeleteModal} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
+         <Button type="Button" onClick={() => this.prepareDeleteModal(row.id, row.nombre)} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
      </div>);
 
      render() {
@@ -245,7 +259,11 @@ class SociosTable extends React.Component {
                      apellidoMaterno={this.state.apellidoMaterno}
                      id_membresia={this.state.id_membresia}
                  />
-                 <EliminarRegistroModal toggleDeleteModal={this.toggleDeleteModal} deleteModal={this.state.deleteModal}/>
+                 <EliminarRegistroModal
+                     toggleDeleteModal={this.toggleDeleteModal}
+                     titulo={this.state.nombre}
+                     deleteRegister={this.deleteRegister}
+                     deleteModal={this.state.deleteModal}/>
                  <ToolkitProvider
                      keyField="id"
                      columns={ columns }

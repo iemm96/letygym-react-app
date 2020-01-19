@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col, Row } from 'reactstrap';
+import {url_base} from '../../constants/api_url';
 
+const api_url = url_base;
 export default class ModalSocio extends React.Component{
 
     constructor(props) {
@@ -10,14 +12,41 @@ export default class ModalSocio extends React.Component{
             nombre: undefined,
             apellidoP: undefined,
             apellidoM: undefined,
+            membresias: [],
         }
     }
 
     componentDidMount() {
+        fetch(`${api_url}membresias`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
 
+            }).then(response =>
+            this.setState({membresias: response})
+        );
     }
 
     render() {
+        let membresias = this.state.membresias;
+
+        let optionItems = membresias.map((membresia) =>
+        {
+            console.log(membresia.id);
+            return <option key={membresia.id} value={membresia.id}>{membresia.membresia}</option>
+        }
+
+        );
+
         return(<Modal isOpen={this.props.modalSocio} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
             <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nuevo'} Socio</ModalHeader>
             <ModalBody>
@@ -35,7 +64,7 @@ export default class ModalSocio extends React.Component{
                         <Col md={6}>
                             <label>* Apellido Paterno</label>
                             <Input type="text" name="apellidoPaterno" id=""
-                                   value={`this.props.editMode` ? this.props.apellidoPaterno : undefined}
+                                   value={this.props.editMode ? this.props.apellidoPaterno : undefined}
                                    onChange={event => this.props.handleInputChange(event)} />
                         </Col>
                         <Col md={6}>
@@ -49,12 +78,8 @@ export default class ModalSocio extends React.Component{
                         <Col>
                             <FormGroup>
                                 <label>Membresía</label>
-                                <Input type="select" name="id_membresia" id="" onChange={this.props.handleInputChange}>
-                                    <option value="">Sin membresía</option>
-                                    <option value="1">1 Semana</option>
-                                    <option value="2">3 Semanas</option>
-                                    <option value="3">1 Mes</option>
-                                    <option value="4">1 Año</option>
+                                <Input type="select" name="id_membresia" value={this.props.id_membresia} onChange={this.props.handleInputChange}>
+                                    {optionItems}
                                 </Input>
                             </FormGroup>
                         </Col>
