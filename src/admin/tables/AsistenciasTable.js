@@ -5,16 +5,15 @@ import paginationFactory, {PaginationListStandalone, PaginationProvider} from "r
 import {Button, Col, TabPane} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
-import ModalSocio from "../modals/ModalSocio";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
+import {url_base} from '../../constants/api_url';
 
 const { SearchBar } = Search;
+const api_url = url_base;
 
-let socios = [{
-    id: 1,
-    socio: "María Cárdenas Jímenez",
-    fechaHora: "Semanal",
+let asistencias = [{
+
 }];
 
 const Buscador = (props) => {
@@ -26,130 +25,168 @@ const Buscador = (props) => {
         <Row className="row mb-2 justify-content-between">
             <div className="col-3">
                 <input
-                    placeholder="Buscar Socios..."
+                    placeholder="Buscar asistencias..."
                     className="form-control"
                     ref={ n => input = n }
                     type="text"
                     onChange={search}
                 />
             </div>
-            <div className="col-2">
-                <Button className="actionButton" onClick={() => props.prepareNewModal()}>Nuevo Socio</Button>
-            </div>
         </Row>
     );
 };
 
-class SociosTable extends React.Component {
+class AsistenciasTable extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            socios: socios,
+            asistencias: asistencias,
             edit: false,
+            idRecord: null,
+            id_socio: '',
+            fechaHora: '',
         };
     }
 
+    componentDidMount() {
+
+        fetch(`${api_url}asistencias`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response =>
+            this.setState({asistencias: response})
+        );
+    }
+
     toggleModal = () => {
-        this.state.modalSocio ? this.setState({modalSocio: false}) : this.setState({modalSocio: true});
+        this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
     };
-
-    prepareNewModal = () => {
-        this.setState({edit: false});
-        this.toggleModal();
-    }
-
-    prepareEditModal = () => {
-        this.setState({edit: true});
-        this.toggleModal();
-    }
 
     toggleDeleteModal = () => {
         this.state.deleteModal ? this.setState({deleteModal: false}) : this.setState({deleteModal: true});
     }
 
-    prepareDeleteModal = () => {
+    prepareDeleteModal = (id,nombre) => {
+        this.setState({idRecord: id, nombre: nombre});
 
+        this.toggleDeleteModal();
     }
 
-     actionsFormatter = (cell, row) => (<div>
-         <Button type="Button" onClick={this.toggleDeleteModal} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
-     </div>);
+    deleteRegister = () => {
+        fetch(`${api_url}asistencias/${this.state.idRecord}`, {
+            method: 'DELETE',
+        }).then((res) => res)
+            .then((data) =>  {
+                if(data.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch((err)=>console.log(err))
+    }
 
-     render() {
-         const columns = [{
-             dataField: 'socio',
-             text: 'Socio',
-             sort: true,
-         },{
-             dataField: 'fechaHora',
-             text: 'Fecha y Hora',
-             sort: true,
-         },{
-             dataField: 'actions',
-             text: 'Acciones',
-             isDummyField: true,
-             csvExport: false,
-             formatter: this.actionsFormatter,
-         },];
 
-         const options = {
-             custom: true,
-             paginationSize: 4,
-             pageStartIndex: 1,
-             firstPageText: 'Inicio',
-             prePageText: 'Atrás',
-             nextPageText: 'Siguiente',
-             lastPageText: 'Final',
-             nextPageTitle: 'Primer página',
-             prePageTitle: 'Página anterior',
-             firstPageTitle: 'Página siguiente',
-             lastPageTitle: 'Última página',
-             showTotal: true,
-             totalSize: socios.length
-         };
+    actionsFormatter = (cell, row) => (<div>
+        <Button type="Button" onClick={() => this.prepareDeleteModal(row.id, row.nombre)} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
+    </div>);
 
-         const contentTable = ({ paginationProps, paginationTableProps }) => (
-             <div>
-                 <ModalSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio} editMode={this.state.edit} getData={false}/>
-                 <EliminarRegistroModal toggleDeleteModal={this.toggleDeleteModal} deleteModal={this.state.deleteModal}/>
-                 <ToolkitProvider
-                     keyField="id"
-                     columns={ columns }
-                     data={ this.state.socios }
-                     search>
-                     {
-                         toolkitprops => (
-                             <div>
-                                 <Buscador prepareNewModal={this.prepareNewModal} { ...toolkitprops.searchProps } />
-                                 <BootstrapTable
-                                     hover
-                                     { ...toolkitprops.baseProps }
-                                     { ...paginationTableProps }
-                                 />
-                             </div>
-                         )
-                     }
-                 </ToolkitProvider>
-                 <PaginationListStandalone { ...paginationProps } />
-             </div>
-         );
+    render() {
 
-         return(
-             <div>
-                 <Col className="col-3">
-                 </Col>
-                 <PaginationProvider
-                     pagination={paginationFactory(options)}>
+        const {error} = this.state;
 
-                     {contentTable}
+        if(error) {
+            alert(error.message);
+            return;
+        }
 
-                 </PaginationProvider>
-             </div>
+        const columns = [{
+            dataField: 'socio',
+            text: 'Socio',
+            sort: true,
+        },{
+            dataField: 'fechaHora',
+            text: 'Fecha y Hora',
+            sort: true,
+        },{
+            dataField: 'actions',
+            text: 'Acciones',
+            isDummyField: true,
+            csvExport: false,
+            formatter: this.actionsFormatter,
+        },];
 
-         );
-     }
+        const options = {
+            custom: true,
+            paginationSize: 4,
+            pageStartIndex: 1,
+            firstPageText: 'Inicio',
+            prePageText: 'Atrás',
+            nextPageText: 'Siguiente',
+            lastPageText: 'Final',
+            nextPageTitle: 'Primer página',
+            prePageTitle: 'Página anterior',
+            firstPageTitle: 'Página siguiente',
+            lastPageTitle: 'Última página',
+            showTotal: true,
+            totalSize: asistencias.length
+        };
+
+        const contentTable = ({ paginationProps, paginationTableProps }) => (
+            <div>
+                <EliminarRegistroModal
+                    toggleDeleteModal={this.toggleDeleteModal}
+                    titulo={this.state.nombre}
+                    deleteRegister={this.deleteRegister}
+                    deleteModal={this.state.deleteModal}/>
+                <ToolkitProvider
+                    keyField="id"
+                    columns={ columns }
+                    data={ this.state.asistencias }
+                    search>
+                    {
+                        toolkitprops => (
+                            <div>
+                                <Buscador prepareNewModal={this.prepareNewModal} { ...toolkitprops.searchProps } />
+                                <BootstrapTable
+                                    hover
+                                    { ...toolkitprops.baseProps }
+                                    { ...paginationTableProps }
+                                />
+                            </div>
+                        )
+                    }
+                </ToolkitProvider>
+                <PaginationListStandalone { ...paginationProps } />
+            </div>
+        );
+
+        return(
+            <div>
+                <Col className="col-3">
+                </Col>
+                <PaginationProvider
+                    pagination={paginationFactory(options)}>
+
+                    {contentTable}
+
+                </PaginationProvider>
+            </div>
+
+        );
+    }
 
 }
 
-export default SociosTable;
+export default AsistenciasTable;

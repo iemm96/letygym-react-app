@@ -39,13 +39,9 @@ export default class ModalSocio extends React.Component{
     render() {
         let membresias = this.state.membresias;
 
-        let optionItems = membresias.map((membresia) =>
-        {
-            console.log(membresia.id);
+        let optionItems = membresias.map((membresia) => {
             return <option key={membresia.id} value={membresia.id}>{membresia.membresia}</option>
-        }
-
-        );
+        });
 
         return(<Modal isOpen={this.props.modalSocio} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
             <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nuevo'} Socio</ModalHeader>

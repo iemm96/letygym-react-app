@@ -108,7 +108,6 @@ export default class Dashboard extends React.Component{
     }
 
     toggle(tab) {
-        console.log(tab);
         if(this.state.activeTab !== tab) {
             this.setState({activeTab:tab})
         }
@@ -195,8 +194,6 @@ export default class Dashboard extends React.Component{
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <ModalSocio toggleModal={this.toggleModal} modalSocio={this.state.modalSocio}/>
-                            <NuevoVisitante toggleModal={this.toggleModal} modalVisitante={this.state.modalVisitante}/>
                             <Row className="p-5 justify-content-end">
 
                             </Row>
@@ -222,12 +219,7 @@ export default class Dashboard extends React.Component{
                         </TabPane>
                         <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
                             <RegistrarVenta toggleModal={this.toggleModal} modalVenta={this.state.modalVenta}/>
-                            <Row className="p-5 justify-content-end">
-                                <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(3)}>Registrar Venta</Button>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <VentasTable/>
@@ -260,7 +252,7 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 5 ? 'active' : ''} tabId="4">
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <AsistenciasTable/>

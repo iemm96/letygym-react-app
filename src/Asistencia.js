@@ -67,7 +67,6 @@ export default class Asistencia extends React.Component{
     handleMouseHover = () => (this.setState(this.toogleHoverState));
 
     toogleHoverState = state => {
-        console.log(this.state.isHovering);
         return ({isHovering: !state.isHovering});
     };
 
