@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
 import Select from 'react-select'
-import InputNumber from "rc-input-number";
+
 import {url_base} from '../../constants/api_url';
 
 const api_url = url_base;
@@ -50,7 +50,7 @@ export default class RegistrarVenta extends React.Component{
 
     handleSelect = object => {
         this.setState({selectedProduct: object.value});
-
+        this.props.handleSelectChange(object);
     }
 
     updateTotal = event => {
@@ -64,14 +64,17 @@ export default class RegistrarVenta extends React.Component{
             }
         });
 
-        this.setState({total:(value * precio)});
+        var total = value * precio;
+        this.setState({total:total});
+        this.props.updateTotal(total);
+        this.props.handleInputChange(event);
     }
 
     render () {
         return(<Modal isOpen={this.props.modalRecord} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
             <ModalHeader toggle={() => this.props.toggleModal}>Registrar Venta</ModalHeader>
             <ModalBody>
-                <Form>
+                <Form id="form" onSubmit={this.props.handleNewRecord}>
                     <FormGroup>
                         <label>* Producto</label>
                         <Select options={this.state.productos}
@@ -89,7 +92,6 @@ export default class RegistrarVenta extends React.Component{
                     <FormGroup>
                         <label>Total</label>
                         <Input ref={this.select}
-                               value="$50.00"
                                value={this.props.editMode ? this.props.total : this.state.total}
                                onChange={event => this.props.handleInputChange(event)}
                                disabled/>
@@ -98,7 +100,7 @@ export default class RegistrarVenta extends React.Component{
             </ModalBody>
             <ModalFooter>
                 <Button color="secondary" onClick={() => this.props.toggleModal}>Cancelar</Button>
-                <Button color="primary" onClick={() => this.props.toggleModal}>Registrar Venta</Button>{' '}
+                <Button form="form" type="submit" color="primary" onClick={() => this.props.toggleModal}>Registrar Venta</Button>{' '}
             </ModalFooter>
         </Modal>);
     }

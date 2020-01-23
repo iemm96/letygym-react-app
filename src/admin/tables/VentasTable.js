@@ -52,7 +52,6 @@ class SociosTable extends React.Component {
             id_producto: '',
             cantidad: '',
             total: '',
-            fechaHora: '',
         };
     }
 
@@ -137,27 +136,39 @@ class SociosTable extends React.Component {
         });
     }
 
+    getCurrentDateTime = () => {
+        var tempDate = new Date();
+        var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
+        this.setState({fechaHora:date});
+
+    }
+
     handleNewRecord = event => {
 
         event.preventDefault();
+
+        this.getCurrentDateTime();
+
         fetch(`${api_url}ventas`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
             },
-            body:this.stringifyData
+            body:this.stringifyData()
         }).then((res) => res.json())
             .then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
 
     }
 
-    stringifyData = () => (JSON.stringify({
-        id_producto:this.state.id_producto,
-        cantidad:this.state.cantidad,
-        total:this.state.total,
-    }));
+    stringifyData = () => {
+            return JSON.stringify({
+            id_producto:this.state.id_producto,
+            cantidad:this.state.cantidad,
+            total:this.state.total,
+            fechaHora:this.state.fechaHora
+    })};
 
     handleEditRecord = event => {
 
@@ -192,6 +203,9 @@ class SociosTable extends React.Component {
             .catch((err)=>console.log(err))
     }
 
+    updateTotal = total => {
+        this.setState({total:total})
+    }
 
     actionsFormatter = (cell, row) => (<div>
         <Button type="Button" onClick={() => this.prepareEditModal(row.id)} className="btn mr-2 btn-primary"><FontAwesomeIcon icon={faEdit}/></Button>
@@ -260,6 +274,7 @@ class SociosTable extends React.Component {
                     modalRecord={this.state.modalRecord}
                     editMode={this.state.edit}
                     recordData={this.state}
+                    updateTotal={this.updateTotal}
                 />
                 <EliminarRegistroModal
                     toggleDeleteModal={this.toggleDeleteModal}
