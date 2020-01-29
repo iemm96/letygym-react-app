@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import './styles/style.scss';
 import ListaResultados from "./ListaResultados";
 import ModalMembresia from "./ModalMembresia";
+import {url_base} from './constants/api_url';
 
-const ApiUrl = React.createContext('https://api-letygym.nucleodev.com/');
+const api_url = url_base;
+
 let arr = ["anagrams-of-string-(with-duplicates)", "array-concatenation", "array-difference", "array-includes", "array-intersection", "array-remove", "array-sample", "array-union", "array-without", "array-zip", "average-of-array-of-numbers", "bottom-visible", "capitalize-first-letter-of-every-word", "capitalize-first-letter", "chain-asynchronous-functions", "check-for-palindrome", "chunk-array", "collatz-algorithm", "compact", "count-occurrences-of-a-value-in-array", "current-URL", "curry", "deep-flatten-array", "distance-between-two-points", "divisible-by-number", "drop-elements-in-array", "element-is-visible-in-viewport", "escape-regular-expression", "even-or-odd-number", "factorial", "fibonacci-array-generator", "fill-array", "filter-out-non-unique-values-in-an-array", "flatten-array-up-to-depth", "flatten-array", "get-days-difference-between-dates", "get-max-value-from-array", "get-min-value-from-array", "get-native-type-of-value", "get-scroll-position", "greatest-common-divisor-(GCD)", "group-by", "hamming-distance", "head-of-list", "hexcode-to-RGB", "initial-of-list", "initialize-array-with-range", "initialize-array-with-values", "is-array", "is-boolean", "is-function", "is-number", "is-string", "is-symbol", "last-of-list", "measure-time-taken-by-function", "median-of-array-of-numbers", "nth-element-of-array", "number-to-array-of-digits", "object-from-key-value-pairs", "object-to-key-value-pairs", "ordinal-suffix-of-number", "percentile", "pick", "pipe", "powerset", "promisify", "random-integer-in-range", "random-number-in-range", "redirect-to-URL", "reverse-a-string", "RGB-to-hexadecimal", "round-number-to-n-digits", "run-promises-in-series", "scroll-to-top", "shallow-clone-object", "shuffle-array", "similarity-between-arrays", "sleep", "sort-characters-in-string-(alphabetical)", "speech-synthesis-(experimental)", "standard-deviation", "sum-of-array-of-numbers", "swap-values-of-two-variables", "tail-of-list", "take-right", "take", "truncate-a-string", "unique-values-of-array", "URL-parameters", "UUID-generator", "validate-email", "validate-number", "value-or-default", "write-json-to-file"];
 
 let list = '';
 let arrayResults = [];
-
+let masterResults = [];
 export default class Asistencia extends React.Component{
-
-    static contextType = ApiUrl;
 
     constructor(props)
     {
@@ -31,6 +31,32 @@ export default class Asistencia extends React.Component{
     }
 
     componentDidMount() {
+
+        var arrNombres = [];
+
+        fetch(`${api_url}sociosyvisitantes`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+
+                response.map(item => {
+                    arrNombres.push(item.nombreCompleto);
+                });
+
+                this.setState({records: response});
+            }
+        );
         /*
         var inputForm = document.getElementsByClassName('input-form');
 
@@ -47,11 +73,17 @@ export default class Asistencia extends React.Component{
 
             resultList.style = 'display: block';
 
-            arr.map(algo => {
-                event.target.value.split(" ").map(word => {
-                    if(algo.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+            var records = this.state.records;
 
-                        this.setState({arrayResults: arrayResults.push(algo)})
+            records.map((val,index) => {
+
+                event.target.value.split(" ").map(word => {
+                    if(val.nombreCompleto.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+
+                        //masterResults.push({nombre:val.nombreCompleto,bActiva:val.bActiva});
+                        arrayResults.push(val.nombreCompleto);
+
+                        this.setState({arrayResults: arrayResults})
                     }
                 });
             });
@@ -70,8 +102,31 @@ export default class Asistencia extends React.Component{
         return ({isHovering: !state.isHovering});
     };
 
-    checarAsistencia = index => {
+    checarAsistencia = value => {
 
+        fetch(`${api_url}socioMembresia/${value}`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+
+
+                console.log(response);
+                debugger;
+
+                this.setState({records: response});
+            }
+        );
 
         //var span = document.getElementsByTagName('span');
 
@@ -124,7 +179,7 @@ export default class Asistencia extends React.Component{
                             </div>
                             <div className="">
                                 <ul id="result-list" className="list-group result">
-                                    <ListaResultados list={arrayResults}
+                                    <ListaResultados list={this.state.arrayResults}
                                                      checarAsistencia={this.checarAsistencia}
                                                      isLoading={this.state.isLoading}
                                                      isCorrect={this.state.isCorrect}

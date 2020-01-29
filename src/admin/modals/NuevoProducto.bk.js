@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
 
-const NuevoProducto = (props ) => {
+const ModalProducto = (props ) => {
 
     const {
         buttonLabel,
@@ -33,4 +33,4 @@ const NuevoProducto = (props ) => {
     </Modal>);
 };
 
-export default NuevoProducto;
+export default ModalProducto;

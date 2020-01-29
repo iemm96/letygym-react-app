@@ -40,7 +40,7 @@ const Buscador = (props) => {
     );
 };
 
-class SociosTable extends React.Component {
+class VentasTable extends React.Component {
 
     constructor(props) {
         super(props);
@@ -57,7 +57,7 @@ class SociosTable extends React.Component {
 
     componentDidMount() {
 
-        fetch(`${api_url}ventas`, {
+        fetch(`${api_url}ventasProductos`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -186,13 +186,13 @@ class SociosTable extends React.Component {
     }
 
     prepareDeleteModal = (id,fechaHora) => {
-        this.setState({recordData:{idRecord: id}, title: fechaHora});
+        this.setState({idRecord: id, fechaHora: fechaHora});
 
         this.toggleDeleteModal();
     }
 
     deleteRegister = () => {
-        fetch(`${api_url}ventas/${this.state.idRecord}`, {
+        fetch(`${api_url}ventasProductos/${this.state.idRecord}`, {
             method: 'DELETE',
         }).then((res) => res)
             .then((data) =>  {
@@ -208,7 +208,6 @@ class SociosTable extends React.Component {
     }
 
     actionsFormatter = (cell, row) => (<div>
-        <Button type="Button" onClick={() => this.prepareEditModal(row.id)} className="btn mr-2 btn-primary"><FontAwesomeIcon icon={faEdit}/></Button>
         <Button type="Button" onClick={() => this.prepareDeleteModal(row.id, row.fechaHora)} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
     </div>);
 
@@ -237,7 +236,7 @@ class SociosTable extends React.Component {
                 sort: true,
             },{
                 dataField: 'fechaHora',
-                text: 'Fecha',
+                text: 'Fecha y Hora',
                 sort: true,
             },{
                 dataField: 'actions',
@@ -320,4 +319,4 @@ class SociosTable extends React.Component {
 
 }
 
-export default SociosTable;
+export default VentasTable;

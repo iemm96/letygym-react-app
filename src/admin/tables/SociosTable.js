@@ -58,7 +58,7 @@ class SociosTable extends React.Component {
 
     componentDidMount() {
 
-        fetch(`${api_url}socios`, {
+        fetch(`${api_url}sociosMembresias`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -205,19 +205,19 @@ class SociosTable extends React.Component {
          }
 
          const columns = [{
-             dataField: 'nombre',
+             dataField: 'nombreCompleto',
              text: 'Nombre',
              sort: true,
          },{
-             dataField: 'apellidoPaterno',
+             dataField: 'membresia',
              text: 'Membresía',
              sort: true,
          },{
-             dataField: 'apellidoMaterno',
+             dataField: 'fecha_fin',
              text: 'Membresía hasta',
              sort: true,
          },{
-             dataField: 'id_membresia',
+             dataField: 'bActiva',
              text: 'Status',
              sort: true,
          },{

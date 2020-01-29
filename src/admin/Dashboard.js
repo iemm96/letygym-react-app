@@ -19,7 +19,7 @@ import RenovarMembresia from "./modals/RenovarMembresia";
 import MembresiasTable from "./tables/MembresiasTable";
 import NuevoVisitante from "./modals/NuevoVisitante";
 import RegistrarVenta from "./modals/RegistrarVenta";
-import NuevoProducto from "./modals/NuevoProducto";
+import ModalProducto from "./modals/ModalProducto";
 import Asistencia from "../Asistencia";
 
 const { SearchBar } = Search;
@@ -204,13 +204,8 @@ export default class Dashboard extends React.Component{
                                     </div>
                                 </Col>
                             </Row>
-                            <Row className="p-5 justify-content-end">
-                                <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(2)}>Nuevo Visitante</Button>
-                                </Col>
-                            </Row>
                             <Row className="justify-content-center">
-                                <Col className="col-11">
+                                <Col className="pt-5 col-11">
                                     <div>
                                         <VistantesTable/>
                                     </div>
@@ -218,7 +213,6 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
-                            <RegistrarVenta toggleModal={this.toggleModal} modalVenta={this.state.modalVenta}/>
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
@@ -228,13 +222,7 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="3">
-                            <NuevoProducto toggleModal={this.toggleModal} modalProducto={this.state.modalProducto}/>
-                            <Row className="p-5 justify-content-end">
-                                <Col className="col-3">
-                                    <Button className="actionButton" onClick={() => this.toggleModal(4)}>Nuevo Producto</Button>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <ProductosTable/>
@@ -243,7 +231,7 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="4">
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <MembresiasTable/>
@@ -261,7 +249,7 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 6 ? 'active' : ''} tabId="4">
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
                                         <PagosTable/>
