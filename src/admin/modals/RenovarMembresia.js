@@ -12,14 +12,20 @@ export default class RenovarMembresia extends React.Component{
 
         this.state = {
             mebresias:[],
-            precio: 0
+            precio: 0,
         }
+
+        this.textInput = React.createRef();
     }
 
     componentDidMount() {
 
         var array = [];
         var membresiasPrecios = [];
+
+        console.log(this.props.socioMembresiaId);
+
+        this.setState({socioMembresiaId:this.props.socioMembresiaId});
 
         fetch(`${api_url}membresias`, {
             // mode: 'no-cors',
@@ -51,15 +57,19 @@ export default class RenovarMembresia extends React.Component{
     handleRenovarMembresia = (event) => {
         event.preventDefault();
 
-        fetch(`${api_url}socioMembresia/`, {
-            method: 'POST',
+        fetch(`${api_url}socioMembresia/${this.textInput.current.props.value}`, {
+            method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
             },
             body:this.stringifyData()
         }).then((res) => res.json())
-            .then((data) =>  console.log(data))
+            .then((data) =>  {
+                if(data.id){
+                    window.location.reload();
+                }
+            })
             .catch((err)=>console.log(err))
     }
 
@@ -92,9 +102,8 @@ export default class RenovarMembresia extends React.Component{
     stringifyData = () => {
 
         var json = JSON.stringify({
-            producto:this.state.producto,
-            cantidad:this.state.cantidad,
-            precio:this.state.precio,
+            id_membresia:this.state.selectedMembresia,
+            pago:this.state.precio,
         });
 
         return json;
@@ -105,6 +114,7 @@ export default class RenovarMembresia extends React.Component{
             <ModalHeader>Renovar Membresía de {this.props.nombreSocio}</ModalHeader>
             <ModalBody>
                 <Form id="form" onSubmit={this.handleRenovarMembresia}>
+                    <Input name="id_membresia" value={this.props.socioMembresiaId} ref={this.textInput} hidden={true}/>
                     <FormGroup>
                         <label>Nombre Completo:</label>
                         <Input type="text" name="nombre" id="" value={this.props.nombreCompleto} disabled/>

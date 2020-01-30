@@ -91,7 +91,8 @@ export default class Dashboard extends React.Component{
             }).then(response => {
 
                 if(response.nombre){
-                    this.setState({nombreSocio:response.nombre,nombreCompleto:response.nombreCompleto});
+
+                    this.setState({nombreSocio:response.nombre,nombreCompleto:response.nombreCompleto,socioMembresiaId:response.id});
                     this.toggleMembresiaModal();
                 }
             }
@@ -144,6 +145,7 @@ export default class Dashboard extends React.Component{
                                   modalRecord={this.state.modalRecord}
                                   nombreSocio={this.state.nombreSocio}
                                   nombreCompleto={this.state.nombreCompleto}
+                                  socioMembresiaId={this.state.socioMembresiaId}
                                   modalMembresia={this.state.modalMembresia}/>
 
                 <header className="">
