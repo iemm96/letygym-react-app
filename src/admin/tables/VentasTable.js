@@ -163,11 +163,11 @@ class VentasTable extends React.Component {
     }
 
     stringifyData = () => {
-            return JSON.stringify({
-            id_producto:this.state.id_producto,
-            cantidad:this.state.cantidad,
-            total:this.state.total,
-            fechaHora:this.state.fechaHora
+        return JSON.stringify({
+        id_producto:this.state.id_producto,
+        cantidad:this.state.cantidad,
+        total:this.state.total,
+        fechaHora:this.state.fechaHora
     })};
 
     handleEditRecord = event => {

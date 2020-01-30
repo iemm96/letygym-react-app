@@ -133,23 +133,27 @@ class SociosTable extends React.Component {
     handleNewSocio = event => {
 
         event.preventDefault();
-        fetch(`${api_url}socios`, {
+        fetch(`${api_url}socio`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
             },
-            body:JSON.stringify({
-                nombre:this.state.nombre,
-                apellidoPaterno:this.state.apellidoPaterno,
-                apellidoMaterno:this.state.apellidoMaterno,
-                id_membresia:this.state.id_membresia,
-            })
+            body:this.stringifyData()
         }).then((res) => res.json())
             .then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
 
     }
+
+    stringifyData = () => {
+        return JSON.stringify({
+            nombre:this.state.nombre,
+            apellidoPaterno:this.state.apellidoPaterno,
+            apellidoMaterno:this.state.apellidoMaterno,
+            id_membresia:this.state.id_membresia,
+        })
+    };
 
     handleEditSocio = event => {
 
@@ -189,6 +193,11 @@ class SociosTable extends React.Component {
             .catch((err)=>console.log(err))
     }
 
+    handleSelectChange = object => {
+        this.setState({
+            id_membresia: object.value
+        });
+    }
 
     actionsFormatter = (cell, row) => (<div>
          <Button type="Button" onClick={() => this.prepareEditModal(row.id)} className="btn mr-2 btn-primary"><FontAwesomeIcon icon={faEdit}/></Button>
@@ -252,6 +261,7 @@ class SociosTable extends React.Component {
                      handleEditSocio={this.handleEditSocio}
                      handleInputChange={this.handleInputChange}
                      modalSocio={this.state.modalSocio}
+                     handleSelectChange={this.handleSelectChange}
                      editMode={this.state.edit}
                      idSocio={this.state.idSocio}
                      nombre={this.state.nombre}

@@ -69,7 +69,7 @@ export default class Dashboard extends React.Component{
     };
 
     toggleMembresiaModal = () => {
-        this.state.modalMembresia ? this.setState({modalMembresia: false}) : this.setState({modalMembresia: true});
+        this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
     };
 
     componentDidMount() {
@@ -90,7 +90,8 @@ export default class Dashboard extends React.Component{
 
             }).then(response => {
 
-                if(response){
+                if(response.nombre){
+                    this.setState({nombreSocio:response.nombre,nombreCompleto:response.nombreCompleto});
                     this.toggleMembresiaModal();
                 }
             }
@@ -139,8 +140,10 @@ export default class Dashboard extends React.Component{
 
         return (
             <div className="mt-3">
-                <RenovarMembresia toggleMembresiaModal={this.toggleMembresiaModal} nombreSocio="Paula"
-                                  nombreCompleto="Paula Gutierréz"
+                <RenovarMembresia toggleMembresiaModal={this.toggleMembresiaModal}
+                                  modalRecord={this.state.modalRecord}
+                                  nombreSocio={this.state.nombreSocio}
+                                  nombreCompleto={this.state.nombreCompleto}
                                   modalMembresia={this.state.modalMembresia}/>
 
                 <header className="">
@@ -221,14 +224,14 @@ export default class Dashboard extends React.Component{
                             <Row className="justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <SociosTable toggleModal={() => this.toggleModal(1)}/>
+                                        {this.state.activeTab === 1 ?  <SociosTable toggleModal={() => this.toggleModal(1)}/> : ''}
                                     </div>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">
                                 <Col className="pt-5 col-11">
                                     <div>
-                                        <VistantesTable/>
+                                        {this.state.activeTab === 1 ? <VistantesTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -237,7 +240,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <VentasTable/>
+                                        {this.state.activeTab === 2 ? <VentasTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -246,7 +249,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <ProductosTable/>
+                                        {this.state.activeTab === 3 ? <ProductosTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -255,7 +258,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <MembresiasTable/>
+                                        {this.state.activeTab === 4 ? <MembresiasTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -264,7 +267,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <AsistenciasTable/>
+                                        {this.state.activeTab === 5 ? <AsistenciasTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -273,7 +276,8 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        <PagosTable/>
+                                        {this.state.activeTab === 6 ? <PagosTable/> : ''}
+
                                     </div>
                                 </Col>
                             </Row>

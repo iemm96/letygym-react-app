@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col, Row } from 'reactstrap';
 import {url_base} from '../../constants/api_url';
+import Select from "react-select";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const api_url = url_base;
 export default class ModalSocio extends React.Component{
@@ -13,10 +17,14 @@ export default class ModalSocio extends React.Component{
             apellidoP: undefined,
             apellidoM: undefined,
             membresias: [],
+            valueStart: new Date(),
+            valueEnd: new Date()
         }
     }
 
     componentDidMount() {
+        var array = [];
+
         fetch(`${api_url}membresias`, {
             // mode: 'no-cors',
             method: 'GET',
@@ -31,9 +39,75 @@ export default class ModalSocio extends React.Component{
                     throw new Error('Something went wrong ...');
                 }
 
-            }).then(response =>
-            this.setState({membresias: response})
+            }).then(response => {
+                response.map((val,index) => {
+                    array.push({value:val.id,label:val.membresia});
+                });
+
+                this.setState({membresias: array})
+            }
         );
+    }
+
+    handleSelect = object => {
+        this.setState({id_membresia: object.value});
+        this.props.handleSelectChange(object);
+    }
+
+    handleChangeStart = date => {
+        this.setState({
+            valueStart: date
+        });
+    };
+
+    handleChangeEnd = date => {
+        this.setState({
+            valueEnd: date
+        });
+    };
+
+    handleNewSocio = event => {
+
+        var self = this;
+
+        event.preventDefault();
+        fetch(`${api_url}socio`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+            },
+            body:this.stringifyData()
+        }).then((res) => res.json())
+            .then((data) =>  {
+                if(data.id) {
+                    window.location.reload();
+                }
+            })
+            .catch((err)=>console.log(err))
+
+    }
+
+    stringifyData = () => {
+        return JSON.stringify({
+            nombre:this.state.nombre,
+            apellidoPaterno:this.state.apellidoPaterno,
+            apellidoMaterno:this.state.apellidoMaterno,
+            id_membresia:this.state.id_membresia,
+            bActiva:this.state.bActiva,
+            fecha_inicio:this.state.valueStart,
+            fecha_fin:this.state.valueEnd
+        })
+    };
+
+    handleInputChange = event => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
     }
 
     render() {
@@ -43,43 +117,77 @@ export default class ModalSocio extends React.Component{
             return <option key={membresia.id} value={membresia.id}>{membresia.membresia}</option>
         });
 
+        var membresiaSection = <div><FormGroup>
+                <Label>* ¿Qué tipo de membresía tiene?</Label>
+                <Select options={this.state.membresias}
+                        placeholder="Seleccione una membresía"
+                        name="id_membresia"
+                        onChange={event => this.handleSelect(event)}/>
+            </FormGroup>
+            <FormGroup row>
+                <Col md={6}>
+                    <Label>¿Cuándo inició?</Label>
+                    <DatePicker
+                        dateFormat="dd/MM/yyyy"
+                        selected={this.state.valueStart}
+                        onChange={this.handleChangeStart}
+                    />
+                </Col>
+                <Col md={6}>
+                    <Label>* ¿Cuándo finalizará?</Label>
+                    <DatePicker
+                        dateFormat="dd/MM/yyyy"
+                        selected={this.state.valueEnd}
+                        onChange={this.handleChangeEnd}
+                    />
+                </Col>
+            </FormGroup>
+            </div>;
+
+
         return(<Modal isOpen={this.props.modalSocio} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
             <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nuevo'} Socio</ModalHeader>
             <ModalBody>
-                <Form id="form" onSubmit={this.props.editMode ? this.props.handleEditSocio : this.props.handleNewSocio}>
+                <Form id="form" onSubmit={this.props.editMode ? this.props.handleEditSocio : this.handleNewSocio}>
                     <Row form>
                         <Col>
                             <FormGroup>
-                                <label>* Nombre</label>
+                                <Label>* Nombre</Label>
                                 <Input type="text" name="nombre" id="" value={this.props.editMode ? this.props.nombre : undefined}
-                                       onChange={event => this.props.handleInputChange(event)} />
+                                       onChange={event => this.handleInputChange(event)} />
                             </FormGroup>
                         </Col>
                     </Row>
-                    <Row form>
+                    <FormGroup row>
                         <Col md={6}>
-                            <label>* Apellido Paterno</label>
+                            <Label>* Apellido Paterno</Label>
                             <Input type="text" name="apellidoPaterno" id=""
                                    value={this.props.editMode ? this.props.apellidoPaterno : undefined}
-                                   onChange={event => this.props.handleInputChange(event)} />
+                                   onChange={event => this.handleInputChange(event)} />
                         </Col>
                         <Col md={6}>
-                            <label>* Apellido Materno</label>
+                            <Label>* Apellido Materno</Label>
                             <Input type="text" name="apellidoMaterno" id=""
                                    value={this.props.editMode ? this.props.apellidoMaterno : undefined}
-                                   onChange={event => this.props.handleInputChange(event)} />
+                                   onChange={event => this.handleInputChange(event)} />
                         </Col>
-                    </Row>
-                    <Row form>
-                        <Col>
-                            <FormGroup>
-                                <label>Membresía</label>
-                                <Input type="select" name="id_membresia" value={this.props.id_membresia} onChange={this.props.handleInputChange}>
-                                    {optionItems}
-                                </Input>
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>* ¿Tiene membresía activa?</Label>
+                        <FormGroup check>
+                            <Label check>
+                                <Input type="radio" name="bActiva" value="1" onChange={event => this.handleInputChange(event)}/>{' '}
+                                Si
+                            </Label>
+                        </FormGroup>
+                        <FormGroup check>
+                            <Label check>
+                                <Input type="radio" name="bActiva" value="0" onChange={event => this.handleInputChange(event)} />{' '}
+                                No
+                            </Label>
+                        </FormGroup>
+                    </FormGroup>
+                    {this.state.bActiva == 1 ? membresiaSection : ''}
                 </Form>
             </ModalBody>
             <ModalFooter>
