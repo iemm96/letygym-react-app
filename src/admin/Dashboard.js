@@ -21,6 +21,9 @@ import NuevoVisitante from "./modals/NuevoVisitante";
 import RegistrarVenta from "./modals/RegistrarVenta";
 import ModalProducto from "./modals/ModalProducto";
 import Asistencia from "../Asistencia";
+import {url_base} from '../constants/api_url';
+
+const api_url = url_base;
 
 const { SearchBar } = Search;
 
@@ -71,9 +74,27 @@ export default class Dashboard extends React.Component{
 
     componentDidMount() {
 
-        //var searchInput = document.getElementById('search-bar-0');
+        fetch(`${api_url}compruebaRenovaciones`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
 
-        //searchInput.placeholder = 'Buscar';
+            }).then(response => {
+
+                if(response){
+                    this.toggleMembresiaModal();
+                }
+            }
+        );
 
         let self = this;
         var elements = document.querySelectorAll('[data-toggle="sticky-onscroll"]');

@@ -45,10 +45,10 @@ import { faCheck, faTrash} from '@fortawesome/free-solid-svg-icons'
                              {this.state.actualHovering === index &&
                              <Button
                                  className={`actionButton`}
-                                 onClick={() => this.props.checarAsistencia(result)}
+                                 onClick={() => this.props.checarAsistencia(this.props.arrayIdSocios[index])}
                                  disabled={this.props.isDisabled}>
                                  <span className={`${this.props.isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                                 {this.props.isCorrect === true ? <FontAwesomeIcon icon={faCheck}/> : ''}{ this.props.buttonText }
+                                 {this.props.isCorrect === true ? <FontAwesomeIcon icon={faCheck}/> : ''}{ this.props.buttonText}
                              </Button>}
                          </Col>
                      </Row>

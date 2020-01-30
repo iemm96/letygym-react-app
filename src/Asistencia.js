@@ -11,6 +11,8 @@ let arr = ["anagrams-of-string-(with-duplicates)", "array-concatenation", "array
 let list = '';
 let arrayResults = [];
 let masterResults = [];
+let arrayIdSocios = [];
+
 export default class Asistencia extends React.Component{
 
     constructor(props)
@@ -33,6 +35,7 @@ export default class Asistencia extends React.Component{
     componentDidMount() {
 
         var arrNombres = [];
+        var arrSocios = [];
 
         fetch(`${api_url}sociosyvisitantes`, {
             // mode: 'no-cors',
@@ -52,9 +55,10 @@ export default class Asistencia extends React.Component{
 
                 response.map(item => {
                     arrNombres.push(item.nombreCompleto);
+                    arrSocios.push(item.id);
                 });
 
-                this.setState({records: response});
+                this.setState({arrNombres: arrNombres, arrSocios: arrSocios});
             }
         );
         /*
@@ -73,17 +77,17 @@ export default class Asistencia extends React.Component{
 
             resultList.style = 'display: block';
 
-            var records = this.state.records;
+            var records = this.state.arrNombres;
 
             records.map((val,index) => {
 
                 event.target.value.split(" ").map(word => {
-                    if(val.nombreCompleto.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+                    if(val.toLowerCase().indexOf(word.toLowerCase()) != -1) {
 
                         //masterResults.push({nombre:val.nombreCompleto,bActiva:val.bActiva});
-                        arrayResults.push(val.nombreCompleto);
-
-                        this.setState({arrayResults: arrayResults})
+                        arrayResults.push(val);
+                        arrayIdSocios.push(index);
+                        this.setState({arrayResults: arrayResults, arrayIdSocios: arrayIdSocios})
                     }
                 });
             });
@@ -104,6 +108,13 @@ export default class Asistencia extends React.Component{
 
     checarAsistencia = value => {
 
+        var state;
+        var self = this;
+
+        this.setState({hoverEnable: false});
+        this.setState({isLoading: true});
+        this.setState({buttonText: 'Registrando...'});
+
         fetch(`${api_url}socioMembresia/${value}`, {
             // mode: 'no-cors',
             method: 'GET',
@@ -120,41 +131,21 @@ export default class Asistencia extends React.Component{
 
             }).then(response => {
 
+                if(response.bActiva) {
 
-                console.log(response);
-                debugger;
+                    self.setState({isLoading: false});
+                    self.setState({isCorrect: true});
+                    self.setState({isDisabled: true});
+                    self.setState({buttonText: 'Correcto!'});
 
-                this.setState({records: response});
+                    setTimeout(function () {
+                        window.location.reload();
+                    },5000);
+                }else{
+                    this.setState({modalMembresia: true})
+                }
             }
         );
-
-        //var span = document.getElementsByTagName('span');
-
-        this.setState({hoverEnable: false});
-        this.setState({isLoading: true});
-        this.setState({buttonText: 'Registrando...'});
-
-        var self = this;
-
-        var state = false;
-
-        if(state) {
-            setTimeout(function () {
-                // and call `resolve` on the deferred object, once you're done
-                self.setState({isLoading: false});
-                self.setState({isCorrect: true});
-                self.setState({isDisabled: true});
-                self.setState({buttonText: 'Correcto!'});
-
-
-            }, 800);
-
-            setTimeout(function () {
-                window.location.reload();
-            },5000);
-        }else{
-            this.setState({modalMembresia: true})
-        }
 
     };
 
@@ -180,6 +171,7 @@ export default class Asistencia extends React.Component{
                             <div className="">
                                 <ul id="result-list" className="list-group result">
                                     <ListaResultados list={this.state.arrayResults}
+                                                     arrayIdSocios={this.state.arrSocios}
                                                      checarAsistencia={this.checarAsistencia}
                                                      isLoading={this.state.isLoading}
                                                      isCorrect={this.state.isCorrect}
