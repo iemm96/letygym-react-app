@@ -278,6 +278,7 @@ class SociosTable extends React.Component {
                      keyField="id"
                      columns={ columns }
                      data={ this.state.socios }
+                     wrapperClasses="table-responsive"
                      search>
                      {
                          toolkitprops => (

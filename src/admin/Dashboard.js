@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Row, Col, Button, NavLink, TabContent, TabPane, UncontrolledDropdown} from "reactstrap";
+import {Row, Col, Button, NavLink, TabContent, TabPane, UncontrolledDropdown, Label, Collapse, NavbarToggler, Navbar} from "reactstrap";
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, { PaginationProvider, PaginationListStandalone } from 'react-bootstrap-table2-paginator';
 
@@ -21,7 +21,10 @@ import NuevoVisitante from "./modals/NuevoVisitante";
 import RegistrarVenta from "./modals/RegistrarVenta";
 import ModalProducto from "./modals/ModalProducto";
 import Asistencia from "../Asistencia";
+import SideBar from "./sidebar/SideBar";
 import {url_base} from '../constants/api_url';
+import { faCheck, faTrash, faBars} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const api_url = url_base;
 
@@ -38,6 +41,8 @@ export default class Dashboard extends React.Component{
             dropDownValue: 'Select action',
             dropdownOpen: false,
             modalMembresia: false,
+            isOpen: false,
+            isOpenSidebar: false
         }
     }
 
@@ -137,10 +142,13 @@ export default class Dashboard extends React.Component{
     }
 
 
+    toggleCollapse = () => (this.setState({isOpen:!this.state.isOpen}));
+    toggleSidebar = () => (this.setState({isOpenSidebar:!this.state.isOpenSidebar}));
+
     render() {
 
         return (
-            <div className="mt-3">
+            <div className="">
                 <RenovarMembresia toggleMembresiaModal={this.toggleMembresiaModal}
                                   modalRecord={this.state.modalRecord}
                                   nombreSocio={this.state.nombreSocio}
@@ -148,18 +156,16 @@ export default class Dashboard extends React.Component{
                                   socioMembresiaId={this.state.socioMembresiaId}
                                   modalMembresia={this.state.modalMembresia}/>
 
-                <header className="">
-                    <nav className="header-dashboard navbar navbar-expand-lg navbar-light top-navbar  animate fadeInDown one"
+                <header className="main-header ">
+                    <Navbar className="header-dashboard navbar navbar-expand-xl animate fadeInDown one navbar-light top-navbar"
                          data-toggle="sticky-onscroll">
                         <div className="container">
 
+
+
                             <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
-                            <button className="navbar-toggler" type="button" data-toggle="collapse"
-                                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
-                                <span className="navbar-toggler-icon">i</span>
-                            </button>
-                            <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+
+                            <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
@@ -198,29 +204,29 @@ export default class Dashboard extends React.Component{
                                         </NavLink>
                                     </li>
                                 </ul>
-                            </div>
-                            <div className="justify-content-end" id="navbarSupportedContent">
-                                <ul className="navbar-nav">
-                                    <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
-                                    <UncontrolledDropdown>
-                                        <DropdownToggle caret>
-                                            Nombre del usuario
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem>Mis datos de perfil</DropdownItem>
-                                            <DropdownItem divider />
-                                            <DropdownItem>Cerrar Sesión</DropdownItem>
-                                        </DropdownMenu>
-                                    </UncontrolledDropdown>
-                                </ul>
-                            </div>
+
+                            </Collapse>
+                            <UncontrolledDropdown className="d-none d-sm-block">
+                                <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
+                                <DropdownToggle caret>
+                                    Nombre del usuario
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem>Mis datos de perfil</DropdownItem>
+                                    <DropdownItem divider />
+                                    <DropdownItem>Cerrar Sesión</DropdownItem>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
                         </div>
-                    </nav>
+                    </Navbar>
+
                 </header>
+                <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
+
                 <div className="dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <Row className="p-5 justify-content-end">
+                            <Row className="p-5 p-xl-4 justify-content-end">
 
                             </Row>
                             <Row className="justify-content-center">

@@ -13,6 +13,10 @@ body,html {
 
 }
 
+.react-bootstrap-table table {
+  table-layout: auto;
+}
+
 .stickyTest{
   height: 40px;
 }
@@ -149,6 +153,26 @@ header .container {
   }
 }
 
+.main-header {
+  margin-top: 1rem !important;
+  transition: 0.25s;
+  z-index: 2;
+}
+
+.btnSidebar {
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  font-size: 1.1rem !important;
+  margin-left: 12px;
+}
+
+.breadcrumb-bar {
+  width: 100%;
+  position: fixed;
+  background: linear-gradient(40deg,#008dd5,#531cb3);
+}
+
 .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
   color: white !important;
   background: rgba(255,255,255,0.2);
@@ -213,6 +237,7 @@ div.card .card-header {
   margin-left: 60px;
   margin-right: 60px;
   border-radius: 10px;
+  transition: 0.25s;
 
   border: 0;
 }
@@ -222,8 +247,10 @@ div.card .card-header {
   margin-top: -30px;
   margin-left: 30px;
   margin-right: 30px;
-  height: 800px;
   background-color: white;
+  height: auto;
+  transition: .25s;
+
 }
 
 .card-plain .card-header:not(.card-avatar) {
@@ -614,6 +641,88 @@ footer p a:hover {
   animation-delay: 3.3s;
 }
 
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background: #7386D5;
+  color: #fff;
+  margin-left: -250px;
+  transition: all 0.5s;
+  z-index: 1;
+  position: fixed;
+}
+
+.sidebar.is-open {
+  margin-left: 0;
+  transition: .5s;
+}
+
+
+.sidebar-header {
+  background: #6d7fcc;
+}
+
+.sidebar-header h3{
+  color: #fff;
+  padding: 1em;
+}
+
+.sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+.menu-open {
+  background: #6d7fcc;
+}
+
+.nav-item:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+.items-menu {
+  color: #fff;
+  background: #6d7fcc;
+}
+
+li a.dropdown-toggle::after {
+  display: inline-flex;
+  position: relative;
+  left: 60%;
+  top: 10%
+}
+
+.sidebar-header > span {
+  position: relative;
+  float: right;
+  margin: .5em;
+  font-size: 2rem;
+  cursor: pointer;
+  display: none;
+}
+.side-menu {
+  height: calc(100vh - 130px);
+  overflow-y: scroll;
+}
+
+.side-menu::-webkit-scrollbar {
+  width: 10px;
+}
+
+.side-menu::-webkit-scrollbar-thumb {
+  background: #5466B3;
+  border-radius: 3px;
+}
+
+.side-menu::-webkit-scrollbar-thumb:hover {
+  background: #3A4C99;
+}
+
 /*=== Animations start here  ===*/
 /*=== FADE IN  ===*/
 @-webkit-keyframes fadeIn {
@@ -789,5 +898,30 @@ footer p a:hover {
 .fadeInRight {
   -webkit-animation-name: fadeInRight;
   animation-name: fadeInRight;
+
+
+}
+
+@media screen and (max-width: 1287px){
+
+  .main-header {
+    margin: 0 !important;
+    transition: 0.25s;
+  }
+
+  .header-dashboard {
+    margin: 0;
+    border-radius: 0;
+    transition: 0.25s;
+
+  }
+}
+
+@media screen and (max-width: 1200px){
+
+  .dashboard-content{
+    margin: -70px 0 0 0;
+    transition: .25s;
+  }
 }
 
