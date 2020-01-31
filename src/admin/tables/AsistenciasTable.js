@@ -52,7 +52,7 @@ class AsistenciasTable extends React.Component {
 
     componentDidMount() {
 
-        fetch(`${api_url}asistencias`, {
+        fetch(`${api_url}asistenciasSocios`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -112,7 +112,7 @@ class AsistenciasTable extends React.Component {
         }
 
         const columns = [{
-            dataField: 'socio',
+            dataField: 'nombreCompleto',
             text: 'Socio',
             sort: true,
         },{
