@@ -160,9 +160,7 @@ export default class Dashboard extends React.Component{
                     <Navbar className="header-dashboard navbar navbar-expand-xl animate fadeInDown one navbar-light top-navbar"
                          data-toggle="sticky-onscroll">
                         <div className="container">
-
-
-
+                            <NavbarToggler onClick={this.toggleCollapse} />
                             <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
 
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
@@ -204,7 +202,17 @@ export default class Dashboard extends React.Component{
                                         </NavLink>
                                     </li>
                                 </ul>
-
+                                <UncontrolledDropdown className="d-sm-none">
+                                    <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
+                                    <DropdownToggle caret>
+                                        Nombre del usuario
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem>Mis datos de perfil</DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem>Cerrar Sesión</DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
                             </Collapse>
                             <UncontrolledDropdown className="d-none d-sm-block">
                                 <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>

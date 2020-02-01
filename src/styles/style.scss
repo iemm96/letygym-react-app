@@ -10,7 +10,6 @@ body,html {
   height: 100%;
   background-color: $darkGrayColor !important;
   min-height: 1200px;
-
 }
 
 .react-bootstrap-table table {
@@ -87,6 +86,12 @@ body,html {
       color: white;
     }
   }
+}
+
+.navbar-item:hover {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px;
 }
 
 .btn-circle.btn-sm {
@@ -177,15 +182,29 @@ header .container {
   color: white !important;
   background: rgba(255,255,255,0.2);
   border-radius: 20px;
+  padding: .5rem;
+  width: -moz-fit-content;
+
 }
+
 
 .navbar-light .navbar-brand, .navbar-light .navbar-brand:hover
 {
   color: white !important;
+
 }
 
 .navbar-light .navbar-nav .nav-link {
   color: white !important;
+  padding: .5rem;
+  width: -moz-fit-content;
+  &:hover{
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px;
+    width: -moz-fit-content;
+
+  }
 }
 
 .container .title{
@@ -495,10 +514,6 @@ footer p a:hover {
   text-decoration: none;
 }
 
-
-
-
-
 .fadeInLoad {
   animation: fadeInLoad 1s;
 }
@@ -590,8 +605,6 @@ footer p a:hover {
   }
 }
 
-
-
 /*=== Basic box styling  ===*/
 .box {
   background: #23a3d3;
@@ -677,16 +690,6 @@ footer p a:hover {
 }
 
 .menu-open {
-  background: #6d7fcc;
-}
-
-.nav-item:hover {
-  color: #7386D5;
-  background: #fff;
-}
-
-.items-menu {
-  color: #fff;
   background: #6d7fcc;
 }
 
