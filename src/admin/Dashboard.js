@@ -160,7 +160,9 @@ export default class Dashboard extends React.Component{
                     <Navbar className="header-dashboard navbar navbar-expand-xl animate fadeInDown one navbar-light top-navbar"
                          data-toggle="sticky-onscroll">
                         <div className="container">
-                            <NavbarToggler onClick={this.toggleCollapse} />
+                            <Button color="info" className="d-xl-none" onClick={this.toggleSidebar}>
+                                <FontAwesomeIcon icon={faBars}/>
+                            </Button>
                             <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
 
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
@@ -168,7 +170,7 @@ export default class Dashboard extends React.Component{
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Socios y Visitantes
+                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Socias y Visitantes
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
@@ -231,7 +233,7 @@ export default class Dashboard extends React.Component{
                 </header>
                 <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
 
-                <div className="dashboard-content animate fadeInUp one">
+                <div className="mb-5 dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
                             <Row className="p-5 p-xl-4 justify-content-end">
@@ -299,6 +301,11 @@ export default class Dashboard extends React.Component{
                             </Row>
                         </TabPane>
                     </TabContent>
+                </div>
+                <div className="sticky-footer">
+                    <div className="container text-center">
+                        <small>Desarrollado por <a href="http://nucleodev.com">Nucleodev</a> - Todos los Derechos Reservados</small>
+                    </div>
                 </div>
             </div>
         );

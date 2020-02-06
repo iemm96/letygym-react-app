@@ -113,7 +113,7 @@ class AsistenciasTable extends React.Component {
 
         const columns = [{
             dataField: 'nombreCompleto',
-            text: 'Socio',
+            text: 'Socia',
             sort: true,
         },{
             dataField: 'fechaHora',
@@ -140,7 +140,7 @@ class AsistenciasTable extends React.Component {
             firstPageTitle: 'Página siguiente',
             lastPageTitle: 'Última página',
             showTotal: true,
-            totalSize: asistencias.length
+            totalSize: this.state.asistencias.length
         };
 
         const contentTable = ({ paginationProps, paginationTableProps }) => (

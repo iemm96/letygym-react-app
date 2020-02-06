@@ -35,7 +35,7 @@ const Buscador = (props) => {
                 />
             </div>
             <div className="col-2">
-                <Button className="actionButton" onClick={() => props.prepareNewModal()}>Nuevo Visitante</Button>
+                <Button className="actionButton" onClick={() => props.prepareNewModal()}>Nueva Visitante</Button>
             </div>
         </Row>
     );

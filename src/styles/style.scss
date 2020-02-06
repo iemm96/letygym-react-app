@@ -7,9 +7,19 @@ $darkGrayColor: #424651;
 $purpleClairColor: #bd2e9d;
 
 body,html {
-  height: 100%;
   background-color: $darkGrayColor !important;
-  min-height: 1200px;
+}
+
+.btn-info {
+  color: #fff;
+  background: linear-gradient(40deg, #008dd5, #531cb3) !important;
+  border: none !important;
+  transition: 0.5s;
+}
+
+.btn-info:hover {
+  background: linear-gradient(60deg, #008dd5, #531cb3) !important;
+  transition: 0.5s;
 }
 
 .react-bootstrap-table table {
@@ -427,13 +437,24 @@ div.login {
   }
 }
 
-
 .card-nav-tabs .card-header {
   margin-top: -30px!important;
 }
 
 .card .card-header .nav-tabs {
   padding: 0;
+}
+
+.sticky-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+
+  line-height: 30px;
+
+  background-color: #34344a;
+
 }
 
 .nav-tabs {

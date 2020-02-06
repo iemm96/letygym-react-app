@@ -24,8 +24,8 @@ const NuevoVisitante = (props ) => {
             </Form>
         </ModalBody>
         <ModalFooter>
-            <Button color="secondary" onClick={() => props.toggleModal(2)}>Cancelar</Button>
-            <Button color="primary" onClick={() => props.toggleModal(2)}>Agregar Visitante</Button>{' '}
+            <Button color="secondary" onClick={() => props.toggleModal()}>Cancelar</Button>
+            <Button color="primary" onClick={() => props.toggleModal()}>Agregar Visitante</Button>{' '}
         </ModalFooter>
     </Modal>);
 };

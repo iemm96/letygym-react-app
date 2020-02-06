@@ -71,8 +71,8 @@ export default class RegistrarVenta extends React.Component{
     }
 
     render () {
-        return(<Modal isOpen={this.props.modalRecord} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
-            <ModalHeader toggle={() => this.props.toggleModal}>Registrar Venta</ModalHeader>
+        return(<Modal isOpen={this.props.modalRecord} toggle={() => this.props.toggleModal()} className={this.props.className}>
+            <ModalHeader toggle={() => this.props.toggleModal()}>Registrar Venta</ModalHeader>
             <ModalBody>
                 <Form id="form" onSubmit={this.props.handleNewRecord}>
                     <FormGroup>
@@ -99,8 +99,8 @@ export default class RegistrarVenta extends React.Component{
                 </Form>
             </ModalBody>
             <ModalFooter>
-                <Button color="secondary" onClick={() => this.props.toggleModal}>Cancelar</Button>
-                <Button form="form" type="submit" color="primary" onClick={() => this.props.toggleModal}>Registrar Venta</Button>{' '}
+                <Button color="secondary" onClick={() => this.props.toggleModal()}>Cancelar</Button>
+                <Button form="form" type="submit" color="primary" onClick={() => this.props.toggleModal()}>Registrar Venta</Button>{' '}
             </ModalFooter>
         </Modal>);
     }
