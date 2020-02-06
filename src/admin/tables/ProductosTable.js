@@ -159,7 +159,11 @@ class ProductosTable extends React.Component {
             },
             body:this.stringifyData()
         }).then((res) => res.json())
-            .then((data) =>  console.log(data))
+            .then((data) =>  {
+              if(data.id) {
+                  window.location.reload();
+              }
+            })
             .catch((err)=>console.log(err))
 
     }
@@ -250,7 +254,7 @@ class ProductosTable extends React.Component {
 
         const options = {
             custom: true,
-            paginationSize: 4,
+            paginationSize: 5,
             pageStartIndex: 1,
             firstPageText: 'Inicio',
             prePageText: 'Atrás',
@@ -261,7 +265,7 @@ class ProductosTable extends React.Component {
             firstPageTitle: 'Página siguiente',
             lastPageTitle: 'Última página',
             showTotal: true,
-            totalSize: records.length
+            totalSize: this.state.records.length
         };
 
         const contentTable = ({ paginationProps, paginationTableProps }) => (

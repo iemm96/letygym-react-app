@@ -4,8 +4,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, La
 export default class ModalProducto extends React.Component{
 
     render () {
-        return(<Modal isOpen={this.props.modalRecord} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
-            <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nuevo'} Producto</ModalHeader>
+        return(<Modal isOpen={this.props.modalRecord} toggle={() => this.props.toggleModal()} className={this.props.className}>
+            <ModalHeader toggle={() => this.props.toggleModal()}>{this.props.editMode ? 'Editar' : 'Nuevo'} Producto</ModalHeader>
             <ModalBody>
                 <Form id="form" onSubmit={this.props.editMode ? this.props.handleEditRecord : this.props.handleNewRecord}>
                 <FormGroup>
@@ -33,7 +33,7 @@ export default class ModalProducto extends React.Component{
                 </Form>
             </ModalBody>
             <ModalFooter>
-                <Button color="secondary" onClick={() => this.props.toggleModal}>Cancelar</Button>
+                <Button color="secondary" onClick={() => this.props.toggleModal()}>Cancelar</Button>
                 <Button form="form" type="submit" color="primary">{this.props.editMode ? 'Editar ' : 'Agregar '} Producto</Button>
             </ModalFooter>
         </Modal>);

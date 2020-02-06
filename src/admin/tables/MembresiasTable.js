@@ -160,7 +160,6 @@ class MembresiasTable extends React.Component {
         }).then((res) => res.json())
             .then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
-
     }
 
     stringifyData = () => {
@@ -177,6 +176,7 @@ class MembresiasTable extends React.Component {
     handleEditRecord = event => {
 
         event.preventDefault();
+
         fetch(`${api_url}membresias/${this.state.idRecord}`, {
             method: 'PUT',
             headers: {
@@ -185,7 +185,11 @@ class MembresiasTable extends React.Component {
             },
             body:this.stringifyData()
         }).then((res) => res.json())
-            .then((data) =>  console.log(data))
+            .then((data) =>  {
+                if(data.id) {
+                    window.location.reload();
+                }
+            })
             .catch((err)=>console.log(err))
     }
     

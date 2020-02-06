@@ -146,7 +146,7 @@ export default class ModalSocio extends React.Component{
 
 
         return(<Modal isOpen={this.props.modalSocio} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
-            <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nuevo'} Socio</ModalHeader>
+            <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nueva'} Socia</ModalHeader>
             <ModalBody>
                 <Form id="form" onSubmit={this.props.editMode ? this.props.handleEditSocio : this.handleNewSocio}>
                     <Row form>
@@ -192,7 +192,7 @@ export default class ModalSocio extends React.Component{
             </ModalBody>
             <ModalFooter>
                 <Button color="secondary" onClick={() => this.props.toggleModal(1)}>Cancelar</Button>
-                <Button form="form" type="submit" color="primary">{this.props.editMode ? 'Editar ' : 'Agregar '} Socio</Button>
+                <Button form="form" type="submit" color="primary">{this.props.editMode ? 'Editar ' : 'Agregar '} Socia</Button>
             </ModalFooter>
         </Modal>);
     }
