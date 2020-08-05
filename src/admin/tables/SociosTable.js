@@ -26,7 +26,7 @@ const Buscador = (props) => {
         <Row className="row mb-2 justify-content-between">
             <div className="col-3">
                 <input
-                    placeholder="Buscar Socios..."
+                    placeholder="Buscar Socias..."
                     className="form-control"
                     ref={ n => input = n }
                     type="text"
@@ -158,7 +158,7 @@ class SociosTable extends React.Component {
     handleEditSocio = event => {
 
         event.preventDefault();
-        fetch(`${api_url}socios/${this.state.idSocio}`, {
+        fetch(`${api_url}socio/${this.state.idSocio}`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
@@ -171,7 +171,11 @@ class SociosTable extends React.Component {
                 id_membresia:this.state.id_membresia,
             })
         }).then((res) => res.json())
-            .then((data) =>  console.log(data))
+            .then((data) =>  {
+                if(data.id) {
+                    window.location.reload();
+                }
+            })
             .catch((err)=>console.log(err))
     }
 
@@ -265,6 +269,7 @@ class SociosTable extends React.Component {
                      editMode={this.state.edit}
                      idSocio={this.state.idSocio}
                      nombre={this.state.nombre}
+                     bActiva={this.state.bActiva}
                      apellidoPaterno={this.state.apellidoPaterno}
                      apellidoMaterno={this.state.apellidoMaterno}
                      id_membresia={this.state.id_membresia}

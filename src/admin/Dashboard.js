@@ -231,6 +231,7 @@ export default class Dashboard extends React.Component{
                     </Navbar>
 
                 </header>
+
                 <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
 
                 <div className="mb-5 dashboard-content animate fadeInUp one">
@@ -304,7 +305,7 @@ export default class Dashboard extends React.Component{
                 </div>
                 <div className="sticky-footer">
                     <div className="container text-center">
-                        <small>Desarrollado por <a href="http://nucleodev.com">Nucleodev</a> - Todos los Derechos Reservados</small>
+                        <small>Desarrollado por <a href="http://nucleodev.com">NucleoDev</a> - Todos los Derechos Reservados</small>
                     </div>
                 </div>
             </div>

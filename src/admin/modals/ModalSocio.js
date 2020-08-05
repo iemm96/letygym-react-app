@@ -13,6 +13,8 @@ export default class ModalSocio extends React.Component{
         super(props);
 
         this.state = {
+            idSocio: this.props.idSocio,
+            bActiva: this.props.bActiva,
             nombre: undefined,
             apellidoP: undefined,
             apellidoM: undefined,
@@ -88,6 +90,28 @@ export default class ModalSocio extends React.Component{
 
     }
 
+    handleEditSocio = event => {
+
+        var self = this;
+
+        event.preventDefault();
+        fetch(`${api_url}socio/${this.props.idSocio}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+            },
+            body:this.stringifyData()
+        }).then((res) => res.json())
+            .then((data) =>  {
+                if(data.id) {
+                    window.location.reload();
+                }
+            })
+            .catch((err)=>console.log(err))
+
+    }
+
     stringifyData = () => {
         return JSON.stringify({
             nombre:this.state.nombre,
@@ -148,7 +172,7 @@ export default class ModalSocio extends React.Component{
         return(<Modal isOpen={this.props.modalSocio} toggle={() => this.props.toggleModal(1)} className={this.props.className}>
             <ModalHeader toggle={() => this.props.toggleModal(1)}>{this.props.editMode ? 'Editar' : 'Nueva'} Socia</ModalHeader>
             <ModalBody>
-                <Form id="form" onSubmit={this.props.editMode ? this.props.handleEditSocio : this.handleNewSocio}>
+                <Form id="form" onSubmit={this.props.editMode ? this.handleEditSocio : this.handleNewSocio}>
                     <Row form>
                         <Col>
                             <FormGroup>
