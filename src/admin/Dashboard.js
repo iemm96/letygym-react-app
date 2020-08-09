@@ -1,26 +1,15 @@
 import React, {useState} from 'react';
 import {Row, Col, Button, NavLink, TabContent, TabPane, UncontrolledDropdown, Label, Collapse, NavbarToggler, Navbar} from "reactstrap";
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory, { PaginationProvider, PaginationListStandalone } from 'react-bootstrap-table2-paginator';
 
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import DropdownToggle from "reactstrap/es/DropdownToggle";
-import DropdownMenu from "reactstrap/es/DropdownMenu";
-import DropdownItem from "reactstrap/es/DropdownItem";
-import ModalSocio from "./modals/ModalSocio";
-import ActionsFormatter from "./actions/ActionsFormatter";
+import { Search } from 'react-bootstrap-table2-toolkit';
 import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
 import VentasTable from "./tables/VentasTable";
 import ProductosTable from "./tables/ProductosTable";
 import AsistenciasTable from "./tables/AsistenciasTable";
-import PagosTable from "./tables/PagosTable";
+import EgresosTable from "./tables/EgresosTable";
 import RenovarMembresia from "./modals/RenovarMembresia";
 import MembresiasTable from "./tables/MembresiasTable";
-import NuevoVisitante from "./modals/NuevoVisitante";
-import RegistrarVenta from "./modals/RegistrarVenta";
-import ModalProducto from "./modals/ModalProducto";
-import Asistencia from "../Asistencia";
 import SideBar from "./sidebar/SideBar";
 import {url_base} from '../constants/api_url';
 import { faCheck, faTrash, faBars} from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +17,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const api_url = url_base;
 
-const { SearchBar } = Search;
 
 export default class Dashboard extends React.Component{
 
@@ -142,7 +130,6 @@ export default class Dashboard extends React.Component{
     }
 
 
-    toggleCollapse = () => (this.setState({isOpen:!this.state.isOpen}));
     toggleSidebar = () => (this.setState({isOpenSidebar:!this.state.isOpenSidebar}));
 
     render() {
@@ -163,7 +150,7 @@ export default class Dashboard extends React.Component{
                             <Button color="info" className="d-xl-none" onClick={this.toggleSidebar}>
                                 <FontAwesomeIcon icon={faBars}/>
                             </Button>
-                            <NavLink className="navbar-brand" to="#">LetyGym</NavLink>
+                            <NavLink className="navbar-brand" to="#">Lety Fitness Club</NavLink>
 
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
                                 <ul className="navbar-nav">
@@ -200,33 +187,17 @@ export default class Dashboard extends React.Component{
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(6)}}
-                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Pagos
+                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Ingresos
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(7)}}
+                                                 className={this.state.activeTab === 7 ? 'active' : ''}>Egresos
                                         </NavLink>
                                     </li>
                                 </ul>
-                                <UncontrolledDropdown className="d-sm-none">
-                                    <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
-                                    <DropdownToggle caret>
-                                        Nombre del usuario
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem>Mis datos de perfil</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem>Cerrar Sesión</DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
                             </Collapse>
-                            <UncontrolledDropdown className="d-none d-sm-block">
-                                <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
-                                <DropdownToggle caret>
-                                    Nombre del usuario
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem>Mis datos de perfil</DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem>Cerrar Sesión</DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
                         </div>
                     </Navbar>
 
@@ -243,7 +214,7 @@ export default class Dashboard extends React.Component{
                             <Row className="justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 1 ?  <SociosTable toggleModal={() => this.toggleModal(1)}/> : ''}
+                                        {this.state.activeTab === 1 ? <SociosTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
@@ -295,7 +266,17 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 6 ? <PagosTable/> : ''}
+                                        {this.state.activeTab === 6 ? <EgresosTable/> : ''}
+
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 7 ? 'active' : ''} tabId="4">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 7 ? <EgresosTable/> : ''}
 
                                     </div>
                                 </Col>
@@ -327,10 +308,5 @@ export default class Dashboard extends React.Component{
             stickyWrapper.style.height = 'auto';
         }
     };
-
-    clearInput(e)
-    {
-        e.target.classList.remove('bounce');
-    }
 
 };

@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
 import {url_base} from '../../constants/api_url';
 import Select from "react-select";
-
+import moment from 'moment';
+import 'moment/locale/es';
 const api_url = url_base;
-
 export default class RenovarMembresia extends React.Component{
 
     constructor(props) {
@@ -13,6 +13,9 @@ export default class RenovarMembresia extends React.Component{
         this.state = {
             mebresias:[],
             precio: 0,
+            diasProrroga: 0,
+            fechaProrroga: null,
+            displayDivProrroga: false,
         }
 
         this.textInput = React.createRef();
@@ -67,15 +70,15 @@ export default class RenovarMembresia extends React.Component{
         }).then((res) => res.json())
             .then((data) =>  {
                 if(data.id){
-                    window.location.reload();
+
                 }
             })
             .catch((err)=>console.log(err))
     }
 
     handleSelect = object => {
-        this.setState({selectedMembresia: object.value});
-        //this.handleSelectChange(object);
+        this.setState({selectedMembresia: object.value},() => this.updateFechaPago());
+        this.handleSelectChange(object);
         this.updateTotal(object.value);
     }
 
@@ -97,19 +100,64 @@ export default class RenovarMembresia extends React.Component{
 
         console.log(precio);
         this.setState({precio:precio});
-    }
+    };
 
     stringifyData = () => {
 
         var json = JSON.stringify({
             id_membresia:this.state.selectedMembresia,
             pago:this.state.precio,
+            diasProrroga:this.state.diasProrroga,
+            fechaSigCobro:this.state.fechaProrrogaForm,
         });
 
         return json;
     };
 
+    updateFechaPago = () => {
+
+        //Se muestra el div con la información de la prorroga
+        this.setState({displayDivProrroga:true});
+        moment().locale('es');
+
+        let date = moment(new Date(), "DD.MM.YYYY");
+        date.add(this.state.diasProrroga, 'days');
+
+        //Se agregan los días o meses necesarios dependiendo el valor del select membresía
+        switch (this.state.selectedMembresia) {
+            case 1: {
+                date.add(7,'days');
+                break;
+            }
+            case 2: {
+                date.add(1,'months');
+                break;
+            }
+            case 3: {
+                date.add(2,'months');
+                break;
+            }
+            case 4: {
+                date.add(3,'months');
+                break;
+            }
+        }
+
+        //Se guarda en status los datos de la fecha actualizados
+        if(this.state.selectedMembresia) {
+            this.setState({fechaProrrogaForm:date.format('YYYY-M-DD')});
+            this.setState({diaProrroga:date.format('DD')});
+            this.setState({mesProrroga:date.format('MMMM')});
+            this.setState({yearProrroga:date.format('YYYY')});
+        }
+    }
+
+    handleChangeDiasProrroga = event => {
+        this.setState({diasProrroga:event.target.value},() => this.updateFechaPago());
+    }
+
     render() {
+
         return(<Modal isOpen={this.props.modalRecord} toggleMembresiaModal={() => this.props.toggleMembresiaModal(1)} className={this.props.className}>
             <ModalHeader>Renovar Membresía de {this.props.nombreSocio}</ModalHeader>
             <ModalBody>
@@ -120,7 +168,7 @@ export default class RenovarMembresia extends React.Component{
                         <Input type="text" name="nombre" id="" value={this.props.nombreCompleto} disabled/>
                     </FormGroup>
                     <FormGroup>
-                        <label>Pago por:</label>
+                        <label>Membresía:</label>
                         <Select options={this.state.membresias}
                                 placeholder="Seleccione una membresía"
                                 name="id_membresia"
@@ -130,6 +178,13 @@ export default class RenovarMembresia extends React.Component{
                         <label>Cantidad a cobrar:</label>
                         <Input type="text" name="cantidad" id="" value={'$' + this.state.precio} disabled/>
                     </FormGroup>
+                    <FormGroup>
+                        <label>Días de prorroga:</label>
+                        <Input id="selectDiasProrroga" onChange={(event) => this.handleChangeDiasProrroga(event)} type="number" name="prorroga" pattern="[0-9]*" inputMode="numeric" defaultValue={0}/>
+                    </FormGroup>
+                    {this.state.displayDivProrroga ?  <FormGroup>
+                        <p>El siguiente pago será el <b>{this.state.diaProrroga} de <span style={{textTransform:'capitalize'}}>{this.state.mesProrroga}</span> de {this.state.yearProrroga}</b></p>
+                    </FormGroup> : ''}
                 </Form>
             </ModalBody>
             <ModalFooter>

@@ -1,8 +1,4 @@
 import React from 'react';
-import {UncontrolledDropdown} from "reactstrap";
-import DropdownToggle from "reactstrap/es/DropdownToggle";
-import DropdownMenu from "reactstrap/es/DropdownMenu";
-import DropdownItem from "reactstrap/es/DropdownItem";
 import {NavLink} from "react-router-dom";
 
 const Header = () =>
@@ -37,17 +33,6 @@ const Header = () =>
                 </div>
                 <div className="justify-content-end" id="navbarSupportedContent">
                     <ul className="navbar-nav">
-                        <img src={require('../assets/images.png')} width={35} height={35} className="rounded-circle"/>
-                        <UncontrolledDropdown>
-                            <DropdownToggle caret>
-                                Nombre del usuario
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem>Mis datos de perfil</DropdownItem>
-                                <DropdownItem divider />
-                                <DropdownItem>Cerrar Sesión</DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
                     </ul>
                 </div>
             </div>

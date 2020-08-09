@@ -1,6 +1,4 @@
 import React from "react";
-import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
 import {Button, Col, TabPane} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -8,9 +6,10 @@ import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ModalSocio from "../modals/ModalSocio";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
+import MUIDataTable from "mui-datatables";
+
 import {url_base} from '../../constants/api_url';
 
-const { SearchBar } = Search;
 const api_url = url_base;
 
 let socios = [{
@@ -218,43 +217,86 @@ class SociosTable extends React.Component {
          }
 
          const columns = [{
-             dataField: 'nombreCompleto',
-             text: 'Nombre',
-             sort: true,
+             name: "nombreCompleto",
+             label: "Nombre",
+             options: {
+                 filter: false,
+                 sort: false,
+             }
          },{
-             dataField: 'membresia',
-             text: 'Membresía',
-             sort: true,
+             name: "membresia",
+             label: "Membresía",
+             options: {
+                 filter: false,
+                 sort: false,
+             }
          },{
-             dataField: 'fecha_fin',
-             text: 'Membresía hasta',
-             sort: true,
+             name: "fecha_fin",
+             label: "Membresía activa hasta",
+             options: {
+                 filter: false,
+                 sort: false,
+             }
          },{
-             dataField: 'bActiva',
-             text: 'Status',
-             sort: true,
+             name: "bActiva",
+             label: "Estatus",
+             options: {
+                 filter: false,
+                 sort: false,
+             }
          },{
-             dataField: 'actions',
-             text: 'Acciones',
-             isDummyField: true,
-             csvExport: false,
-             formatter: this.actionsFormatter,
+             name: "Acciones",
+             options: {
+                 filter: true,
+                 sort: false,
+                 empty: true,
+                 customBodyRender: (value, tableMeta, updateValue) => {
+                     return (
+                         <div>
+                             <Button type="Button" onClick={() => this.prepareEditModal(value.id)} className="mr-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
+                         </div>
+                     );
+                 }
+             }
          },];
 
          const options = {
-             custom: true,
-             paginationSize: 4,
-             pageStartIndex: 1,
-             firstPageText: 'Inicio',
-             prePageText: 'Atrás',
-             nextPageText: 'Siguiente',
-             lastPageText: 'Final',
-             nextPageTitle: 'Primer página',
-             prePageTitle: 'Página anterior',
-             firstPageTitle: 'Página siguiente',
-             lastPageTitle: 'Última página',
-             showTotal: true,
-             totalSize: socios.length
+             filter:false,
+             print:false,
+             textLabels: {
+                 body: {
+                     noMatch: "No se encontraron registros",
+                     toolTip: "Ordenar",
+                     columnHeaderTooltip: column => `Ordenamiento para ${column.label}`
+                 },
+                 pagination: {
+                     next: "Siguiente página",
+                     previous: "Página anterior",
+                     rowsPerPage: "Registros por página:",
+                     displayRows: "de",
+                 },
+                 toolbar: {
+                     search: "Buscar",
+                     downloadCsv: "Descargar CSV",
+                     print: "Imprimir",
+                     viewColumns: "Ver columnas...",
+                     filterTable: "Filtrar por...",
+                 },
+                 filter: {
+                     all: "Todos",
+                     title: "FILTROS",
+                     reset: "REINICIAR",
+                 },
+                 viewColumns: {
+                     title: "Ver columnas",
+                     titleAria: "Mostrar/Ocultar columnas",
+                 },
+                 selectedRows: {
+                     text: "Registro(s) seleccionado(s)",
+                     delete: "Eliminar",
+                     deleteAria: "Eliminar los registros seleccionados",
+                 },
+             }
          };
 
          const contentTable = ({ paginationProps, paginationTableProps }) => (
@@ -279,41 +321,22 @@ class SociosTable extends React.Component {
                      titulo={this.state.nombre}
                      deleteRegister={this.deleteRegister}
                      deleteModal={this.state.deleteModal}/>
-                 <ToolkitProvider
-                     keyField="id"
-                     columns={ columns }
-                     data={ this.state.socios }
-                     wrapperClasses="table-responsive"
-                     search>
-                     {
-                         toolkitprops => (
-                             <div>
-                                 <Buscador prepareNewModal={this.prepareNewModal} { ...toolkitprops.searchProps } />
-                                 <BootstrapTable
-                                     hover
-                                     { ...toolkitprops.baseProps }
-                                     { ...paginationTableProps }
-                                 />
-                             </div>
-                         )
-                     }
-                 </ToolkitProvider>
-                 <PaginationListStandalone { ...paginationProps } />
+                 <MUIDataTable
+                     title={"Socias"}
+                     data={this.state.socios}
+                     columns={columns}
+                     options={options}
+                 />
              </div>
          );
 
          return(
-             <div>
-                 <Col className="col-3">
-                 </Col>
-                 <PaginationProvider
-                     pagination={paginationFactory(options)}>
-
-                     {contentTable}
-
-                 </PaginationProvider>
-             </div>
-
+             <MUIDataTable
+                 title={"Socias"}
+                 data={this.state.socios}
+                 columns={columns}
+                 options={options}
+             />
          );
      }
 

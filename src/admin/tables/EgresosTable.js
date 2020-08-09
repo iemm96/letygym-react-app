@@ -2,15 +2,13 @@ import React from "react";
 import ToolkitProvider, {Search} from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
-import {Button, Col, TabPane} from "reactstrap";
+import {Button, Col } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
-import RegistrarVenta from "../modals/RegistrarVenta";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
 import {url_base} from '../../constants/api_url';
 
-const { SearchBar } = Search;
 const api_url = url_base;
 
 let records = [{
@@ -39,7 +37,7 @@ const Buscador = (props) => {
     );
 };
 
-class PagosTable extends React.Component {
+class EgresosTable extends React.Component {
 
     constructor(props) {
         super(props);
@@ -309,4 +307,4 @@ class PagosTable extends React.Component {
 
 }
 
-export default PagosTable;
+export default EgresosTable;

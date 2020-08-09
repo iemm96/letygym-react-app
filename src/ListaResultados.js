@@ -1,63 +1,63 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, Row, Col } from 'reactstrap';
 import './styles/style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faTrash} from '@fortawesome/free-solid-svg-icons'
 
- export default class ListaResultados extends React.Component {
+const ListaResultados = props => {
 
-     constructor(props) {
-         super(props);
-         this.state = {
-             list: props.list,
-             isHovering: false,
-             actualHovering: null,
-         };
-     }
+    const [actualHovering,setActualHovering] = useState(false);
+    const [isHovering,setIsHovering] = useState(false);
+    const [buffer,setBuffer] = useState([]);
+    const [list,setList] = useState([]);
 
-     handleMouseHover = index => {
+    useEffect(() => {
+        setList(props.list);
 
-         if(this.props.hoverEnable) {
-             this.setState({actualHovering: index});
-         }
-         return (this.setState(this.toogleHoverState));
-     };
+            setBuffer([]);
+            list.map((result, index) => {
+                buffer.push(
+                    <li id={index}
+                        onMouseEnter={() => handleMouseHover(index)}
+                        onMouseLeave={() => handleMouseHover(index)}
+                        className="list-group-item"
+                    >
+                        <Row className="">
+                            <Col className="">
+                                <span className="">{result.nombre}</span>
+                            </Col>
+                            <Col className="align-self-end">
+                                {actualHovering === index &&
+                                <Button
+                                    className={`actionButton`}
+                                    onClick={() => props.checarAsistencia(props.result.id)}
+                                    disabled={props.isDisabled}>
+                                    <span className={`${props.isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
+                                    {props.isCorrect === true ? <FontAwesomeIcon icon={faCheck}/> : ''}{ props.buttonText}
+                                </Button>}
+                            </Col>
+                        </Row>
+                    </li>);
+            });
+    },[])
 
-     toogleHoverState = state => {
+    const handleMouseHover = index => {
 
-         return {isHovering: !state.isHovering}};
+        if(props.hoverEnable) {
+            setActualHovering(index);
+        }
 
-     render() {
+        setIsHovering(!isHovering);
 
-         let buffer = [];
-         if(this.props.list.length >= 1) {
-             this.props.list.map((result, index) => {
-                 buffer.push(
-                     <li id={index}
-                         onMouseEnter={() => this.handleMouseHover(index)}
-                         onMouseLeave={() => this.handleMouseHover(index)}
-                         className="list-group-item">
-                     <Row className="">
-                         <Col className="">
-                            <span className="">{result}</span>
-                        </Col>
-                         <Col className="align-self-end">
-                             {this.state.actualHovering === index &&
-                             <Button
-                                 className={`actionButton`}
-                                 onClick={() => this.props.checarAsistencia(this.props.arrayIdSocios[index])}
-                                 disabled={this.props.isDisabled}>
-                                 <span className={`${this.props.isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                                 {this.props.isCorrect === true ? <FontAwesomeIcon icon={faCheck}/> : ''}{ this.props.buttonText}
-                             </Button>}
-                         </Col>
-                     </Row>
-                 </li>);
-             });
-         }
+        return isHovering;
 
-         return buffer;
+    };
 
-    }
 
-}
+
+    return buffer;
+};
+
+export default ListaResultados;
+
+

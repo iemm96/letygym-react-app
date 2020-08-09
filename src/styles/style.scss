@@ -372,6 +372,21 @@ div.login {
   }
 }
 
+
+
+.btnAction {
+  background: none !important;
+  color: #011627 !important;
+  border: none !important;
+  transition: 0.4s;
+
+  &:hover {
+    color: #011627;
+    transition: 0.4s;
+    transform: scale(1.8);
+  }
+}
+
 .list-group-item {
   color: #3c4858;
 }

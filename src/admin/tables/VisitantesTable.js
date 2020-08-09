@@ -203,7 +203,7 @@ class VisitantesTable extends React.Component {
         }).then((res) => res)
             .then((data) =>  {
                 if(data.ok) {
-                    window.location.reload();
+                    //window.location.reload();
                 }
             })
             .catch((err)=>console.log(err))

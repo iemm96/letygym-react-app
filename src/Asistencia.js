@@ -4,9 +4,12 @@ import ListaResultados from "./ListaResultados";
 import ModalMembresia from "./ModalMembresia";
 import {url_base} from './constants/api_url';
 import {fetchRecords} from "./actions/fetchRecords";
+import {Button, Col, Row} from "reactstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck} from "@fortawesome/free-solid-svg-icons";
 
 const api_url = url_base;
-
+const useForceUpdate = () => useState()[1];
 const Asistencia = () => {
     let arrayResults2 = [];
     const [isHovering,setIsHovering] = useState(false);
@@ -15,10 +18,11 @@ const Asistencia = () => {
     const [isLoading,setIsLoading] = useState(false);
     const [isDisabled,setIsDisabled] = useState(false);
     const [isCorrect,setIsCorrect] = useState(false);
-    const [hoverEnable,setHoverEnable] = useState(false);
+    const [hoverEnable,setHoverEnable] = useState(true);
     const [modalMembresia,setModalMembresia] = useState(false);
     const [showList,setShowList] = useState(false);
     const [buttonText,setButtonText] = useState('Registrar Asistencia');
+    const [actualHovering,setActualHovering] = useState(false);
 
     useEffect(() => {
         async function getSocias() {
@@ -33,6 +37,15 @@ const Asistencia = () => {
 
         getSocias();
     },[]);
+
+    useEffect(() => {
+        forceUpdate();
+        console.log('arrayResults ',arrayResults);
+
+        if(arrayResults.length) {
+            console.log('arrayResults ',arrayResults);
+        }
+    },[arrayResults]);
 
     const checarAsistencia = value => {
 
@@ -74,11 +87,14 @@ const Asistencia = () => {
 
     };
 
+    const forceUpdate = useForceUpdate();
+
     const toggleModal = () => setModalMembresia(!modalMembresia);
     
     const handleInputChange = event => {
         setArrayResults([]);
 
+        let arrResultsTemp = [];
         //Si el string del campo es mayor a 2 se comienza a buscar en el arreglo
         if(event.target.value.length > 1) {
 
@@ -95,7 +111,9 @@ const Asistencia = () => {
                     if(nombreCompleto.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
                         console.log('encontrado: ' , socia );
 
-                        arrayResults.push({nombre:socia.nombreCompleto,id:socia.id});
+                        arrResultsTemp.push({nombre:socia.nombreCompleto,id:socia.id});
+
+                        setArrayResults(arrResultsTemp);
 
                     }
                 });
@@ -109,6 +127,20 @@ const Asistencia = () => {
         }
 
     };
+
+
+    const handleMouseHover = index => {
+
+        if(hoverEnable) {
+            setActualHovering(index);
+        }
+
+        setIsHovering(!isHovering);
+
+        return isHovering;
+
+    };
+
     return (
         <div className="row justify-content-center h-100">
             <ModalMembresia
@@ -118,7 +150,7 @@ const Asistencia = () => {
             <div id="cardLogin" className="login card card-nav-tabs animate fadeInUp one">
                 <div className="card-body">
                     <form id="formLogin" className="center">
-                        <h3>Bienvenid@ a LetyGym</h3>
+                        <h3>Bienvenid@ a Lety Fitness Club</h3>
                         <div className="form-group">
                             <input onInput={handleInputChange}
                                    id="inputNombre" type="text"
@@ -129,15 +161,28 @@ const Asistencia = () => {
                         </div>
                         <div className="">
                             <ul id="result-list" className="list-group result">
-                                {showList ? <ListaResultados list={arrayResults}
-                                                             checarAsistencia={checarAsistencia}
-                                                             isLoading={isLoading}
-                                                             isCorrect={isCorrect}
-                                                             isDisabled={isDisabled}
-                                                             buttonText={buttonText}
-                                                             hoverEnable={hoverEnable}
-                                                             showList={showList}
-                                /> : '' }
+                                {arrayResults.map((result,index) => (
+                                    <li id={index}
+                                        onMouseEnter={() => handleMouseHover(index)}
+                                        onMouseLeave={() => handleMouseHover(index)}
+                                        className="list-group-item"
+                                    >
+                                    <Row className="">
+                                        <Col className="">
+                                            <span className="">{result.nombre}</span>
+                                        </Col>
+                                        <Col className="align-self-end">
+                                            {actualHovering === index &&
+                                            <Button
+                                                className={`actionButton`}
+                                                onClick={() => checarAsistencia(result.id)}
+                                                disabled={isDisabled}>
+                                                <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
+                                                {isCorrect === true ? <FontAwesomeIcon icon={faCheck}/> : ''}{buttonText}
+                                            </Button>}
+                                        </Col>
+                                    </Row>
+                                </li>))}
                             </ul>
                         </div>
 
