@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
-import {Row, Col, Button, NavLink, TabContent, TabPane, UncontrolledDropdown, Label, Collapse, NavbarToggler, Navbar} from "reactstrap";
+import React from 'react';
+import {Row, Col, Button, NavLink, TabContent, TabPane, Collapse, Navbar} from "reactstrap";
 
-import { Search } from 'react-bootstrap-table2-toolkit';
 import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
 import VentasTable from "./tables/VentasTable";
 import ProductosTable from "./tables/ProductosTable";
 import AsistenciasTable from "./tables/AsistenciasTable";
 import EgresosTable from "./tables/EgresosTable";
+import IngresosTable from "./tables/IngresosTable";
 import RenovarMembresia from "./modals/RenovarMembresia";
 import MembresiasTable from "./tables/MembresiasTable";
 import SideBar from "./sidebar/SideBar";
 import {url_base} from '../constants/api_url';
-import { faCheck, faTrash, faBars} from '@fortawesome/free-solid-svg-icons'
+import { faBars} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const api_url = url_base;
@@ -266,7 +266,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 6 ? <EgresosTable/> : ''}
+                                        {this.state.activeTab === 6 ? <IngresosTable/> : ''}
 
                                     </div>
                                 </Col>

@@ -9,6 +9,7 @@ import EliminarRegistroModal from "../modals/EliminarRegistroModal";
 import MUIDataTable from "mui-datatables";
 
 import {url_base} from '../../constants/api_url';
+import {muiTableOptions} from "../../constants/muiTableOptions";
 
 const api_url = url_base;
 
@@ -260,82 +261,12 @@ class SociosTable extends React.Component {
              }
          },];
 
-         const options = {
-             filter:false,
-             print:false,
-             textLabels: {
-                 body: {
-                     noMatch: "No se encontraron registros",
-                     toolTip: "Ordenar",
-                     columnHeaderTooltip: column => `Ordenamiento para ${column.label}`
-                 },
-                 pagination: {
-                     next: "Siguiente página",
-                     previous: "Página anterior",
-                     rowsPerPage: "Registros por página:",
-                     displayRows: "de",
-                 },
-                 toolbar: {
-                     search: "Buscar",
-                     downloadCsv: "Descargar CSV",
-                     print: "Imprimir",
-                     viewColumns: "Ver columnas...",
-                     filterTable: "Filtrar por...",
-                 },
-                 filter: {
-                     all: "Todos",
-                     title: "FILTROS",
-                     reset: "REINICIAR",
-                 },
-                 viewColumns: {
-                     title: "Ver columnas",
-                     titleAria: "Mostrar/Ocultar columnas",
-                 },
-                 selectedRows: {
-                     text: "Registro(s) seleccionado(s)",
-                     delete: "Eliminar",
-                     deleteAria: "Eliminar los registros seleccionados",
-                 },
-             }
-         };
-
-         const contentTable = ({ paginationProps, paginationTableProps }) => (
-             <div>
-                 <ModalSocio
-                     toggleModal={this.toggleModal}
-                     handleNewSocio={this.handleNewSocio}
-                     handleEditSocio={this.handleEditSocio}
-                     handleInputChange={this.handleInputChange}
-                     modalSocio={this.state.modalSocio}
-                     handleSelectChange={this.handleSelectChange}
-                     editMode={this.state.edit}
-                     idSocio={this.state.idSocio}
-                     nombre={this.state.nombre}
-                     bActiva={this.state.bActiva}
-                     apellidoPaterno={this.state.apellidoPaterno}
-                     apellidoMaterno={this.state.apellidoMaterno}
-                     id_membresia={this.state.id_membresia}
-                 />
-                 <EliminarRegistroModal
-                     toggleDeleteModal={this.toggleDeleteModal}
-                     titulo={this.state.nombre}
-                     deleteRegister={this.deleteRegister}
-                     deleteModal={this.state.deleteModal}/>
-                 <MUIDataTable
-                     title={"Socias"}
-                     data={this.state.socios}
-                     columns={columns}
-                     options={options}
-                 />
-             </div>
-         );
-
          return(
              <MUIDataTable
                  title={"Socias"}
                  data={this.state.socios}
                  columns={columns}
-                 options={options}
+                 options={muiTableOptions}
              />
          );
      }
