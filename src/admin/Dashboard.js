@@ -14,7 +14,9 @@ import SideBar from "./sidebar/SideBar";
 import {url_base} from '../constants/api_url';
 import { faBars} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
+import axios from "axios";
+import IngresosEgresos from "./sections/IngresosEgresos";
+import Switch from "react-switch";
 const api_url = url_base;
 
 
@@ -30,7 +32,9 @@ export default class Dashboard extends React.Component{
             dropdownOpen: false,
             modalMembresia: false,
             isOpen: false,
-            isOpenSidebar: false
+            isOpenSidebar: false,
+            turnoActual:0,
+            checked:true
         }
     }
 
@@ -66,6 +70,30 @@ export default class Dashboard extends React.Component{
     };
 
     componentDidMount() {
+
+        fetch(`${api_url}getTurnoActual`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+
+                if(response.turno){
+
+                    this.setState({turnoActual:response.turno});
+                }
+            }
+        );
 
         fetch(`${api_url}compruebaRenovaciones`, {
             // mode: 'no-cors',
@@ -129,8 +157,52 @@ export default class Dashboard extends React.Component{
         }
     }
 
+    handleChangeTurno = async turno => {
+
+        try {
+            const response = await axios({
+                url:`${api_url}updateTurnoActual/${turno}`,
+                method: 'PUT',
+                headers: {"Content-Type": "application/json",}
+            });
+            if(response) {
+                window.location.reload();
+            }
+        }catch (e) {
+            console.log(e);
+        }
+
+    }
 
     toggleSidebar = () => (this.setState({isOpenSidebar:!this.state.isOpenSidebar}));
+
+    renderSwitch(param) {
+        console.log(param);
+        switch(param) {
+            case 0:
+                return <Button onClick={() => this.handleChangeTurno(1)}>
+                    Iniciar turno Matutino
+                </Button>;
+            case 1:
+                return <Button onClick={() => this.handleChangeTurno(2)}>
+                    Finalizar turno Matutino
+                </Button>;
+            case 2:
+                return <Button onClick={() => this.handleChangeTurno(3)}>
+                    Iniciar turno Vespertino
+                </Button>;
+            case 3:
+                return <Button onClick={() => this.handleChangeTurno(0)}>
+                    Finalizar turno Vespertino
+                </Button>;
+            default:
+                return <p>Cargando...</p>;
+        }
+    }
+
+    handleChange = () => {
+        this.setState({checked:!this.state.checked});
+    }
 
     render() {
 
@@ -142,7 +214,6 @@ export default class Dashboard extends React.Component{
                                   nombreCompleto={this.state.nombreCompleto}
                                   socioMembresiaId={this.state.socioMembresiaId}
                                   modalMembresia={this.state.modalMembresia}/>
-
                 <header className="main-header ">
                     <Navbar className="header-dashboard navbar navbar-expand-xl animate fadeInDown one navbar-light top-navbar"
                          data-toggle="sticky-onscroll">
@@ -155,52 +226,60 @@ export default class Dashboard extends React.Component{
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
+
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Socias y Visitantes
+                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Inicio
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(2)}}
-                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Venta de Productos
+                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Socias y Visitantes
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(3)}}
-                                                 className={this.state.activeTab === 3 ? 'active' : ''}>Catálogo de Productos
+                                                 className={this.state.activeTab === 3 ? 'active' : ''}>Venta de Productos
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(4)}}
-                                                 className={this.state.activeTab === 4 ? 'active' : ''}>Membresías
+                                                 className={this.state.activeTab === 4 ? 'active' : ''}>Catálogo de Productos
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(5)}}
-                                                 className={this.state.activeTab === 5 ? 'active' : ''}>Asistencias
+                                                 className={this.state.activeTab === 5 ? 'active' : ''}>Membresías
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(6)}}
-                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Ingresos
+                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Asistencias
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(7)}}
-                                                 className={this.state.activeTab === 7 ? 'active' : ''}>Egresos
+                                                 className={this.state.activeTab === 7 ? 'active' : ''}>Ingresos
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink className="nav-link" href="#"
+                                                 onClick={() => {this.toggle(8)}}
+                                                 className={this.state.activeTab === 8 ? 'active' : ''}>Egresos
                                         </NavLink>
                                     </li>
                                 </ul>
+
                             </Collapse>
+                            {this.renderSwitch(this.state.turnoActual)}
                         </div>
                     </Navbar>
-
                 </header>
 
                 <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
@@ -208,20 +287,101 @@ export default class Dashboard extends React.Component{
                 <div className="mb-5 dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-                            <Row className="p-5 p-xl-4 justify-content-end">
 
+
+                            <Row className="p-5 p-xl-4 justify-content-end">
+                                <Col className="mt-5">
+                                    <label htmlFor="small-radius-switch" style={{
+                                        display:'flex',
+                                        alignItems: "center",
+                                        justifyContent: "end",
+                                    }}>
+                                        <span className="mr-3">Egresos</span>
+                                        <Switch
+                                            checked={this.state.checked}
+                                            onChange={this.handleChange}
+                                            uncheckedIcon={
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        height: "100%",
+                                                        fontSize: 15,
+                                                        color: "white",
+                                                        paddingRight: 15,
+                                                        width:"100%"
+                                                    }}
+                                                >
+                                                </div>
+                                            }
+                                            checkedIcon={
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        height: "100%",
+                                                        fontSize: 15,
+                                                        color: "white",
+                                                        paddingRight: 2,
+                                                        marginLeft:10,
+                                                        width:"100%"
+                                                    }}
+                                                >
+                                                </div>
+                                            }
+                                            handleDiameter={28}
+                                            offColor="#FF5E5B"
+                                            onColor="#40C9A2"
+                                            offHandleColor="#F9E784"
+                                            onHandleColor="#F9E784"
+                                            height={40}
+                                            width={80}
+                                            className="react-switch"
+                                            id="small-radius-switch"
+                                        />
+                                        <span className="ml-3">Ingresos</span>
+
+                                    </label>
+                                </Col>
+                            </Row>
+                            <Row style={{margin:0}}>
+                                <Col>
+                                    {this.state.activeTab === 1 && this.state.checked ? <IngresosTable className="mt-3"/> : ''}
+                                    {this.state.activeTab === 1 && this.state.checked === false ? <EgresosTable className="mt-3"/> : ''}
+                                </Col>
                             </Row>
                             <Row className="justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 1 ? <SociosTable/> : ''}
+                                        {this.state.activeTab === 9 ? <SociosTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
                             <Row className="justify-content-center">
                                 <Col className="pt-5 col-11">
                                     <div>
-                                        {this.state.activeTab === 1 ? <VistantesTable/> : ''}
+                                        {this.state.activeTab === 9 ? <VistantesTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 9 ? 'active' : ''} tabId="1">
+                            <Row className="p-5 p-xl-4 justify-content-end">
+
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 9 ? <SociosTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <Col className="pt-5 col-11">
+                                    <div>
+                                        {this.state.activeTab === 9 ? <VistantesTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
