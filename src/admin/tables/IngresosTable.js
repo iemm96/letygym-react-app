@@ -50,13 +50,36 @@ class IngresosTable extends React.Component {
             idRecord: null,
             ingresosTurnoMatutino: [],
             ingresosTurnoVespertino: [],
-            precio: ''
+            precio: '',
+            totalIngresos:0,
+            totalEgresos:0,
         };
     }
 
     componentDidMount() {
 
-        fetch(`${api_url}pagosSocios`, {
+            fetch(`${api_url}ingresos/getRecords/1`, {
+                // mode: 'no-cors',
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                },
+            },)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Something went wrong ...');
+                    }
+
+                }).then(response => {
+                this.setState({ingresosTurnoMatutino: response.dataIngresos});
+            }
+
+
+        );
+
+        fetch(`${api_url}ingresos/getRecords/2`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -70,8 +93,47 @@ class IngresosTable extends React.Component {
                     throw new Error('Something went wrong ...');
                 }
 
-            }).then(response =>
-            this.setState({records: response})
+            }).then(response => {
+                this.setState({ingresosTurnoVespertino: response.dataIngresos});
+            }
+        );
+
+        fetch(`${api_url}ingresos/getTotal`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+                this.setState({totalIngresos: response});
+            }
+        );
+
+        fetch(`${api_url}egresos/getTotal`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+                this.setState({totalEgresos: response});
+            }
         );
     }
 
@@ -152,7 +214,7 @@ class IngresosTable extends React.Component {
     }
 
     updateTotal = total => {
-        this.setState({total:total})
+        this.setState({totalIngresos:total})
     }
 
     actionsFormatter = (cell, row) => (<div>
@@ -237,30 +299,23 @@ class IngresosTable extends React.Component {
             </div>
         );
 
-        const columnsTurnoVespertino = [{
-            name: "nombreCompleto",
-            label: "Nombre",
+        const columnsTurnos = [{
+            name: "concepto",
+            label: "Concepto",
             options: {
                 filter: false,
                 sort: false,
             }
         },{
-            name: "membresia",
-            label: "Membresía",
+            name: "cantidad",
+            label: "Cantidad",
             options: {
                 filter: false,
                 sort: false,
             }
         },{
-            name: "fecha_fin",
-            label: "Membresía activa hasta",
-            options: {
-                filter: false,
-                sort: false,
-            }
-        },{
-            name: "bActiva",
-            label: "Estatus",
+            name: "fechaHora",
+            label: "Fecha y Hora",
             options: {
                 filter: false,
                 sort: false,
@@ -285,32 +340,34 @@ class IngresosTable extends React.Component {
             <div>
                 <Row>
                     <Col>
-                        <Button>
-                            Día anterior
-                        </Button>
                     </Col>
                     <Col>
-                        <h2>Ingresos del día</h2>
+                        <h2>Ingresos del día ${new Intl.NumberFormat().format(this.state.totalIngresos)}</h2>
                     </Col>
                     <Col>
+                    </Col>
+                </Row>
+                <Row className="mt-4">
+                    <Col>
+                        <MUIDataTable
+                            title={"Turno matutino"}
+                            data={this.state.ingresosTurnoMatutino}
+                            columns={columnsTurnos}
+                            options={muiTableOptions}
+                        />
+                    </Col>
 
+                </Row>
+                <Row className="mt-4">
+                    <Col>
+                        <MUIDataTable
+                            title={"Turno vespertino"}
+                            data={this.state.ingresosTurnoVespertino}
+                            columns={columnsTurnos}
+                            options={muiTableOptions}
+                        />
                     </Col>
-                </Row>
-                <Row className="mt-4">
-                    <MUIDataTable
-                        title={"Turno matutino"}
-                        data={this.state.ingresosTurnoMatutino}
-                        columns={columns}
-                        options={columnsTurnoVespertino}
-                    />
-                </Row>
-                <Row className="mt-4">
-                    <MUIDataTable
-                        title={"Turno vespertino"}
-                        data={this.state.ingresosTurnoVespertino}
-                        columns={columns}
-                        options={columnsTurnoVespertino}
-                    />
+
                 </Row>
 
             </div>

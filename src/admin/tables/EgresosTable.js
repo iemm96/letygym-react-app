@@ -4,10 +4,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
 import {Button, Col } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
 import {url_base} from '../../constants/api_url';
+import MUIDataTable from "mui-datatables";
+import {muiTableOptions} from "../../constants/muiTableOptions";
 
 const api_url = url_base;
 
@@ -46,15 +48,17 @@ class EgresosTable extends React.Component {
             records: records,
             edit: false,
             idRecord: null,
-            cantidad: 0,
-            producto: '',
-            precio: ''
+            egresosTurnoMatutino: [],
+            egresosTurnoVespertino: [],
+            precio: '',
+            totalIngresos:0,
+            totalEgresos:0
         };
     }
 
     componentDidMount() {
 
-        fetch(`${api_url}pagosSocios`, {
+        fetch(`${api_url}egresos/getRecords/1`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -69,24 +73,10 @@ class EgresosTable extends React.Component {
                 }
 
             }).then(response =>
-            this.setState({records: response})
+            this.setState({egresosTurnoMatutino: response})
         );
-    }
 
-    toggleModal = () => {
-        this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
-    };
-
-    prepareNewModal = () => {
-        this.setState({edit: false});
-
-        this.toggleModal();
-    }
-
-    prepareEditModal = id => {
-        this.setState({edit: true,idRecord: id});
-
-        fetch(`${api_url}pagos/${id}`, {
+        fetch(`${api_url}egresos/getRecords/2`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -100,22 +90,24 @@ class EgresosTable extends React.Component {
                     throw new Error('Something went wrong ...');
                 }
 
-            }).then(response => (this.setRecordData(response))
+            }).then(response =>
+            this.setState({egresosTurnoVespertino: response})
         );
-
-        this.toggleModal();
     }
 
-    setRecordData = data => {
+    toggleModal = () => {
+        this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
+    };
 
-        this.setState({
-            ...data
-        })
+    prepareNewModal = () => {
+        this.setState({edit: false});
+
+        this.toggleModal();
     };
 
     toggleDeleteModal = () => {
         this.state.deleteModal ? this.setState({deleteModal: false}) : this.setState({deleteModal: true});
-    }
+    };
 
     handleInputChange = event => {
 
@@ -126,39 +118,14 @@ class EgresosTable extends React.Component {
         this.setState({
             [name]: value
         });
-    }
-
-    handleSelectChange = object => {
-        this.setState({
-            id_producto: object.value
-        });
-    }
+    };
 
     getCurrentDateTime = () => {
         var tempDate = new Date();
         var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
         this.setState({fechaHora:date});
 
-    }
-
-    handleNewRecord = event => {
-
-        event.preventDefault();
-
-        this.getCurrentDateTime();
-
-        fetch(`${api_url}pagos`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-            },
-            body:this.stringifyData()
-        }).then((res) => res.json())
-            .then((data) =>  console.log(data))
-            .catch((err)=>console.log(err))
-
-    }
+    };
 
     stringifyData = () => {
 
@@ -290,16 +257,77 @@ class EgresosTable extends React.Component {
             </div>
         );
 
+        const columnsTurnos = [{
+            name: "concepto",
+            label: "Concepto",
+            options: {
+                filter: false,
+                sort: false,
+            }
+        },{
+            name: "cantidad",
+            label: "Cantidad",
+            options: {
+                filter: false,
+                sort: false,
+            }
+        },{
+            name: "fechaHora",
+            label: "Fecha y Hora",
+            options: {
+                filter: false,
+                sort: false,
+            }
+        },{
+            name: "Acciones",
+            options: {
+                filter: true,
+                sort: false,
+                empty: true,
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return (
+                        <div>
+                            <Button type="Button" onClick={() => this.prepareEditModal(value.id)} className="mr-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
+                        </div>
+                    );
+                }
+            }
+        },];
+
         return(
             <div>
-                <Col className="col-3">
-                </Col>
-                <PaginationProvider
-                    pagination={paginationFactory(options)}>
+                <Row>
+                    <Col>
+                    </Col>
+                    <Col>
+                        <h2>Egresos del día ${new Intl.NumberFormat().format(this.state.totalEgresos)}</h2>
+                    </Col>
+                    <Col>
+                    </Col>
+                </Row>
+                <Row className="mt-4">
+                    <Col>
+                        <MUIDataTable
+                            title={"Turno matutino"}
+                            data={this.state.egresosTurnoMatutino}
+                            columns={columnsTurnos}
+                            options={muiTableOptions}
+                        />
+                    </Col>
 
-                    {contentTable}
+                </Row>
+                <Row className="mt-4">
+                    <Col>
+                        <MUIDataTable
+                            title={"Turno vespertino"}
+                            data={this.state.egresosTurnoVespertino}
+                            columns={columnsTurnos}
+                            options={muiTableOptions}
+                        />
+                    </Col>
 
-                </PaginationProvider>
+                </Row>
+
             </div>
 
         );

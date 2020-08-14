@@ -9,9 +9,11 @@ import RegistrarVenta from "../modals/RegistrarVenta";
 import { Row } from "reactstrap";
 import EliminarRegistroModal from "../modals/EliminarRegistroModal";
 import {url_base} from '../../constants/api_url';
-import ModalProducto from "../modals/ModalProducto";
+import ModalRecord from "../modals/ModalProducto";
+import {fetchRecords} from "../../actions/fetchRecords";
 
 const { SearchBar } = Search;
+const RESOURCE = 'productos';
 const api_url = url_base;
 
 let records = [{
@@ -52,7 +54,9 @@ class ProductosTable extends React.Component {
             idRecord: null,
             cantidad: 0,
             producto: '',
-            precio: ''
+            precio: '',
+            selectedRecordId: null,
+            modalControl:false
         };
     }
 
@@ -78,7 +82,7 @@ class ProductosTable extends React.Component {
     }
 
     toggleModal = () => {
-        this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
+        this.setState({modalControl:!this.state.modalControl});
     };
 
     prepareNewModal = () => {
@@ -221,6 +225,16 @@ class ProductosTable extends React.Component {
         <Button type="Button" onClick={() => this.prepareDeleteModal(row.id, row.producto)} className="btn btn-danger"><FontAwesomeIcon icon={faTrash} /></Button>
     </div>);
 
+    updateRecords = async () => {
+        console.log('updating');
+        const result = await fetchRecords(RESOURCE);
+
+        if(result) {
+
+            this.state.setState({records:result})
+        }
+    };
+
     render() {
 
         const {error} = this.state;
@@ -268,23 +282,17 @@ class ProductosTable extends React.Component {
             totalSize: this.state.records.length
         };
 
+
+
         const contentTable = ({ paginationProps, paginationTableProps }) => (
             <div>
-                <ModalProducto
+                {this.state.modalControl ? <ModalRecord
+                    idRecord={this.state.selectedRecordId}
                     toggleModal={this.toggleModal}
-                    handleNewRecord={this.handleNewRecord}
-                    handleEditRecord={this.handleEditRecord}
-                    handleInputChange={this.handleInputChange}
-                    handleSelectChange={this.handleSelectChange}
-                    modalRecord={this.state.modalRecord}
-                    idRecord={this.state.idRecord}
-                    producto={this.state.producto}
-                    cantidad={this.state.cantidad}
-                    precio={this.state.precio}
-                    editMode={this.state.edit}
-                    recordData={this.state}
-                    updateTotal={this.updateTotal}
-                />
+                    recordModal={this.state.modalControl}
+                    resource={RESOURCE}
+                    updateRecords={this.updateRecords}
+                /> : ''}
                 <EliminarRegistroModal
                     toggleDeleteModal={this.toggleDeleteModal}
                     titulo={this.state.title}
