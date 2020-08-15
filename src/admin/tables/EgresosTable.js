@@ -93,7 +93,47 @@ class EgresosTable extends React.Component {
             }).then(response =>
             this.setState({egresosTurnoVespertino: response})
         );
+
+        fetch(`${api_url}ingresos/getTotal`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+                this.setState({totalIngresos: response});
+            }
+        );
+
+        fetch(`${api_url}egresos/getTotal`, {
+            // mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        },)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong ...');
+                }
+
+            }).then(response => {
+                this.setState({totalEgresos: response});
+            }
+        );
     }
+
+
 
     toggleModal = () => {
         this.state.modalRecord ? this.setState({modalRecord: false}) : this.setState({modalRecord: true});
