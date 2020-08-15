@@ -262,18 +262,6 @@ export default class Dashboard extends React.Component{
                                                  className={this.state.activeTab === 6 ? 'active' : ''}>Asistencias
                                         </NavLink>
                                     </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
-                                                 onClick={() => {this.toggle(7)}}
-                                                 className={this.state.activeTab === 7 ? 'active' : ''}>Ingresos
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
-                                                 onClick={() => {this.toggle(8)}}
-                                                 className={this.state.activeTab === 8 ? 'active' : ''}>Egresos
-                                        </NavLink>
-                                    </li>
                                 </ul>
 
                             </Collapse>
@@ -418,26 +406,6 @@ export default class Dashboard extends React.Component{
                                 <Col className="col-11">
                                     <div>
                                         {this.state.activeTab === 5 ? <AsistenciasTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 6 ? 'active' : ''} tabId="4">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 6 ? <IngresosTable/> : ''}
-
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 7 ? 'active' : ''} tabId="4">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 7 ? <EgresosTable/> : ''}
-
                                     </div>
                                 </Col>
                             </Row>
