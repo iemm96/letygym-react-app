@@ -9,7 +9,7 @@ import {storeRecord} from "../../actions/storeRecord";
 const ModalProducto = (props ) => {
     const { register,errors, handleSubmit } = useForm();
     const [record,setRecord] = useState(null);
-    const [tipoProducto,setTipoProducto] = useState(0);
+    const [tipoProducto,setTipoProducto] = useState(1);
     const [disabledButton,setDisabledButton] = useState(false);
 
     useEffect(() => {
@@ -38,13 +38,11 @@ const ModalProducto = (props ) => {
 
     const onSubmit = async (data) => {
 
-        console.log(data);
-        debugger;
         if(record) {
 
             try {
 
-                const response = await updateRecord(data,'productos');
+                const response = await updateRecord(data,'productos/update');
 
                 console.log(response);
                 if(response) {
@@ -85,11 +83,11 @@ const ModalProducto = (props ) => {
 
         }else{
             try {
-                const response = await storeRecord(data,'productos');
+                const response = await storeRecord(data,'productos/add');
                 if(response) {
                     store.addNotification({
                         title: "Correcto",
-                        message: "Se ha creado una nueva cuenta",
+                        message: "Se ha creado un nuevo producto",
                         type: "success",
                         insert: "top",
                         container: "top-right",
@@ -106,7 +104,7 @@ const ModalProducto = (props ) => {
 
             }catch (e) {
                 store.addNotification({
-                    title: "Ocurrió un error al agregar la cuenta",
+                    title: "Ocurrió un error al agregar el producto",
                     message: "Revisa tu conexión a internet",
                     type: "danger",
                     insert: "top",
@@ -131,7 +129,7 @@ const ModalProducto = (props ) => {
                 <hr/>
             </p>
             <Row>
-                <Col sm={4}>
+                <Col sm={6}>
                     <FormGroup>
                         <Label>* ¿Cuánto te costó?</Label>
                         <input className="form-control" type="number" name="costo" id="" placeholder=""
@@ -147,21 +145,33 @@ const ModalProducto = (props ) => {
         <ModalHeader toggle={() => props.toggleModal(4)}>Nuevo Producto</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>
-                <FormGroup>
-                    <label>* Nombre del producto </label>
-                    <input type="text" name="nombre" id="" />
-                    {errors.nombre && <small>Ingresa un nombre para el producto</small>}
-                </FormGroup>
-                <FormGroup>
-                    <label>* Cantidad </label>
-                    <input type="number" name="cantidad" id=""/>
-                    {errors.cantidad && <small>Ingresa una cantidad del producto</small>}
-                </FormGroup>
-                <FormGroup>
-                    <label>* Precio al público p/Unidad</label>
-                    <Input type="number" name="precio" id="" ref={register({ required: true })}/>
-                    {errors.precio && <small>Ingresa el precio para el cliente del producto</small>}
-                </FormGroup>
+                <Row>
+                    <Col sm={8}>
+                        <FormGroup>
+                            <label>* Nombre del producto </label>
+                            <input class="form-control" type="text" name="producto" id="" ref={register({ required: true })}/>
+                            {errors.nombre && <small>Ingresa un nombre para el producto</small>}
+                        </FormGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm={8}>
+                        <FormGroup>
+                            <label>* Cantidad </label>
+                            <input class="form-control"  type="number" name="cantidad" ref={register({ required: true })}/>
+                            {errors.cantidad && <small>Ingresa una cantidad del producto</small>}
+                        </FormGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm={8}>
+                        <FormGroup>
+                            <label>* Precio al público p/Unidad</label>
+                            <input class="form-control" type="number" name="precio" id="" ref={register({ required: true })}/>
+                            {errors.precio && <small>Ingresa el precio para el cliente del producto</small>}
+                        </FormGroup>
+                    </Col>
+                </Row>
                 <FormGroup>
                     <label>* Tipo de producto</label>
                     <div className="custom-control custom-radio custom-control-inline ml-3">
@@ -189,7 +199,7 @@ const ModalProducto = (props ) => {
                         <label className="custom-control-label" htmlFor="nuevo">Nuevo</label>
 
                     </div>
-                    {tipoProducto ? seccionNuevoProducto : ''}
+                    {tipoProducto === 2 ? seccionNuevoProducto : ''}
 
                 </FormGroup>
             </Form>
