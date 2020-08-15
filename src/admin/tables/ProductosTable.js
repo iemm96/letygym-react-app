@@ -226,12 +226,11 @@ class ProductosTable extends React.Component {
     </div>);
 
     updateRecords = async () => {
-        console.log('updating');
         const result = await fetchRecords(RESOURCE);
 
         if(result) {
 
-            this.state.setState({records:result})
+            this.setState({records:result})
         }
     };
 
