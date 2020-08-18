@@ -5,16 +5,12 @@ import 'react-notifications-component/dist/theme.css'
 
 const api_url = url_base;
 
-export const storeRecord = async (payload, resource, idCondominio) => {
+export const storeRecord = async (payload, resource) => {
 
     const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json, text-plain, */*",
     };
-
-    if(idCondominio) {
-        headers.idCondominio = idCondominio;
-    }
 
     const options = {
         url:`${api_url}${resource}`,

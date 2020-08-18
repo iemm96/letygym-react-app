@@ -3,17 +3,12 @@ import {url_base} from "./../constants/api_url";
 import axios from "axios";
 const api_url = url_base;
 
-export const updateRecord = async (payload,resource,record,idCondominio) => {
-
+export const updateRecord = async (payload,resource,record) => {
 
     const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json, text-plain, */*",
     };
-
-    if(idCondominio) {
-        headers.idCondominio = idCondominio;
-    }
 
     const options = {
         url:`${api_url}${resource}/${record}`,

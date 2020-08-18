@@ -4,7 +4,10 @@ import {url_base} from '../../constants/api_url';
 import Select from "react-select";
 import moment from 'moment';
 import 'moment/locale/es';
+import {store} from "react-notifications-component";
+
 const api_url = url_base;
+
 export default class RenovarMembresia extends React.Component{
 
     constructor(props) {
@@ -70,11 +73,25 @@ export default class RenovarMembresia extends React.Component{
         }).then((res) => res.json())
             .then((data) =>  {
                 if(data.id){
+                    store.addNotification({
+                        title: "Correcto",
+                        message: `Se ha renovado la membresía de ${this.props.nombreSocio}` ,
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
 
+                    this.props.updateRecords();
                 }
             })
             .catch((err)=>console.log(err))
-    }
+    };
 
     handleSelect = object => {
         this.setState({selectedMembresia: object.value},() => this.updateFechaPago());
@@ -154,7 +171,7 @@ export default class RenovarMembresia extends React.Component{
 
     handleChangeDiasProrroga = event => {
         this.setState({diasProrroga:event.target.value},() => this.updateFechaPago());
-    }
+    };
 
     render() {
 
