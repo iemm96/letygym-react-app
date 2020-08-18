@@ -46,12 +46,9 @@ const Buscador = (props) => {
     );
 };
 
-
-
 const AsistenciasTable = props => {
     const [records,setRecords] = useState([]);
-    const [recordsInstructores,setRecordsInstructores] = useState([]);
-    const [modalAsistencia,setModalAsistencia] = useState(false);
+    const [recordsAsistenciaInstructores,setRecordsAsistenciaInstructores] = useState([]);
     const [switchAsistencia,setSwitchAsistencia] = useState(true);
     const [idSocia,setIdSocia] = useState(null);
     const [idInstructor,setIdInstructor] = useState(null);
@@ -60,16 +57,12 @@ const AsistenciasTable = props => {
     const [isLoading,setIsLoading] = useState(false);
     const [isDisabled,setIsDisabled] = useState(true);
     const [isCorrect,setIsCorrect] = useState(false);
-    const [selectValue,setSelectValue] = useState(null);
-    const [hoverEnable,setHoverEnable] = useState(true);
     const [modalMembresia,setModalMembresia] = useState(false);
-    const [showList,setShowList] = useState(false);
     const [buttonText,setButtonText] = useState('Registrar Asistencia');
-    const [actualHovering,setActualHovering] = useState(false);
     const [nombreSocia,setNombreSocia] = useState('');
     const [nombreCompletoSocia,setNombreCompletoSocia] = useState('');
 
-      useEffect( () => {
+    useEffect( () => {
 
           async function getAsistencias() {
               try {
@@ -101,9 +94,10 @@ const AsistenciasTable = props => {
 
           async function getAsistenciasInstructores() {
               try {
-                  const result = await fetchRecords('asistenciasInstructores');
+                  const result = await fetchRecords('asistenciasInstructores/getRecords');
+
                   if(result){
-                      setRecords(result);
+                      setRecordsAsistenciaInstructores(result);
                   }
               }catch (e) {
                   console.log(e);
@@ -134,13 +128,40 @@ const AsistenciasTable = props => {
 
           getAsistenciasInstructores();
 
-      },[]);
+    },[]);
 
+    const registrarAsistenciaInstructor = async () => {
+        setIsLoading(true);
+        setButtonText('');
+        moment().locale('es');
 
+        let turnoActual = 1;
 
-    const checarAsistencia = async () => {
+        if(props.turnoActual === 3) {
+            turnoActual = 2;
+        }
 
-        setHoverEnable(false);
+        let datetime = moment(new Date());
+        console.log(datetime.format('YYYY-MM-DD H:m:s'));
+
+        try {
+            const asistenciaResult = await storeRecord({
+                id_instructor:idInstructor,
+                fechaHora:datetime.format('YYYY-MM-DD H:m:s'),
+                turno:turnoActual
+            },'asistenciasInstructores');
+
+            if(asistenciaResult) {
+                updateRecords();
+            }
+        }catch (e) {
+
+        }
+
+    };
+      
+    const checarMembresia = async () => {
+
         setIsLoading(true);
         setButtonText('');
         const today = moment();
@@ -193,24 +214,39 @@ const AsistenciasTable = props => {
     };
 
     const updateRecords = async () => {
-
         setIsLoading(false);
         setIsCorrect(true);
         setIsDisabled(true);
-        setSelectValue(null);
-
-        setTimeout(() => {
-            setIsCorrect(false);
-            setButtonText('Registrar asistencia de Socia');
-        },2000);
 
         setModalMembresia(false);
 
         try {
-            const result = await fetchRecords('asistenciasSocios');
-            if(result) {
-                setRecords(result);
+
+            if(switchAsistencia) {
+
+                setTimeout(() => {
+                    setIsCorrect(false);
+                    setButtonText('Registrar asistencia de Socia');
+                },2000);
+
+                const result = await fetchRecords('asistenciasSocios');
+                if(result) {
+                    setRecords(result);
+                }
+
+            }else{
+
+                setTimeout(() => {
+                    setIsCorrect(false);
+                    setButtonText('Registrar asistencia de Instructor');
+                },2000);
+
+                const result = await fetchRecords('asistenciasInstructores/getRecords');
+                if(result) {
+                    setRecordsAsistenciaInstructores(result);
+                }
             }
+
         }catch (e) {
             console.log(e);
         }
@@ -360,7 +396,7 @@ const AsistenciasTable = props => {
                           width:270
                       }}
                       className="actionButton"
-                      onClick={() => checarAsistencia()}
+                      onClick={() => {switchAsistencia ? checarMembresia() : registrarAsistenciaInstructor()}}
                       disabled={isDisabled}
                   >
                       <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
@@ -378,7 +414,7 @@ const AsistenciasTable = props => {
                       options={muiTableOptions}
                   /> : <MUIDataTable
                       title={"Asistencias de Instructores"}
-                      data={recordsInstructores}
+                      data={recordsAsistenciaInstructores}
                       columns={columns}
                       options={muiTableOptions}
                   />}
