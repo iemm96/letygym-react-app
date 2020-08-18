@@ -4,10 +4,27 @@ import {useForm} from "react-hook-form";
 import {updateRecord} from "../../actions/updateRecord";
 import {store} from "react-notifications-component";
 import {storeRecord} from "../../actions/storeRecord";
+import {fetchRecord} from "../../actions/fetchRecord";
 
 const ModalInstructor = props => {
     const { register,errors, handleSubmit } = useForm();
     const [record,setRecord] = useState(null);
+
+    useEffect(() => {
+        async function getRecord() {
+            try {
+                const result = await fetchRecord(props.recordId,'instructores');
+                if(result) {
+                    setRecord(result);
+                }
+            }catch (e) {
+                console.log(e);
+            }
+        }
+
+        getRecord(props.recordId);
+
+    },[props.recordId]);
 
     const onSubmit = async (data) => {
 
@@ -15,13 +32,13 @@ const ModalInstructor = props => {
 
             try {
 
-                const response = await updateRecord(data,'productos/update');
+                const response = await updateRecord(data,'instructores',props.recordId);
 
                 console.log(response);
                 if(response) {
                     store.addNotification({
                         title: "Correcto",
-                        message: "Se ha actualizado la cuenta",
+                        message: "Se ha actualizado el instructor",
                         type: "success",
                         insert: "top",
                         container: "top-right",
@@ -40,7 +57,7 @@ const ModalInstructor = props => {
             }catch (e) {
                 console.log(e);
                 store.addNotification({
-                    title: "Ocurrió un error al actualizar la cuenta",
+                    title: "Ocurrió un error al actualizar el instructor",
                     message: "Revisa tu conexión a internet",
                     type: "danger",
                     insert: "top",
@@ -56,11 +73,11 @@ const ModalInstructor = props => {
 
         }else{
             try {
-                const response = await storeRecord(data,'productos/add');
+                const response = await storeRecord(data,'instructores');
                 if(response) {
                     store.addNotification({
                         title: "Correcto",
-                        message: "Se ha creado un nuevo producto",
+                        message: "Se ha creado un nuevo instructor",
                         type: "success",
                         insert: "top",
                         container: "top-right",
@@ -77,7 +94,7 @@ const ModalInstructor = props => {
 
             }catch (e) {
                 store.addNotification({
-                    title: "Ocurrió un error al agregar el producto",
+                    title: "Ocurrió un error al agregar el instructor",
                     message: "Revisa tu conexión a internet",
                     type: "danger",
                     insert: "top",
@@ -100,34 +117,69 @@ const ModalInstructor = props => {
         className
     } = props;
 
-    return(<Modal isOpen={props.recordModal} toggle={() => props.toggleModal(4)} className={className}>
-        <ModalHeader toggle={() => props.toggleModal(4)}>Nuevo Producto</ModalHeader>
+    return(<Modal isOpen={props.modalControl} toggle={() => props.toggleModal()} className={className}>
+        <ModalHeader toggle={() => props.toggleModal()}>Nuevo Instructor</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>
                 <Row>
-                    <Col sm={8}>
+                    <Col sm={12}>
                         <FormGroup>
-                            <label>* Nombre del producto </label>
-                            <input class="form-control" type="text" name="producto" id="" ref={register({ required: true })}/>
-                            {errors.nombre && <small>Ingresa un nombre para el producto</small>}
+                            <label>* Nombre del instructor</label>
+                            <input className="form-control"
+                                   type="text"
+                                   name="nombre"
+                                   defaultValue={record ? record.nombre : undefined}
+                                   ref={register({ required: true })}/>
+                            {errors.nombre && <small>Ingresa un nombre para el instructor</small>}
                         </FormGroup>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={8}>
                         <FormGroup>
-                            <label>* Cantidad </label>
-                            <input class="form-control"  type="number" name="cantidad" ref={register({ required: true })}/>
-                            {errors.cantidad && <small>Ingresa una cantidad del producto</small>}
+                            <label>* Apellido paterno </label>
+                            <input className="form-control"
+                                   type="text"
+                                   name="apellidoPaterno"
+                                   defaultValue={record ? record.apellidoPaterno : undefined}
+                                   ref={register({ required: true })}/>
+                            {errors.cantidad && <small>Ingresa un apellido paterno</small>}
                         </FormGroup>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={8}>
                         <FormGroup>
-                            <label>* Precio al público p/Unidad</label>
-                            <input class="form-control" type="number" name="precio" id="" ref={register({ required: true })}/>
-                            {errors.precio && <small>Ingresa el precio para el cliente del producto</small>}
+                            <label>* Apellido materno </label>
+                            <input className="form-control"
+                                   type="text"
+                                   name="apellidoMaterno"
+                                   defaultValue={record ? record.apellidoMaterno : undefined}
+                                   ref={register({ required: true })}/>
+                            {errors.precio && <small>Ingresa un apellido materno</small>}
+                        </FormGroup>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col sm={6}>
+                        <FormGroup>
+                            <label> Teléfono </label>
+                            <input className="form-control"
+                                   type="text"
+                                   name="telefono"
+                                   defaultValue={record ? record.telefono : undefined}
+                                   ref={register()}/>
+                        </FormGroup>
+                    </Col>
+                    <Col sm={6}>
+                        <FormGroup>
+                            <label> Celular </label>
+                            <input className="form-control"
+                                   type="text"
+                                   name="celular"
+                                   defaultValue={record ? record.celular : undefined}
+                                   ref={register()}/>
                         </FormGroup>
                     </Col>
                 </Row>
@@ -135,8 +187,8 @@ const ModalInstructor = props => {
             </Form>
         </ModalBody>
         <ModalFooter>
-            <Button color="secondary" onClick={() => props.toggleModal(4)}>Cancelar</Button>
-            <Button type="submit" form="form" color="primary">Agregar Producto</Button>{' '}
+            <Button color="secondary" onClick={() => props.toggleModal()}>Cancelar</Button>
+            <Button type="submit" form="form" color="primary">{record ? 'Actualizar' : 'Agregar'} Instructor</Button>{' '}
         </ModalFooter>
     </Modal>);
 

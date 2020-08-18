@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from "react";
 import MUIDataTable from "mui-datatables";
 import {fetchRecords} from "../../actions/fetchRecords";
+import { Row, Col } from "reactstrap";
 import {Button} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit} from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,11 @@ const InstructoresTable = props => {
             try {
                 const result = await fetchRecords('instructores');
                 if(result) {
+
+                    result.map((value) => {
+                        value.nombre = `${value.nombre} ${value.apellidoPaterno} ${value.apellidoMaterno}`;
+                    });
+
                     setRecords(result);
                 }
             }catch (e) {
@@ -29,15 +35,31 @@ const InstructoresTable = props => {
 
     const prepareEditModal = id => {
         setSelectedRecordId(id);
-        setModalControl(true);
+        toggleModal();
     };
 
-    const updateRecords = () => {
-
+    const prepareNewModal = () => {
+        toggleModal();
     };
+
+    const toggleModal = () => {
+        setModalControl(!modalControl);
+    };
+
+    const updateRecords = async () => {
+        try {
+            const result = await fetchRecords('instructores');
+            if(result) {
+                setRecords(result);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+    };
+
 
     const columns = [{
-        name: "nombreCompleto",
+        name: "nombre",
         label: "Nombre",
         options: {
             filter: false,
@@ -58,7 +80,8 @@ const InstructoresTable = props => {
             sort: false,
         }
     },{
-        name: "Acciones",
+        name: "id",
+        label: "Acciones",
         options: {
             filter: true,
             sort: false,
@@ -66,7 +89,7 @@ const InstructoresTable = props => {
             customBodyRender: (value, tableMeta, updateValue) => {
                 return (
                     <div>
-                        <Button type="Button" onClick={() => prepareEditModal(value.id)} className="mr-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
+                        <Button type="Button" onClick={() => prepareEditModal(value)} className="mr-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
                     </div>
                 );
             }
@@ -74,16 +97,27 @@ const InstructoresTable = props => {
     },];
     return(
         <div>
-            <ModalInstructor
+            {modalControl ? <ModalInstructor
                 modalControl={modalControl}
+                toggleModal={toggleModal}
                 recordId={selectedRecordId}
                 updateRecords={updateRecords}
-            />
-            <MUIDataTable
-                columns={columns}
-                data={records}
-                options={muiTableOptions}
-            />
+            /> : ''}
+            <Row className="mt-4 justify-content-end">
+                <Col sm={2}>
+                    <Button className="actionButton" onClick={() => prepareNewModal()}>Nuevo Instructor</Button>
+                </Col>
+            </Row>
+            <Row className="mt-4">
+                <Col>
+                    <MUIDataTable
+                        columns={columns}
+                        data={records}
+                        options={muiTableOptions}
+                    />
+                </Col>
+            </Row>
+
         </div>
 
 
