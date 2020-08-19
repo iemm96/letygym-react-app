@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from "react";
-import {Button, Col, Row} from "reactstrap";
+import {Button, Col, Row, ListGroup, ListGroupItem} from "reactstrap";
 import Switch from "react-switch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,7 @@ import MUIDataTable from "mui-datatables";
 import {muiTableOptions} from "../../constants/muiTableOptions";
 import {fetchRecords} from "../../actions/fetchRecords";
 import ModalTransaccion from "../modals/ModalTransaccion";
+import moment from "moment";
 
 const IngresosEgresos = props => {
     const [switchTipoTransaccion,setSwitchTipoTransaccion] = useState(true);
@@ -17,21 +18,47 @@ const IngresosEgresos = props => {
     const [isDisabled,setIsDisabled] = useState(false);
     const [isLoading,setIsLoading] = useState(false);
     const [isCorrect,setIsCorrect] = useState(false);
-    const [modalControlEgreso,setModalControlEgreso] = useState(false);
-    const [modalControlIngreso,setModalControlIngreso] = useState(false);
+    const [totalIngresos,setTotalIngresos] = useState(0);
+    const [totalEgresos,setTotalEgresos] = useState(0);
+    const [recordsIngresosMatutino,setRecordsIngresosMatutino] = useState([]);
+    const [recordsEgresosMatutino,setRecordsEgresosMatutino] = useState([]);
+    const [recordsIngresosVespertino,setRecordsIngresosVespertino] = useState([]);
+    const [recordsEgresosVespertino,setRecordsEgresosVespertino] = useState([]);
     const [modalControlTransaccion,setModalControlTransaccion] = useState(false);
+    let ingresos = 0;
+    let ingresosVespertino = 0;
+    let ingresosMatutino = 0;
+
+    let egresos = 0;
+    let egresosVespertino = 0;
+    let egresosMatutino = 0;
 
     useEffect( () => {
 
         async function getIngresos() {
 
             let turnoActual = 1;
+
+            moment().locale('es');
+
+            let datetime = moment(new Date());
+
+            let date = datetime.format('YYYY-MM-DD');
+
             if(props.turnoActual === 3) {
                 turnoActual = 2;
             }
 
+            if(props.turnoActual === 0) {
+                turnoActual = 2;
+            }
+
+            if(props.turnoActual === 2) {
+                turnoActual = 1;
+            }
+
             try {
-                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/null/1`);
+                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/${date}/1`);
                 if(result){
                     setRecordsIngresos(result);
                 }
@@ -41,15 +68,30 @@ const IngresosEgresos = props => {
         }
 
         async function getEgresos() {
+
+            moment().locale('es');
+
+            let datetime = moment(new Date());
+
+            let date = datetime.format('YYYY-MM-DD');
+
+            let turnoActual = 1;
+
+            if(props.turnoActual === 3) {
+                turnoActual = 2;
+            }
+
+            if(props.turnoActual === 0) {
+                turnoActual = 2;
+            }
+
+            if(props.turnoActual === 2) {
+                turnoActual = 1;
+            }
+
             try {
 
-                let turnoActual = 1;
-
-                if(props.turnoActual === 3) {
-                    turnoActual = 2;
-                }
-
-                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/null/2`);
+                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/${date}/2`);
 
                 setRecordsEgresos(result);
 
@@ -58,11 +100,68 @@ const IngresosEgresos = props => {
             }
         }
 
+        async function getIngresosTurno(turno) {
+
+            moment().locale('es');
+
+            let datetime = moment(new Date());
+
+            let date = datetime.format('YYYY-MM-DD');
+
+            try {
+
+                const result = await fetchRecords(`transacciones/getRecords/${turno}/${date}/1`);
+
+                if(turno === 1) {
+                    setRecordsIngresosMatutino(result);
+                }else{
+                    setRecordsIngresosVespertino(result);
+                }
+
+            }catch (e) {
+                console.log(e);
+            }
+        }
+
+        async function getEgresosTurno(turno) {
+
+            moment().locale('es');
+
+            let datetime = moment(new Date());
+
+            let date = datetime.format('YYYY-MM-DD');
+
+            try {
+
+                const result = await fetchRecords(`transacciones/getRecords/${turno}/${date}/2`);
+
+                if(turno === 1) {
+                    setRecordsEgresosMatutino(result);
+                }else{
+                    setRecordsEgresosVespertino(result);
+                }
+
+            }catch (e) {
+                console.log(e);
+            }
+        }
+
+
         getEgresos();
 
         getIngresos();
 
-    },[]);
+        if(props.turnoActual === 0) {
+            getIngresosTurno(1);
+            getEgresosTurno(1);
+        }
+
+        if(props.turnoActual === 2) {
+            getIngresosTurno(2);
+            getEgresosTurno(2);
+        }
+
+    },[props.turnoActual]);
 
     const columns = [{
         name: "concepto",
@@ -109,6 +208,196 @@ const IngresosEgresos = props => {
         }
     };
 
+    const seccionResumenTurnoMatutino = (
+        <Row>
+            <Col>
+                <Row>
+                    <Col>
+                        <h2>Resumen del Turno Matutino</h2>
+                    </Col>
+                </Row>
+                <Row sm={6} className="mt-3 justify-content-center">
+                    <Col className="text-left">
+                        {recordsIngresosMatutino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsIngresosMatutino.map((value) => {
+
+                            ingresosMatutino = ingresosMatutino + value.cantidad;
+
+                            return (
+                                <p>${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        {recordsEgresosMatutino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsEgresosMatutino.map((value) => {
+
+                            egresosMatutino = egresosMatutino + value.cantidad;
+
+                            return (
+                                <p>-${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <hr style={{borderColor:'white',width:600}}/>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        <b>Ganancias del turno</b>
+                    </Col>
+                    <Col className="text-right">
+                        <b>${ingresosMatutino - egresosMatutino}</b>
+                    </Col>
+                </Row>
+
+            </Col>
+        </Row>
+    );
+
+    const seccionResumenDia = (
+        <Row>
+            <Col>
+                <Row>
+                    <Col>
+                        <h2>Resumen del Día</h2>
+                    </Col>
+                </Row>
+                <Row className="mt-3">
+                    <Col>
+                        <b>Turno Matutino</b>
+                    </Col>
+                </Row>
+                <Row sm={6} className="mt-3 justify-content-center">
+                    <Col className="text-left">
+                        {recordsIngresosMatutino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsIngresosMatutino.map((value) => {
+
+                            ingresosMatutino = ingresosMatutino + value.cantidad;
+
+                            return (
+                                <p>${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        {recordsEgresosMatutino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsEgresosMatutino.map((value) => {
+
+                            egresosMatutino = egresosMatutino + value.cantidad;
+
+                            return (
+                                <p>-${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <hr style={{borderColor:'white',width:600}}/>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        <b>Ganancias del turno</b>
+                    </Col>
+                    <Col className="text-right">
+                        <b>${ingresosMatutino - egresosMatutino}</b>
+                    </Col>
+                </Row>
+                <Row className="mt-5">
+                    <Col>
+                        <b>Turno Vespertino</b>
+                    </Col>
+                </Row>
+                <Row sm={6} className="mt-3 justify-content-center">
+                    <Col className="text-left">
+                        {recordsIngresosVespertino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsIngresosVespertino.map((value) => {
+
+                            ingresosVespertino = ingresosVespertino + value.cantidad;
+
+                            return (
+                                <p>${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        {recordsEgresosVespertino.map((value) => {
+
+                            return (
+                                <p>{value.concepto}</p>
+                            )
+                        })}
+                    </Col>
+                    <Col className="text-right">
+                        {recordsEgresosVespertino.map((value) => {
+
+                            egresosVespertino = egresosVespertino + value.cantidad;
+
+                            return (
+                                <p>-${value.cantidad}</p>
+                            )
+                        })}
+                    </Col>
+                </Row>
+                <hr style={{borderColor:'white',width:600}}/>
+                <Row sm={6} className="justify-content-center">
+                    <Col className="text-left">
+                        <b>Ganancias del turno</b>
+                    </Col>
+                    <Col className="text-right">
+                        <b>${ingresosVespertino - egresosVespertino}</b>
+                    </Col>
+                </Row>
+                <Row sm={6} className="mt-4 justify-content-center">
+                    <Col className="text-left">
+                        <h2>Ganancias del día</h2>
+                    </Col>
+                    <Col className="text-right">
+                        <h2>${(ingresosVespertino + ingresosMatutino) - (egresosVespertino + egresosMatutino)}</h2>
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
+    );
+
     return (
         <div>
             {modalControlTransaccion ?
@@ -120,106 +409,114 @@ const IngresosEgresos = props => {
                     updateRecords={updateRecords}
                 />
                 : ''}
-            <Row className="justify-content-between">
-                <Col sm={2}>
-                    <label htmlFor="small-radius-switch" style={{
-                        display:'flex',
-                        alignItems: "center",
-                        justifyContent: "end",
-                        marginTop: 8
-                    }}>
-                        <span className="mr-3">Egresos</span>
-                        <Switch
-                            checked={switchTipoTransaccion}
-                            onChange={() => {
 
-                                if(!switchTipoTransaccion) {
-                                    setButtonText('Registrar Ingreso');
-                                    setTitleText('Ingresos');
-                                }else{
-                                    setButtonText('Registrar Egreso');
-                                    setTitleText('Egresos');
-                                }
+            {props.turnoActual === 0 ? seccionResumenDia : ''}
+            {props.turnoActual === 2 ? seccionResumenTurnoMatutino : ''}
+            {props.turnoActual === 1 || props.turnoActual === 3 ?
+                <div>
+                    <Row className="justify-content-between">
+                        <Col sm={2}>
+                            <label htmlFor="small-radius-switch" style={{
+                                display:'flex',
+                                alignItems: "center",
+                                justifyContent: "end",
+                                marginTop: 8
+                            }}>
+                                <span className="mr-3">Egresos</span>
+                                <Switch
+                                    checked={switchTipoTransaccion}
+                                    onChange={() => {
 
-                                setSwitchTipoTransaccion(!switchTipoTransaccion);
-                            }}
-                            uncheckedIcon={
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        height: "100%",
-                                        fontSize: 15,
-                                        color: "white",
-                                        paddingRight: 15,
-                                        width:"100%"
+                                        if(!switchTipoTransaccion) {
+                                            setButtonText('Registrar Ingreso');
+                                            setTitleText('Ingresos');
+                                        }else{
+                                            setButtonText('Registrar Egreso');
+                                            setTitleText('Egresos');
+                                        }
+
+                                        setSwitchTipoTransaccion(!switchTipoTransaccion);
                                     }}
-                                >
-                                </div>
-                            }
-                            checkedIcon={
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        height: "100%",
-                                        fontSize: 15,
-                                        color: "white",
-                                        paddingRight: 2,
-                                        marginLeft:10,
-                                        width:"100%"
-                                    }}
-                                >
-                                </div>
-                            }
-                            handleDiameter={28}
-                            offColor="#FF9B54"
-                            onColor="#82D173"
-                            offHandleColor="#FFF275"
-                            onHandleColor="#FFF275"
-                            height={40}
-                            width={80}
-                            className="react-switch"
-                            id="small-radius-switch"
-                        />
-                        <span className="ml-3">Ingresos</span>
+                                    uncheckedIcon={
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                height: "100%",
+                                                fontSize: 15,
+                                                color: "white",
+                                                paddingRight: 15,
+                                                width:"100%"
+                                            }}
+                                        >
+                                        </div>
+                                    }
+                                    checkedIcon={
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                height: "100%",
+                                                fontSize: 15,
+                                                color: "white",
+                                                paddingRight: 2,
+                                                marginLeft:10,
+                                                width:"100%"
+                                            }}
+                                        >
+                                        </div>
+                                    }
+                                    handleDiameter={28}
+                                    offColor="#FF9B54"
+                                    onColor="#82D173"
+                                    offHandleColor="#FFF275"
+                                    onHandleColor="#FFF275"
+                                    height={40}
+                                    width={80}
+                                    className="react-switch"
+                                    id="small-radius-switch"
+                                />
+                                <span className="ml-3">Ingresos</span>
 
-                    </label>
-                </Col>
-                <Col sm={2}>
-                    <Button
-                        style={{
-                            height:50,
-                            width:270
-                        }}
-                        className="actionButton"
-                        onClick={() => toggleModal()}
-                        disabled={isDisabled}
-                    >
-                        <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                        {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
-                        {buttonText}
-                    </Button>
-                </Col>
-            </Row>
-            <Row className="mt-4 justify-content-center">
-                <Col>
-                    {switchTipoTransaccion ? <MUIDataTable
-                        title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
-                        data={recordsIngresos}
-                        columns={columns}
-                        options={muiTableOptions}
-                    /> : <MUIDataTable
-                        title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
-                        data={recordsEgresos}
-                        columns={columns}
-                        options={muiTableOptions}
-                    />}
+                            </label>
+                        </Col>
+                        <Col sm={2}>
+                            <Button
+                                style={{
+                                    height:50,
+                                    width:270
+                                }}
+                                className="actionButton"
+                                onClick={() => toggleModal()}
+                                disabled={isDisabled}
+                            >
+                                <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
+                                {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
+                                {buttonText}
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row className="mt-4 justify-content-center">
+                        <Col>
+                            {switchTipoTransaccion ? <MUIDataTable
+                                title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
+                                data={recordsIngresos}
+                                columns={columns}
+                                options={muiTableOptions}
+                            /> : <MUIDataTable
+                                title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
+                                data={recordsEgresos}
+                                columns={columns}
+                                options={muiTableOptions}
+                            />}
 
-                </Col>
-            </Row>
+                        </Col>
+                    </Row>
+                </div>
+                : ''}
+
         </div>
     );
 };
