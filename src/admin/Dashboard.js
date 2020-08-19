@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Button, NavLink, TabContent, TabPane, Collapse, Navbar} from "reactstrap";
+import {Row, Col,UncontrolledDropdown,DropdownToggle,DropdownMenu,DropdownItem, Button, NavLink, TabContent, TabPane, Collapse, Navbar} from "reactstrap";
 
 import SociosTable from "./tables/SociosTable";
 import VistantesTable from "./tables/VisitantesTable";
@@ -17,6 +17,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import IngresosEgresos from "./sections/IngresosEgresos";
 import Switch from "react-switch";
+import InstructoresTable from "./tables/InstructoresTable";
 const api_url = url_base;
 
 
@@ -177,7 +178,6 @@ export default class Dashboard extends React.Component{
     toggleSidebar = () => (this.setState({isOpenSidebar:!this.state.isOpenSidebar}));
 
     renderSwitch(param) {
-        console.log(param);
         switch(param) {
             case 0:
                 return <Button onClick={() => this.handleChangeTurno(1)}>
@@ -226,16 +226,15 @@ export default class Dashboard extends React.Component{
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Inicio
+                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Registro de Asistencias
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(2)}}
-                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Socias y Visitantes
+                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Ingresos y Egresos
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
@@ -244,26 +243,39 @@ export default class Dashboard extends React.Component{
                                                  className={this.state.activeTab === 3 ? 'active' : ''}>Venta de Productos
                                         </NavLink>
                                     </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
-                                                 onClick={() => {this.toggle(4)}}
-                                                 className={this.state.activeTab === 4 ? 'active' : ''}>Catálogo de Productos
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
-                                                 onClick={() => {this.toggle(5)}}
-                                                 className={this.state.activeTab === 5 ? 'active' : ''}>Membresías
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
-                                                 onClick={() => {this.toggle(6)}}
-                                                 className={this.state.activeTab === 6 ? 'active' : ''}>Asistencias
-                                        </NavLink>
-                                    </li>
                                 </ul>
-
+                                <span style={{color:'white'}}>|</span>
+                                <UncontrolledDropdown>
+                                    <DropdownToggle caret>
+                                        Administrar
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem
+                                            onClick={() => {this.setState({activeTab:4})}}
+                                            className={this.state.activeTab === 4 ? 'active' : ''}>Productos</DropdownItem>
+                                        <DropdownItem
+                                            onClick={() => {this.setState({activeTab:5})}}
+                                            className={this.state.activeTab === 5 ? 'active' : ''}>Instructores</DropdownItem>
+                                        <DropdownItem
+                                            onClick={() => {this.setState({activeTab:6})}}
+                                            className={this.state.activeTab === 6 ? 'active' : ''}>Membresías</DropdownItem>
+                                        <DropdownItem
+                                            onClick={() => {this.setState({activeTab:7})}}
+                                            className={this.state.activeTab === 7 ? 'active' : ''}>Socias</DropdownItem>
+                                        <DropdownItem
+                                            onClick={() => {this.setState({activeTab:8})}}
+                                            className={this.state.activeTab === 8 ? 'active' : ''}>Visitantes</DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                                <UncontrolledDropdown>
+                                    <DropdownToggle caret>
+                                        Historiales
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem>Asistencias</DropdownItem>
+                                        <DropdownItem>Ingresos y Egresos</DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
                             </Collapse>
                             {this.renderSwitch(this.state.turnoActual)}
                         </div>
@@ -274,138 +286,73 @@ export default class Dashboard extends React.Component{
 
                 <div className="mb-5 dashboard-content animate fadeInUp one">
                     <TabContent activeTab={this.state.activeTab} className="text-center">
-                        <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="1">
-
-
-                            <Row className="p-5 p-xl-4 justify-content-end">
-                                <Col className="mt-5">
-                                    <label htmlFor="small-radius-switch" style={{
-                                        display:'flex',
-                                        alignItems: "center",
-                                        justifyContent: "end",
-                                    }}>
-                                        <span className="mr-3">Egresos</span>
-                                        <Switch
-                                            checked={this.state.checked}
-                                            onChange={this.handleChange}
-                                            uncheckedIcon={
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        height: "100%",
-                                                        fontSize: 15,
-                                                        color: "white",
-                                                        paddingRight: 15,
-                                                        width:"100%"
-                                                    }}
-                                                >
-                                                </div>
-                                            }
-                                            checkedIcon={
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        height: "100%",
-                                                        fontSize: 15,
-                                                        color: "white",
-                                                        paddingRight: 2,
-                                                        marginLeft:10,
-                                                        width:"100%"
-                                                    }}
-                                                >
-                                                </div>
-                                            }
-                                            handleDiameter={28}
-                                            offColor="#FF5E5B"
-                                            onColor="#40C9A2"
-                                            offHandleColor="#F9E784"
-                                            onHandleColor="#F9E784"
-                                            height={40}
-                                            width={80}
-                                            className="react-switch"
-                                            id="small-radius-switch"
-                                        />
-                                        <span className="ml-3">Ingresos</span>
-
-                                    </label>
-                                </Col>
-                            </Row>
-                            <Row style={{margin:0}}>
-                                <Col>
-                                    {this.state.activeTab === 1 && this.state.checked ? <IngresosTable className="mt-3"/> : ''}
-                                    {this.state.activeTab === 1 && this.state.checked === false ? <EgresosTable className="mt-3"/> : ''}
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
+                        <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="2">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 9 ? <SociosTable/> : ''}
+                                        {this.state.activeTab === 1 ? <AsistenciasTable turnoActual={this.state.turnoActual}/> : ''}
                                     </div>
                                 </Col>
                             </Row>
+                        </TabPane>
+
+                        <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="1">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 2 ? <IngresosEgresos turnoActual={this.state.turnoActual}/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="2">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 3 ? <VentasTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="3">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 4 ? <ProductosTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 5 ? 'active' : ''} tabId="3">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    {this.state.activeTab === 5 ? <InstructoresTable/> : ''}
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 6 ? 'active' : ''} tabId="4">
+                            <Row className="pt-5 justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 6 ? <MembresiasTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 7 ? 'active' : ''} tabId="1">
+                            <Row className="justify-content-center">
+                                <Col className="col-11">
+                                    <div>
+                                        {this.state.activeTab === 7 ? <SociosTable/> : ''}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane className={this.state.activeTab === 8 ? 'active' : ''} tabId="4">
                             <Row className="justify-content-center">
                                 <Col className="pt-5 col-11">
                                     <div>
-                                        {this.state.activeTab === 9 ? <VistantesTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 9 ? 'active' : ''} tabId="1">
-                            <Row className="p-5 p-xl-4 justify-content-end">
-
-                            </Row>
-                            <Row className="justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 9 ? <SociosTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-center">
-                                <Col className="pt-5 col-11">
-                                    <div>
-                                        {this.state.activeTab === 9 ? <VistantesTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 2 ? <VentasTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="3">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 3 ? <ProductosTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="4">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 4 ? <MembresiasTable/> : ''}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane className={this.state.activeTab === 5 ? 'active' : ''} tabId="4">
-                            <Row className="pt-5 justify-content-center">
-                                <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 5 ? <AsistenciasTable/> : ''}
+                                        {this.state.activeTab === 8 ? <VistantesTable/> : ''}
                                     </div>
                                 </Col>
                             </Row>
