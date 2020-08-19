@@ -34,7 +34,6 @@ const ModalInstructor = props => {
 
                 const response = await updateRecord(data,'instructores',props.recordId);
 
-                console.log(response);
                 if(response) {
                     store.addNotification({
                         title: "Correcto",

@@ -356,7 +356,6 @@ class IngresosTable extends React.Component {
                             options={muiTableOptions}
                         />
                     </Col>
-
                 </Row>
                 <Row className="mt-4">
                     <Col>

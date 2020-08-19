@@ -40,11 +40,7 @@ const Asistencia = () => {
 
     useEffect(() => {
         forceUpdate();
-        console.log('arrayResults ',arrayResults);
 
-        if(arrayResults.length) {
-            console.log('arrayResults ',arrayResults);
-        }
     },[arrayResults]);
 
     const checarAsistencia = value => {
@@ -84,7 +80,6 @@ const Asistencia = () => {
                 }
             }
         );
-
     };
 
     const forceUpdate = useForceUpdate();
@@ -109,7 +104,6 @@ const Asistencia = () => {
 
                     //Se busca por nombre si se encuentra se regresa su id
                     if(nombreCompleto.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
-                        console.log('encontrado: ' , socia );
 
                         arrResultsTemp.push({nombre:socia.nombreCompleto,id:socia.id});
 
@@ -120,14 +114,11 @@ const Asistencia = () => {
 
             });
 
-            console.log(arrayResults);
 
         }else{
             setShowList(false);
         }
-
     };
-
 
     const handleMouseHover = index => {
 

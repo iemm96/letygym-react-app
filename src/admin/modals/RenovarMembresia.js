@@ -29,7 +29,6 @@ export default class RenovarMembresia extends React.Component{
         var array = [];
         var membresiasPrecios = [];
 
-        console.log(this.props.socioMembresiaId);
 
         this.setState({socioMembresiaId:this.props.socioMembresiaId});
 

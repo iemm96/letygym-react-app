@@ -5,7 +5,6 @@ const api_url = url_base;
 
 export const fetchRecord = async (idRecord,resource) => {
 
-
     try{
         const response = await axios({
             url:`${api_url}${resource}/${idRecord}`,

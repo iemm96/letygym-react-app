@@ -44,7 +44,6 @@ const ModalProducto = (props ) => {
 
                 const response = await updateRecord(data,'productos/update');
 
-                console.log(response);
                 if(response) {
                     store.addNotification({
                         title: "Correcto",

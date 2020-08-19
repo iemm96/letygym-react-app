@@ -109,7 +109,6 @@ const AsistenciasTable = props => {
         }
 
         let datetime = moment(new Date());
-        console.log(datetime.format('YYYY-MM-DD H:m:s'));
 
         try {
             const asistenciaResult = await storeRecord({
@@ -139,7 +138,6 @@ const AsistenciasTable = props => {
             moment().locale('es');
 
             let datetime = moment(new Date());
-            console.log(datetime.format('YYYY-MM-DD H:m:s'));
 
             //Si la membresía es activa se registra la asistencia de lo contrario se abre modal de renovar membresía
             if(socioMembresia.bActiva) {
@@ -330,47 +328,49 @@ const AsistenciasTable = props => {
 
                   </label>
               </Col>
-              <Col sm={8}>
-                  {switchAsistencia ?
-                      <Select styles={customStyles}
-                              options={socias}
-                              placeholder={'Buscar socias para registrar asistencia'}
-                              value={socias.find(op => {
-                                  return op.value === idSocia
-                              })}
-                              onChange={(event) => {
-                                  setIdSocia(event.value);
-                                  setIsDisabled(false);
-                              }}
-                      /> : <Select styles={customStyles}
-                               options={instructores}
-                               placeholder={'Buscar instructores para registrar asistencia'}
-                               value={instructores.find(op => {
-                                   return op.value === idInstructor
-                               })}
-                               onChange={(event) => {
-                                   setIdInstructor(event.value);
-                                   setIsDisabled(false);
-                               }}
-                      />
+              {props.turnoActual === 2 || props.turnoActual === 0 ?
+                  '' : <Col sm={8}>
+                      {switchAsistencia ?
+                          <Select styles={customStyles}
+                                  options={socias}
+                                  placeholder={'Buscar socias para registrar asistencia'}
+                                  value={socias.find(op => {
+                                      return op.value === idSocia
+                                  })}
+                                  onChange={(event) => {
+                                      setIdSocia(event.value);
+                                      setIsDisabled(false);
+                                  }}
+                          /> : <Select styles={customStyles}
+                                       options={instructores}
+                                       placeholder={'Buscar instructores para registrar asistencia'}
+                                       value={instructores.find(op => {
+                                           return op.value === idInstructor
+                                       })}
+                                       onChange={(event) => {
+                                           setIdInstructor(event.value);
+                                           setIsDisabled(false);
+                                       }}
+                          />
+                      }
+                  </Col> }
+              {props.turnoActual === 2 || props.turnoActual === 0 ?
+                  '' : <Col sm={2}>
+                      <Button
+                          style={{
+                              height:50,
+                              width:270
+                          }}
+                          className="actionButton"
+                          onClick={() => {switchAsistencia ? checarMembresia() : registrarAsistenciaInstructor()}}
+                          disabled={isDisabled}
+                      >
+                          <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
+                          {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
+                          {buttonText}
+                      </Button>
+                  </Col>
                   }
-
-              </Col>
-              <Col sm={2}>
-                  <Button
-                      style={{
-                          height:50,
-                          width:270
-                      }}
-                      className="actionButton"
-                      onClick={() => {switchAsistencia ? checarMembresia() : registrarAsistenciaInstructor()}}
-                      disabled={isDisabled}
-                  >
-                      <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                      {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
-                      {buttonText}
-                  </Button>
-              </Col>
           </Row>
           <Row className="mt-4 justify-content-center">
               <Col>
