@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import {
     Modal,
     ModalHeader,
@@ -7,9 +7,7 @@ import {
     Button,
     Form,
     FormGroup,
-    Label,
     Input,
-    FormText,
     Col,
     Row
 } from 'reactstrap';

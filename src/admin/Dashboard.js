@@ -6,8 +6,6 @@ import VistantesTable from "./tables/VisitantesTable";
 import VentasTable from "./tables/VentasTable";
 import ProductosTable from "./tables/ProductosTable";
 import AsistenciasTable from "./tables/AsistenciasTable";
-import EgresosTable from "./tables/EgresosTable";
-import IngresosTable from "./tables/IngresosTable";
 import RenovarMembresia from "./modals/RenovarMembresia";
 import MembresiasTable from "./tables/MembresiasTable";
 import SideBar from "./sidebar/SideBar";
@@ -16,15 +14,14 @@ import { faBars} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import IngresosEgresos from "./sections/IngresosEgresos";
-import Switch from "react-switch";
 import InstructoresTable from "./tables/InstructoresTable";
 import Background from './../assets/img/img-background-afternoon.svg';
-import Background2 from './../assets/img/img-background-day.svg';
+import BackgroundDay from './../assets/img/img-background-day.svg';
 
 const api_url = url_base;
 
 const customStyles = {backgroundImage:`url(${Background})`,backgroundaAttachment:'fixed',backgroundSize: '100%', color: 'white'};
-const customStyles2 = {backgroundImage:`url(${Background2})`,backgroundaAttachment:'fixed',backgroundSize: '100%'};
+const customStylesDay = {backgroundImage:`url(${BackgroundDay})`,backgroundaAttachment:'fixed',backgroundSize: '100%'};
 
 export default class Dashboard extends React.Component{
 
@@ -127,7 +124,6 @@ export default class Dashboard extends React.Component{
 
         let self = this;
         var elements = document.querySelectorAll('[data-toggle="sticky-onscroll"]');
-        // Find all data-toggle="sticky-onscroll" elements
 
         const url = this.props.match.path;
 
@@ -153,10 +149,6 @@ export default class Dashboard extends React.Component{
 
     }
 
-    changeValue(e) {
-        this.setState({dropDownValue: e.currentTarget.textContent})
-    }
-
     toggle(tab) {
         if(this.state.activeTab !== tab) {
             this.setState({activeTab:tab})
@@ -178,8 +170,7 @@ export default class Dashboard extends React.Component{
         }catch (e) {
             console.log(e);
         }
-
-    }
+    };
 
     toggleSidebar = () => (this.setState({isOpenSidebar:!this.state.isOpenSidebar}));
 
@@ -206,10 +197,6 @@ export default class Dashboard extends React.Component{
         }
     }
 
-    handleChange = () => {
-        this.setState({checked:!this.state.checked});
-    }
-
     render() {
 
         return (
@@ -232,21 +219,21 @@ export default class Dashboard extends React.Component{
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
+                                        <NavLink href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Asistencias
+                                                 className={(this.state.activeTab === 1 ? 'active' : '') + ' nav-link'}>Asistencias
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
+                                        <NavLink href="#"
                                                  onClick={() => {this.toggle(2)}}
-                                                 className={this.state.activeTab === 2 ? 'active' : ''}>Ingresos y Egresos
+                                                 className={(this.state.activeTab === 2 ? 'active' : '') + ' nav-link'}>Ingresos y Egresos
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" href="#"
+                                        <NavLink href="#"
                                                  onClick={() => {this.toggle(3)}}
-                                                 className={this.state.activeTab === 3 ? 'active' : ''}>Venta de Productos
+                                                 className={(this.state.activeTab === 3 ? 'active' : '') + ' nav-link'}>Venta de Productos
                                         </NavLink>
                                     </li>
                                 </ul>
@@ -282,7 +269,7 @@ export default class Dashboard extends React.Component{
                 <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
 
                 <div className="mb-5 dashboard-content animate fadeInUp one" style={this.state.turnoActual === 0 && this.state.activeTab === 2 ? customStyles :
-                    (this.state.turnoActual === 2 && this.state.activeTab === 2 ? customStyles2 : {})
+                    (this.state.turnoActual === 2 && this.state.activeTab === 2 ? customStylesDay : {})
                 }>
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="2">

@@ -1,8 +1,6 @@
 import React, {useState,useEffect} from "react";
-import {Button, Col, Row, ListGroup, ListGroupItem} from "reactstrap";
+import {Button, Col, Row } from "reactstrap";
 import Switch from "react-switch";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import MUIDataTable from "mui-datatables";
 import {muiTableOptions} from "../../constants/muiTableOptions";
 import {fetchRecords} from "../../actions/fetchRecords";
@@ -11,15 +9,8 @@ import moment from "moment";
 
 const IngresosEgresos = props => {
     const [switchTipoTransaccion,setSwitchTipoTransaccion] = useState(true);
-    const [recordsIngresos,setRecordsIngresos] = useState([]);
-    const [recordsEgresos,setRecordsEgresos] = useState([]);
     const [buttonText,setButtonText] = useState('Registrar Ingreso');
     const [titleText,setTitleText] = useState('Ingresos');
-    const [isDisabled,setIsDisabled] = useState(false);
-    const [isLoading,setIsLoading] = useState(false);
-    const [isCorrect,setIsCorrect] = useState(false);
-    const [totalIngresos,setTotalIngresos] = useState(0);
-    const [totalEgresos,setTotalEgresos] = useState(0);
     const [recordsIngresosMatutino,setRecordsIngresosMatutino] = useState([]);
     const [recordsEgresosMatutino,setRecordsEgresosMatutino] = useState([]);
     const [recordsIngresosVespertino,setRecordsIngresosVespertino] = useState([]);
@@ -31,193 +22,67 @@ const IngresosEgresos = props => {
 
     useEffect( () => {
 
-        async function getTransacciones() {
-
-            moment().locale('es');
-
-            let datetime = moment(new Date());
-
-            let date = datetime.format('YYYY-MM-DD');
-
-            try {
-                const result = await fetchRecords(`transacciones/getRecords/null/${date}`);
-
-                if(result){
-
-                    let arrIngresosMatutino = [];
-                    let arrIngresosVespertino = [];
-                    let arrEgresosMatutino = [];
-                    let arrEgresosVespertino = [];
-
-                    let ingresosMatutino = 0;
-                    let ingresosVespertino = 0;
-
-                    let egresosMatutino = 0;
-                    let egresosVespertino = 0;
-
-                    result.map(value => {
-                        if(value.turno === 'Matutino'){
-                            if(value.tipo === 'Ingreso') {
-
-                                ingresosMatutino += value.cantidad;
-                                arrIngresosMatutino.push(value);
-                            }else{
-                                egresosMatutino += value.cantidad;
-                                arrEgresosMatutino.push(value);
-                            }
-                        }else{
-                            if(value.tipo === 'Ingreso') {
-                                ingresosVespertino += value.cantidad;
-                                arrIngresosVespertino.push(value);
-                            }else{
-                                egresosVespertino += value.cantidad;
-                                arrEgresosVespertino.push(value);
-                            }
-                        }
-                    });
-
-                    setRecordsIngresosMatutino(arrIngresosMatutino);
-                    setRecordsEgresosMatutino(arrEgresosMatutino);
-                    setRecordsIngresosVespertino(arrIngresosVespertino);
-                    setRecordsEgresosVespertino(arrEgresosVespertino);
-
-                    setGananciasMatutino(ingresosMatutino-egresosMatutino);
-                    setGananciaVespertino(ingresosVespertino-egresosVespertino);
-                }
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
-        async function getIngresos() {
-
-            let turnoActual = 1;
-
-            moment().locale('es');
-
-            let datetime = moment(new Date());
-
-            let date = datetime.format('YYYY-MM-DD');
-
-            if(props.turnoActual === 3) {
-                turnoActual = 2;
-            }
-
-            if(props.turnoActual === 0) {
-                turnoActual = 2;
-            }
-
-            if(props.turnoActual === 2) {
-                turnoActual = 1;
-            }
-
-            try {
-                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/${date}/1`);
-                if(result){
-                    setRecordsIngresos(result);
-                }
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
-        async function getEgresos() {
-
-            moment().locale('es');
-
-            let datetime = moment(new Date());
-
-            let date = datetime.format('YYYY-MM-DD');
-
-            let turnoActual = 1;
-
-            if(props.turnoActual === 3) {
-                turnoActual = 2;
-            }
-
-            if(props.turnoActual === 0) {
-                turnoActual = 2;
-            }
-
-            if(props.turnoActual === 2) {
-                turnoActual = 1;
-            }
-
-            try {
-
-                const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/${date}/2`);
-
-                setRecordsEgresos(result);
-
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
-        async function getIngresosTurno(turno) {
-
-            moment().locale('es');
-
-            let datetime = moment(new Date());
-
-            let date = datetime.format('YYYY-MM-DD');
-
-            try {
-
-                const result = await fetchRecords(`transacciones/getRecords/${turno}/${date}/1`);
-
-                if(turno === 1) {
-                    setRecordsIngresosMatutino(result);
-                }else{
-                    setRecordsIngresosVespertino(result);
-                }
-
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
-        async function getEgresosTurno(turno) {
-
-            moment().locale('es');
-
-            let datetime = moment(new Date());
-
-            let date = datetime.format('YYYY-MM-DD');
-
-            try {
-
-                const result = await fetchRecords(`transacciones/getRecords/${turno}/${date}/2`);
-
-                if(turno === 1) {
-                    setRecordsEgresosMatutino(result);
-                }else{
-                    setRecordsEgresosVespertino(result);
-                }
-
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
         getTransacciones();
-        /*
-
-        getEgresos();
-
-        getIngresos();
-
-        if(props.turnoActual === 0) {
-            getIngresosTurno(1);
-            getEgresosTurno(1);
-        }
-
-        if(props.turnoActual === 2) {
-            getIngresosTurno(2);
-            getEgresosTurno(2);
-        }*/
 
     },[props.turnoActual]);
+
+    async function getTransacciones() {
+
+        moment().locale('es');
+
+        let datetime = moment(new Date());
+
+        let date = datetime.format('YYYY-MM-DD');
+
+        try {
+            const result = await fetchRecords(`transacciones/getRecords/null/${date}`);
+
+            if(result){
+
+                let arrIngresosMatutino = [];
+                let arrIngresosVespertino = [];
+                let arrEgresosMatutino = [];
+                let arrEgresosVespertino = [];
+
+                let ingresosMatutino = 0;
+                let ingresosVespertino = 0;
+
+                let egresosMatutino = 0;
+                let egresosVespertino = 0;
+
+                result.map(value => {
+                    if(value.turno === 'Matutino'){
+                        if(value.tipo === 'Ingreso') {
+
+                            ingresosMatutino += value.cantidad;
+                            arrIngresosMatutino.push(value);
+                        }else{
+                            egresosMatutino += value.cantidad;
+                            arrEgresosMatutino.push(value);
+                        }
+                    }else{
+                        if(value.tipo === 'Ingreso') {
+                            ingresosVespertino += value.cantidad;
+                            arrIngresosVespertino.push(value);
+                        }else{
+                            egresosVespertino += value.cantidad;
+                            arrEgresosVespertino.push(value);
+                        }
+                    }
+                });
+
+                setRecordsIngresosMatutino(arrIngresosMatutino);
+                setRecordsEgresosMatutino(arrEgresosMatutino);
+                setRecordsIngresosVespertino(arrIngresosVespertino);
+                setRecordsEgresosVespertino(arrEgresosVespertino);
+
+                setGananciasMatutino(ingresosMatutino-egresosMatutino);
+                setGananciaVespertino(ingresosVespertino-egresosVespertino);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+    }
 
     const columns = [{
         name: "concepto",
@@ -247,21 +112,7 @@ const IngresosEgresos = props => {
     };
 
     const updateRecords = async () => {
-
-        let turnoActual = 1;
-        if(props.turnoActual === 3) {
-            turnoActual = 2;
-        }
-
-        try {
-            const result = await fetchRecords(`transacciones/getRecords/${turnoActual}/null/${switchTipoTransaccion ? '1' : '2'}`);
-            if(result){
-
-                switchTipoTransaccion ? setRecordsIngresos(result) : setRecordsEgresos(result);
-            }
-        }catch (e) {
-            console.log(e);
-        }
+        await getTransacciones()
     };
 
     const seccionResumenTurnoMatutino = (
@@ -537,10 +388,7 @@ const IngresosEgresos = props => {
                                 }}
                                 className="actionButton"
                                 onClick={() => toggleModal()}
-                                disabled={isDisabled}
                             >
-                                <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                                {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
                                 {buttonText}
                             </Button>
                         </Col>

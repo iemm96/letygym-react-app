@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import React  from 'react';
+import {  Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 
 const ModalMembresia = (props) => {
-    const {
-        className
-    } = props;
 
     return (
         <div>

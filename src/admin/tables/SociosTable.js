@@ -1,6 +1,5 @@
 import React from "react";
-import paginationFactory, {PaginationListStandalone, PaginationProvider} from "react-bootstrap-table2-paginator";
-import {Button, Col, TabPane} from "reactstrap";
+import {Button } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ModalSocio from "../modals/ModalSocio";

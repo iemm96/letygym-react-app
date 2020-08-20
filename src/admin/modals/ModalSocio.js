@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col, Row } from 'reactstrap';
+import React  from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, Col, Row } from 'reactstrap';
 import {url_base} from '../../constants/api_url';
 import Select from "react-select";
 import DatePicker from "react-datepicker";
@@ -70,8 +70,6 @@ export default class ModalSocio extends React.Component{
 
     handleNewSocio = event => {
 
-        var self = this;
-
         event.preventDefault();
         fetch(`${api_url}socio`, {
             method: 'POST',
@@ -91,8 +89,6 @@ export default class ModalSocio extends React.Component{
     }
 
     handleEditSocio = event => {
-
-        var self = this;
 
         event.preventDefault();
         fetch(`${api_url}socio/${this.props.idSocio}`, {
@@ -135,12 +131,6 @@ export default class ModalSocio extends React.Component{
     }
 
     render() {
-        let membresias = this.state.membresias;
-
-        let optionItems = membresias.map((membresia) => {
-            return <option key={membresia.id} value={membresia.id}>{membresia.membresia}</option>
-        });
-
         var membresiaSection = <div><FormGroup>
                 <Label>* ¿Qué tipo de membresía tiene?</Label>
                 <Select options={this.state.membresias}
@@ -211,7 +201,7 @@ export default class ModalSocio extends React.Component{
                             </Label>
                         </FormGroup>
                     </FormGroup>
-                    {this.state.bActiva == 1 ? membresiaSection : ''}
+                    {this.state.bActiva === 1 ? membresiaSection : ''}
                 </Form>
             </ModalBody>
             <ModalFooter>

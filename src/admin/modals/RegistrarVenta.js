@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
+import React  from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import Select from 'react-select'
 
 import {url_base} from '../../constants/api_url';
@@ -14,7 +14,7 @@ export default class RegistrarVenta extends React.Component{
         this.state = {
             total: 0,
             productos: [],
-        }
+        };
 
         this.select = React.createRef();
     }
@@ -39,7 +39,7 @@ export default class RegistrarVenta extends React.Component{
 
             }).then(response => {
 
-                response.map((val,index) => {
+                response.map((val) => {
                     array.push({value:val.id,label:val.producto});
                     arrayProductosPrecios.push({idProducto:val.id,precio:val.precio});
                 });
@@ -59,7 +59,7 @@ export default class RegistrarVenta extends React.Component{
         var precio = 0;
         var productosPrecios = this.state.productosPrecios;
         productosPrecios.map((val,index) => {
-            if(val.idProducto == this.state.selectedProduct) {
+            if(val.idProducto === this.state.selectedProduct) {
                 precio = val.precio;
             }
         });

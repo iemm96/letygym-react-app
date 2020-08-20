@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React  from 'react';
 
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 export default class EliminarRegistroModal extends React.Component{
 
