@@ -1,6 +1,7 @@
 export const muiTableOptions = {
     filter:false,
     print:false,
+    selectableRows:false,
     textLabels: {
         body: {
             noMatch: "No se encontraron registros",
@@ -34,5 +35,16 @@ export const muiTableOptions = {
             delete: "Eliminar",
             deleteAria: "Eliminar los registros seleccionados",
         },
+    },
+    onRowsDelete: function (rowsDeleted) {
+        rowsDeleted.data.map(item =>
+            console.log(item)
+        );
+    },
+    onRowsSelect: function (rowsSelected) {
+        console.log(rowsSelected);
+    },
+    onRowClick: (rowData, rowState) => {
+        console.log(rowData, rowState);
     }
 };
