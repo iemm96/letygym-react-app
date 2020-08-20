@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, Col } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faTrash} from "@fortawesome/free-solid-svg-icons";
 import { Row } from "reactstrap";
 import {fetchRecords} from "../../actions/fetchRecords";
 import MUIDataTable from "mui-datatables";
@@ -12,6 +12,8 @@ import RenovarMembresia from "../modals/RenovarMembresia";
 import {fetchRecord} from "../../actions/fetchRecord";
 import moment from 'moment';
 import {storeRecord} from "../../actions/storeRecord";
+import ModalEliminarRegistro from "../modals/ModalEliminarRegistro";
+import {deleteRecord} from "../../actions/deleteRecord";
 
 const AsistenciasTable = props => {
     const [records,setRecords] = useState([]);
@@ -28,6 +30,9 @@ const AsistenciasTable = props => {
     const [buttonText,setButtonText] = useState('Registrar Asistencia');
     const [nombreSocia,setNombreSocia] = useState('');
     const [nombreCompletoSocia,setNombreCompletoSocia] = useState('');
+    const [selectedRecordId,setSelectedRecordId] = useState(null);
+    const [modalEliminar,setModalEliminar] = useState(false);
+    const [tituloModal,setTituloModal] = useState(false);
 
     useEffect( () => {
 
@@ -219,6 +224,14 @@ const AsistenciasTable = props => {
     };
 
     const columns = [{
+        name: "id",
+        options: {
+            display: "excluded",
+            filter: false,
+            sort: false,
+            download: false,
+        },
+    },{
         name: "nombreCompleto",
         label: "Nombre",
         options: {
@@ -231,6 +244,25 @@ const AsistenciasTable = props => {
         options: {
             filter: false,
             sort: false,
+        }
+    },{
+        name: "id",
+        label: "Acciones",
+        options: {
+            filter: true,
+            sort: false,
+            empty: true,
+            customBodyRender: (value, tableMeta, updateValue) => {
+                return (
+                    <div>
+                        <Button type="Button" onClick={() => {
+                            setSelectedRecordId(value);
+                            setModalEliminar(!modalEliminar);
+                            setTituloModal(tableMeta.rowData[1]);
+                        }} className="mr-2 btnAction"><FontAwesomeIcon icon={faTrash}/></Button>
+                    </div>
+                );
+            }
         }
     }];
 
@@ -253,6 +285,23 @@ const AsistenciasTable = props => {
         })
     };
 
+    const eliminarRegistro = () => {
+        try {
+
+            setModalEliminar(false);
+
+            if(switchAsistencia) {
+                deleteRecord(selectedRecordId,'asistencias');
+            }else {
+                deleteRecord(selectedRecordId,'asistenciasInstructores')
+            }
+
+            updateRecords();
+
+        }catch (e) {
+
+        }
+    };
     return (
       <div>
           {modalMembresia ? <RenovarMembresia toggleMembresiaModal={toggleModal}
@@ -262,6 +311,12 @@ const AsistenciasTable = props => {
                                               socioMembresiaId={idSocia}
                                               updateRecords={updateRecords}
                                               modalMembresia={modalMembresia}/> : ''}
+          {modalEliminar ? <ModalEliminarRegistro
+              toggleDeleteModal={() => setModalEliminar(!modalEliminar)}
+              deleteModal={modalEliminar}
+              titulo={tituloModal}
+              deleteRegister={() => eliminarRegistro()}
+          /> : ''}
           <Row className="justify-content-between">
               <Col sm={2}>
                   <label htmlFor="small-radius-switch" style={{
@@ -365,8 +420,8 @@ const AsistenciasTable = props => {
                           onClick={() => {switchAsistencia ? checarMembresia() : registrarAsistenciaInstructor()}}
                           disabled={isDisabled}
                       >
-                          <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}></span>
-                          {isCorrect ? <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon> : ''}
+                          <span className={`${isLoading ? 'spinner-border spinner-border-sm' : ''}`}/>
+                          {isCorrect ? <FontAwesomeIcon icon={faCheck}/> : ''}
                           {buttonText}
                       </Button>
                   </Col>
