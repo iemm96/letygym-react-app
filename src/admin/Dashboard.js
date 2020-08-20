@@ -18,8 +18,13 @@ import axios from "axios";
 import IngresosEgresos from "./sections/IngresosEgresos";
 import Switch from "react-switch";
 import InstructoresTable from "./tables/InstructoresTable";
+import Background from './../assets/img/img-background-afternoon.svg';
+import Background2 from './../assets/img/img-background-day.svg';
+
 const api_url = url_base;
 
+const customStyles = {backgroundImage:`url(${Background})`,backgroundaAttachment:'fixed',backgroundSize: '100%', color: 'white'};
+const customStyles2 = {backgroundImage:`url(${Background2})`,backgroundaAttachment:'fixed',backgroundSize: '100%'};
 
 export default class Dashboard extends React.Component{
 
@@ -167,7 +172,8 @@ export default class Dashboard extends React.Component{
                 headers: {"Content-Type": "application/json",}
             });
             if(response) {
-                window.location.reload();
+                this.setState({turnoActual:turno});
+                console.log(response);
             }
         }catch (e) {
             console.log(e);
@@ -228,7 +234,7 @@ export default class Dashboard extends React.Component{
                                     <li className="nav-item">
                                         <NavLink className="nav-link" href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Registro de Asistencias
+                                                 className={this.state.activeTab === 1 ? 'active' : ''}>Asistencias
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
@@ -267,15 +273,6 @@ export default class Dashboard extends React.Component{
                                             className={this.state.activeTab === 8 ? 'active' : ''}>Visitantes</DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                                <UncontrolledDropdown>
-                                    <DropdownToggle caret>
-                                        Historiales
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem>Asistencias</DropdownItem>
-                                        <DropdownItem>Ingresos y Egresos</DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
                             </Collapse>
                             {this.renderSwitch(this.state.turnoActual)}
                         </div>
@@ -284,10 +281,14 @@ export default class Dashboard extends React.Component{
 
                 <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
 
-                <div className="mb-5 dashboard-content animate fadeInUp one">
+                <div className="mb-5 dashboard-content animate fadeInUp one" style={this.state.turnoActual === 0 && this.state.activeTab === 2 ? customStyles :
+                    (this.state.turnoActual === 2 && this.state.activeTab === 2 ? customStyles2 : {})
+                }>
                     <TabContent activeTab={this.state.activeTab} className="text-center">
                         <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="2">
                             <Row className="pt-5 justify-content-center">
+
+
                                 <Col className="col-11">
                                     <div>
                                         {this.state.activeTab === 1 ? <AsistenciasTable turnoActual={this.state.turnoActual}/> : ''}
