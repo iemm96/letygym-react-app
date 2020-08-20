@@ -10,7 +10,7 @@ import MUIDataTable from "mui-datatables";
 import {muiTableOptions} from "../../constants/muiTableOptions";
 import {deleteRecord} from "../../actions/deleteRecord";
 
-const VentasTable = () => {
+const VentasTable = props => {
     const [records,setRecords] = useState([]);
     const [modalControl,setModalControl] = useState(false);
     const [modalEliminar,setModalEliminar] = useState(false);
@@ -93,6 +93,7 @@ const VentasTable = () => {
                 toggleModal={() => {setModalControl(!modalControl)}}
                 modalRecord={modalControl}
                 updateRecords={() => getRecords()}
+                turnoActual={props.turnoActual}
             /> : ''}
             {modalEliminar ? <ModalEliminarRegistro
                 toggleDeleteModal={() => setModalEliminar(!modalEliminar)}

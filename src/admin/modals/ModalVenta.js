@@ -39,6 +39,13 @@ const ModalVenta = props => {
         data.total = total;
         data.id_producto = selectedProducto;
 
+        let turno = 1;
+        if(props.turnoActual === 3) {
+            turno = 2;
+        }
+
+        data.turno = turno;
+
         try {
 
             const response = await storeRecord(data,'ventasProductos');

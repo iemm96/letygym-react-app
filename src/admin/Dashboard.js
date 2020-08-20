@@ -297,7 +297,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 3 ? <VentasTable/> : ''}
+                                        {this.state.activeTab === 3 ? <VentasTable turnoActual={this.state.turnoActual}/> : ''}
                                     </div>
                                 </Col>
                             </Row>
