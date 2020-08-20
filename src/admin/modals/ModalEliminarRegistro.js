@@ -1,26 +1,16 @@
 import React  from 'react';
-
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
-export default class EliminarRegistroModal extends React.Component{
+const ModalEliminarRegistro = props => (<Modal isOpen={props.deleteModal} toggle={() => props.toggleDeleteModal()} className={props.className}>
+        <ModalHeader toggle={() => props.toggleDeleteModal()}>Eliminar el registro de <b>'{props.titulo}'</b></ModalHeader>
+        <ModalBody>
+            <p>¿Seguro que desea eliminar el registro de <b>'{props.titulo}'</b>? Esta acción no se puede deshacer</p>
+        </ModalBody>
+        <ModalFooter>
+            <Button color="secondary" onClick={() => props.toggleDeleteModal()}>Cancelar</Button>
+            <Button color="primary" onClick={() => props.deleteRegister()}>Eliminar Registro</Button>{' '}
+        </ModalFooter>
+    </Modal>);
 
-    constructor(props) {
-        super(props);
+export default ModalEliminarRegistro;
 
-        this.state = {nombre: ''}
-    }
-
-    render() {
-        return(<Modal isOpen={this.props.deleteModal} toggle={() => this.props.toggleDeleteModal()} className={this.props.className}>
-            <ModalHeader toggle={() => this.props.toggleDeleteModal()}>Eliminar el registro de <b>'{this.props.titulo}'</b></ModalHeader>
-            <ModalBody>
-                <p>¿Seguro que desea eliminar el registro de <b>'{this.props.titulo}'</b>? Esta acción no se puede deshacer</p>
-            </ModalBody>
-            <ModalFooter>
-                <Button color="secondary" onClick={() => this.props.toggleDeleteModal()}>Cancelar</Button>
-                <Button color="primary" onClick={() => this.props.deleteRegister()}>Eliminar Registro</Button>{' '}
-            </ModalFooter>
-        </Modal>);
-    }
-    
-};
