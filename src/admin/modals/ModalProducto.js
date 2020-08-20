@@ -82,7 +82,7 @@ const ModalProducto = (props ) => {
 
         }else{
             try {
-                const response = await storeRecord(data,'productos/add');
+                const response = await storeRecord(data,'productos/addRecord');
                 if(response) {
                     store.addNotification({
                         title: "Correcto",
@@ -140,8 +140,8 @@ const ModalProducto = (props ) => {
         </div>
     );
 
-    return(<Modal isOpen={props.recordModal} toggle={() => props.toggleModal(4)} className={className}>
-        <ModalHeader toggle={() => props.toggleModal(4)}>Nuevo Producto</ModalHeader>
+    return(<Modal isOpen={props.modalRecord} toggle={() => props.toggleModal()} className={className}>
+        <ModalHeader toggle={() => props.toggleModal()}>Nuevo Producto</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>
                 <Row>
