@@ -4,31 +4,21 @@ import {fetchRecords} from "../../actions/fetchRecords";
 import { Row, Col } from "reactstrap";
 import {Button} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit} from "@fortawesome/free-solid-svg-icons";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {muiTableOptions} from "../../constants/muiTableOptions";
 import ModalInstructor from "../modals/ModalInstructor";
+import ModalEliminarRegistro from "../modals/ModalEliminarRegistro";
+import {deleteRecord} from "../../actions/deleteRecord";
 
-const InstructoresTable = props => {
+const InstructoresTable = () => {
     const [records,setRecords] = useState([]);
     const [selectedRecordId,setSelectedRecordId] = useState(null);
     const [modalControl,setModalControl] = useState(false);
+    const [modalEliminar,setModalEliminar] = useState(false);
+    const [tituloModal,setTituloModal] = useState('');
 
     useEffect(() => {
-        async function getRecords() {
-            try {
-                const result = await fetchRecords('instructores');
-                if(result) {
 
-                    result.map((value) => {
-                        value.nombre = `${value.nombre} ${value.apellidoPaterno} ${value.apellidoMaterno}`;
-                    });
-
-                    setRecords(result);
-                }
-            }catch (e) {
-                console.log(e);
-            }
-        }
 
         getRecords();
     },[]);
@@ -38,6 +28,22 @@ const InstructoresTable = props => {
         toggleModal();
     };
 
+    async function getRecords() {
+        try {
+            const result = await fetchRecords('instructores');
+            if(result) {
+
+                result.map((value) => {
+                    value.nombre = `${value.nombre} ${value.apellidoPaterno} ${value.apellidoMaterno}`;
+                });
+
+                setRecords(result);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
     const prepareNewModal = () => {
         toggleModal();
     };
@@ -46,17 +52,18 @@ const InstructoresTable = props => {
         setModalControl(!modalControl);
     };
 
-    const updateRecords = async () => {
+    const eliminarRegistro = async () => {
         try {
-            const result = await fetchRecords('instructores');
-            if(result) {
-                setRecords(result);
-            }
+
+            setModalEliminar(false);
+            await deleteRecord(selectedRecordId,'instructores');
+
+            getRecords();
+
         }catch (e) {
-            console.log(e);
+
         }
     };
-
 
     const columns = [{
         name: "nombre",
@@ -86,10 +93,15 @@ const InstructoresTable = props => {
             filter: true,
             sort: false,
             empty: true,
-            customBodyRender: (value, tableMeta, updateValue) => {
+            customBodyRender: (value,tableMeta) => {
                 return (
                     <div>
-                        <Button type="Button" onClick={() => prepareEditModal(value)} className="mr-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
+                        <Button type="Button" onClick={() => {
+                            setSelectedRecordId(value);
+                            setModalEliminar(!modalEliminar);
+                            setTituloModal(tableMeta.rowData[0]);
+                        }} className="mr-2 btnAction"><FontAwesomeIcon icon={faTrash}/></Button>
+                        <Button type="Button" onClick={() => prepareEditModal(value)} className="ml-2 btnAction"><FontAwesomeIcon icon={faEdit}/></Button>
                     </div>
                 );
             }
@@ -101,8 +113,14 @@ const InstructoresTable = props => {
                 modalControl={modalControl}
                 toggleModal={toggleModal}
                 recordId={selectedRecordId}
-                updateRecords={updateRecords}
+                updateRecords={getRecords}
             /> : ''}
+            {modalEliminar ? <ModalEliminarRegistro
+                toggleDeleteModal={() => setModalEliminar(!modalEliminar)}
+                deleteModal={modalEliminar}
+                titulo={tituloModal}
+                deleteRegister={() => eliminarRegistro()}
+            /> : '' }
             <Row className="mt-4 justify-content-end">
                 <Col sm={2}>
                     <Button className="actionButton" onClick={() => prepareNewModal()}>Nuevo Instructor</Button>
