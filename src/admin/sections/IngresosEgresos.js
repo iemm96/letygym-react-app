@@ -25,15 +25,69 @@ const IngresosEgresos = props => {
     const [recordsIngresosVespertino,setRecordsIngresosVespertino] = useState([]);
     const [recordsEgresosVespertino,setRecordsEgresosVespertino] = useState([]);
     const [modalControlTransaccion,setModalControlTransaccion] = useState(false);
-    let ingresos = 0;
-    let ingresosVespertino = 0;
-    let ingresosMatutino = 0;
+    const [gananciasMatutino,setGananciasMatutino] = useState(0);
+    const [gananciasVespertino,setGananciaVespertino] = useState(0);
 
-    let egresos = 0;
-    let egresosVespertino = 0;
-    let egresosMatutino = 0;
 
     useEffect( () => {
+
+        async function getTransacciones() {
+
+            moment().locale('es');
+
+            let datetime = moment(new Date());
+
+            let date = datetime.format('YYYY-MM-DD');
+
+            try {
+                const result = await fetchRecords(`transacciones/getRecords/null/${date}`);
+
+                if(result){
+
+                    let arrIngresosMatutino = [];
+                    let arrIngresosVespertino = [];
+                    let arrEgresosMatutino = [];
+                    let arrEgresosVespertino = [];
+
+                    let ingresosMatutino = 0;
+                    let ingresosVespertino = 0;
+
+                    let egresosMatutino = 0;
+                    let egresosVespertino = 0;
+
+                    result.map(value => {
+                        if(value.turno === 'Matutino'){
+                            if(value.tipo === 'Ingreso') {
+
+                                ingresosMatutino += value.cantidad;
+                                arrIngresosMatutino.push(value);
+                            }else{
+                                egresosMatutino += value.cantidad;
+                                arrEgresosMatutino.push(value);
+                            }
+                        }else{
+                            if(value.tipo === 'Ingreso') {
+                                ingresosVespertino += value.cantidad;
+                                arrIngresosVespertino.push(value);
+                            }else{
+                                egresosVespertino += value.cantidad;
+                                arrEgresosVespertino.push(value);
+                            }
+                        }
+                    });
+
+                    setRecordsIngresosMatutino(arrIngresosMatutino);
+                    setRecordsEgresosMatutino(arrEgresosMatutino);
+                    setRecordsIngresosVespertino(arrIngresosVespertino);
+                    setRecordsEgresosVespertino(arrEgresosVespertino);
+
+                    setGananciasMatutino(ingresosMatutino-egresosMatutino);
+                    setGananciaVespertino(ingresosVespertino-egresosVespertino);
+                }
+            }catch (e) {
+                console.log(e);
+            }
+        }
 
         async function getIngresos() {
 
@@ -146,6 +200,8 @@ const IngresosEgresos = props => {
             }
         }
 
+        getTransacciones();
+        /*
 
         getEgresos();
 
@@ -159,7 +215,7 @@ const IngresosEgresos = props => {
         if(props.turnoActual === 2) {
             getIngresosTurno(2);
             getEgresosTurno(2);
-        }
+        }*/
 
     },[props.turnoActual]);
 
@@ -228,7 +284,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsIngresosMatutino.map((value) => {
 
-                            ingresosMatutino = ingresosMatutino + value.cantidad;
 
                             return (
                                 <p>${value.cantidad}</p>
@@ -248,7 +303,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsEgresosMatutino.map((value) => {
 
-                            egresosMatutino = egresosMatutino + value.cantidad;
 
                             return (
                                 <p>-${value.cantidad}</p>
@@ -262,7 +316,7 @@ const IngresosEgresos = props => {
                         <b>Ganancias del turno</b>
                     </Col>
                     <Col className="text-right">
-                        <b>${ingresosMatutino - egresosMatutino}</b>
+                        <b>${gananciasMatutino}</b>
                     </Col>
                 </Row>
 
@@ -295,8 +349,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsIngresosMatutino.map((value) => {
 
-                            ingresosMatutino = ingresosMatutino + value.cantidad;
-
                             return (
                                 <p>${value.cantidad}</p>
                             )
@@ -315,7 +367,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsEgresosMatutino.map((value) => {
 
-                            egresosMatutino = egresosMatutino + value.cantidad;
 
                             return (
                                 <p>-${value.cantidad}</p>
@@ -329,7 +380,7 @@ const IngresosEgresos = props => {
                         <b>Ganancias del turno</b>
                     </Col>
                     <Col className="text-right">
-                        <b>${ingresosMatutino - egresosMatutino}</b>
+                        <b>${gananciasMatutino}</b>
                     </Col>
                 </Row>
                 <Row className="mt-5">
@@ -349,8 +400,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsIngresosVespertino.map((value) => {
 
-                            ingresosVespertino = ingresosVespertino + value.cantidad;
-
                             return (
                                 <p>${value.cantidad}</p>
                             )
@@ -369,8 +418,6 @@ const IngresosEgresos = props => {
                     <Col className="text-right">
                         {recordsEgresosVespertino.map((value) => {
 
-                            egresosVespertino = egresosVespertino + value.cantidad;
-
                             return (
                                 <p>-${value.cantidad}</p>
                             )
@@ -383,7 +430,7 @@ const IngresosEgresos = props => {
                         <b>Ganancias del turno</b>
                     </Col>
                     <Col className="text-right">
-                        <b>${ingresosVespertino - egresosVespertino}</b>
+                        <b>${gananciasVespertino}</b>
                     </Col>
                 </Row>
                 <Row sm={6} className="mt-4 justify-content-center">
@@ -391,7 +438,7 @@ const IngresosEgresos = props => {
                         <h2>Ganancias del día</h2>
                     </Col>
                     <Col className="text-right">
-                        <h2>${(ingresosVespertino + ingresosMatutino) - (egresosVespertino + egresosMatutino)}</h2>
+                        <h2>${gananciasMatutino + gananciasVespertino}</h2>
                     </Col>
                 </Row>
             </Col>
@@ -502,12 +549,12 @@ const IngresosEgresos = props => {
                         <Col>
                             {switchTipoTransaccion ? <MUIDataTable
                                 title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
-                                data={recordsIngresos}
+                                data={props.turnoActual === 1 ? recordsIngresosMatutino : (props.turnoActual === 3 ? recordsIngresosVespertino : '')}
                                 columns={columns}
                                 options={muiTableOptions}
                             /> : <MUIDataTable
                                 title={`${titleText} del turno ${props.turnoActual === 1 ? 'Matutino' : (props.turnoActual === 3 ? 'Vespertino' : '')}`}
-                                data={recordsEgresos}
+                                data={props.turnoActual === 1 ? recordsEgresosMatutino : (props.turnoActual === 3 ? recordsEgresosVespertino : '')}
                                 columns={columns}
                                 options={muiTableOptions}
                             />}
