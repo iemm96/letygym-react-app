@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Button, Row, Col } from 'reactstrap';
 import './styles/style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faTrash} from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 const ListaResultados = props => {
 
