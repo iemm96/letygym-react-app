@@ -384,7 +384,7 @@ const AsistenciasTable = props => {
                   </label>
               </Col>
               {props.turnoActual === 2 || props.turnoActual === 0 ?
-                  '' : <Col sm={8}>
+                  '' : <Col sm={6}>
                       {switchAsistencia ?
                           <Select styles={customStyles}
                                   options={socias}
@@ -416,7 +416,7 @@ const AsistenciasTable = props => {
                               height:50,
                               width:270
                           }}
-                          className="actionButton"
+                          className="mt-3 mt-lg-0 actionButton"
                           onClick={() => {switchAsistencia ? checarMembresia() : registrarAsistenciaInstructor()}}
                           disabled={isDisabled}
                       >
