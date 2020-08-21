@@ -7,16 +7,6 @@ export default class Login extends React.Component{
 
     static contextType = ApiUrl;
 
-    componentDidMount() {
-        /*
-        var inputForm = document.getElementsByClassName('input-form');
-
-        inputForm.addEventListener('change', function () {
-            this.classList.remove('bounce');
-        });*/
-    }
-
-
     render() {
         return (
             <div className="row justify-content-center h-100">
@@ -50,9 +40,6 @@ export default class Login extends React.Component{
 
         e.preventDefault();
         var btnIngresar = document.getElementById('btnIngresar').firstChild;
-        var xhr = new XMLHttpRequest();
-        var inputEmail = document.getElementById('inputEmail');
-        var inputPassword = document.getElementById('inputPassword');
         var cardLogin = document.getElementById('cardLogin');
 
         cardLogin.classList.remove('animate','one','fadeInUp');
@@ -60,42 +47,6 @@ export default class Login extends React.Component{
         cardLogin.classList.add('fadeOut');
 
         btnIngresar.data = 'Ingresando';
-
-
-        /*
-        // get a callback when the server responds
-        xhr.addEventListener('load', () => {
-            // update the state of the component with the result here
-
-            if(xhr.success !== true) {
-                if(xhr.type === 'password') {
-                    inputPassword.classList.add('bounce');
-                }
-
-                if(xhr.type === 'email') {
-                    inputEmail.classList.add('bounce');
-                }
-
-                btnIngresar.innerText = 'Ingresar';
-            }
-            console.log(xhr.success)
-        });
-        // open the request with the verb and the url
-        xhr.open('POST', this.context)
-        // send the request
-        xhr.send()*/
-
-        /*
-        if(inputPassword.innerText === '') {
-            inputPassword.classList.add('bounce');
-        }
-
-        if(inputEmail.innerText === '') {
-            inputEmail.classList.add('bounce');
-        }*/
-
-        //btnIngresar.innerText = 'Ingresar';
-
 
         setTimeout(function () {
             // and call `resolve` on the deferred object, once you're done
