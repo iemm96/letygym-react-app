@@ -20,8 +20,19 @@ import BackgroundDay from './../assets/img/img-background-day.svg';
 
 const api_url = url_base;
 
-const customStyles = {backgroundImage:`url(${Background})`,backgroundaAttachment:'fixed',backgroundSize: '100%', color: 'white'};
-const customStylesDay = {backgroundImage:`url(${BackgroundDay})`,backgroundaAttachment:'fixed',backgroundSize: '100%'};
+const customStyles = {
+    backgroundImage:`url(${Background})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    color: 'white'
+};
+const customStylesDay = {
+    backgroundImage:`url(${BackgroundDay})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+};
 
 export default class Dashboard extends React.Component{
 
@@ -125,9 +136,6 @@ export default class Dashboard extends React.Component{
         let self = this;
         var elements = document.querySelectorAll('[data-toggle="sticky-onscroll"]');
 
-        const url = this.props.match.path;
-
-
         [].forEach.call(elements, function(element) {
 
             let div = document.createElement('div');
@@ -214,14 +222,17 @@ export default class Dashboard extends React.Component{
                             <Button color="info" className="d-xl-none" onClick={this.toggleSidebar}>
                                 <FontAwesomeIcon icon={faBars}/>
                             </Button>
-                            <NavLink className="navbar-brand" to="#">Lety Fitness Club</NavLink>
+                            <NavLink className="navbar-brand d-none d-lg-inline" to="#">Lety Fitness Club</NavLink>
 
                             <Collapse isOpen={this.state.isOpen} className="navbar-collapse justify-content-center" id="navbarSupportedContent" navbar>
+
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
                                         <NavLink href="#"
                                                  onClick={() => {this.toggle(1)}}
-                                                 className={(this.state.activeTab === 1 ? 'active' : '') + ' nav-link'}>Asistencias
+                                                 className={(this.state.activeTab === 1 ? 'active' : '') + ' nav-link'}
+                                        >
+                                            Asistencias
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
@@ -273,54 +284,50 @@ export default class Dashboard extends React.Component{
                     </Navbar>
                 </header>
 
-                <SideBar toggle={this.state.toggleSidebar} isOpen={this.state.isOpenSidebar}/>
+                <SideBar toggle={this.state.toggleSidebar} toggleTab={(tab) => {
+                    if(this.state.activeTab !== tab) {
+                        this.setState({activeTab:tab})
+                    }
 
-                <div className="mb-5 dashboard-content animate fadeInUp one" style={this.state.turnoActual === 0 && this.state.activeTab === 3 ? customStyles :
+                    this.toggleSidebar();
+                }} activeTab={this.state.activeTab} isOpen={this.state.isOpenSidebar}/>
+
+                <div className="mb-5  dashboard-content animate fadeInUp one" style={this.state.turnoActual === 0 && this.state.activeTab === 3 ? customStyles :
                     (this.state.turnoActual === 2 && this.state.activeTab === 3 ? customStylesDay : {})
                 }>
-                    <TabContent activeTab={this.state.activeTab} className="text-center">
-                        <TabPane className={this.state.activeTab === 1 ? 'active' : ''} tabId="2">
+                    <TabContent activeTab={this.state.activeTab} className="text-center ">
+                        <TabPane className={(this.state.activeTab === 1 ? 'active' : '') + ' mt-4 mt-xl-0'} tabId="2">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 1 ? <AsistenciasTable turnoActual={this.state.turnoActual}/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 1 ? <AsistenciasTable turnoActual={this.state.turnoActual}/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 2 ? 'active' : ''} tabId="2">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 2 ? <VistantesTable costoVisita={this.state.costoVisita} turnoActual={this.state.turnoActual}/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 2 ? <VistantesTable costoVisita={this.state.costoVisita} turnoActual={this.state.turnoActual}/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 3 ? 'active' : ''} tabId="1">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 3 ? <IngresosEgresos turnoActual={this.state.turnoActual}/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 3 ? <IngresosEgresos turnoActual={this.state.turnoActual}/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 4 ? 'active' : ''} tabId="2">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 4 ? <VentasTable turnoActual={this.state.turnoActual}/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 4 ? <VentasTable turnoActual={this.state.turnoActual}/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 5 ? 'active' : ''} tabId="3">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 5 ? <ProductosTable/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 5 ? <ProductosTable/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
@@ -334,16 +341,14 @@ export default class Dashboard extends React.Component{
                         <TabPane className={this.state.activeTab === 7 ? 'active' : ''} tabId="4">
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                    <div>
-                                        {this.state.activeTab === 7 ? <MembresiasTable/> : ''}
-                                    </div>
+                                    {this.state.activeTab === 7 ? <MembresiasTable/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
                         <TabPane className={this.state.activeTab === 8 ? 'active' : ''} tabId="1">
-                            <Row className="justify-content-center">
+                            <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
-                                        {this.state.activeTab === 8 ? <SociasTable/> : ''}
+                                    {this.state.activeTab === 8 ? <SociasTable/> : ''}
                                 </Col>
                             </Row>
                         </TabPane>
