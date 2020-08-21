@@ -130,8 +130,8 @@ const VisitantesTable = props => {
                 deleteRegister={() => eliminarRegistro()}
             /> : '' }
 
-            <Row className="justify-content-between">
-                <Col sm={2}>
+            <Row className="mt-5 mt-lg-0 justify-content-between">
+                <Col sm={3} >
                     <InputGroup className="mt-2">
                         <InputGroupAddon addonType="prepend">
                             <InputGroupText>Visita $</InputGroupText>
@@ -140,7 +140,7 @@ const VisitantesTable = props => {
                         <InputGroupAddon addonType="append"><Button color="primary" disabled={isDisabled} onClick={() => updateCostoVisita()}>Actualizar</Button></InputGroupAddon>
                     </InputGroup>
                 </Col>
-                <Col sm={2}>
+                <Col className="mt-3 mt-sm-0" sm={3} >
                     <Button
                         className="actionButton"
                         onClick={() => setModalControl(!modalControl)}

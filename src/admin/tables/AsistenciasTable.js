@@ -135,7 +135,6 @@ const AsistenciasTable = props => {
 
         setIsLoading(true);
         setButtonText('');
-        const today = moment();
 
         try {
             const socioMembresia = await fetchRecord(idSocia,'socioMembresia/hasMembresiaActiva');
@@ -319,7 +318,7 @@ const AsistenciasTable = props => {
               deleteRegister={() => eliminarRegistro()}
           /> : ''}
           <Row className="justify-content-between">
-              <Col sm={2}>
+              <Col sm={3} >
                   <label htmlFor="small-radius-switch" style={{
                       display:'flex',
                       alignItems: "center",
@@ -411,7 +410,7 @@ const AsistenciasTable = props => {
                       }
                   </Col> }
               {props.turnoActual === 2 || props.turnoActual === 0 ?
-                  '' : <Col sm={2}>
+                  '' : <Col sm={3} >
                       <Button
                           style={{
                               height:50,

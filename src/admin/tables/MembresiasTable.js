@@ -80,7 +80,7 @@ const MembresiasTable = () => {
                 tituloModal={tituloModal}
                 updateRecords={() => getRecords()}
             /> : ''}
-            <Row className="mt-4">
+            <Row className="mt-5 mt-lg-0">
                 <Col>
                     <MUIDataTable
                         title={"Membresías"}

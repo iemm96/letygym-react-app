@@ -111,8 +111,8 @@ const ProductosTable = props => {
                 deleteRegister={() => eliminarRegistro()}
             /> : '' }
 
-            <Row className="justify-content-end">
-                <Col sm={2}>
+            <Row className="mt-5 mt-lg-0 justify-content-end">
+                <Col sm={3} xl={3}>
                     <Button
                         className="actionButton"
                         onClick={() => setModalControl(!modalControl)}

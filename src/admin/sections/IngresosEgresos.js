@@ -116,7 +116,7 @@ const IngresosEgresos = props => {
     };
 
     const seccionResumenTurnoMatutino = (
-        <Row>
+        <Row className="mt-5 mt-lg-0">
             <Col>
                 <Row>
                     <Col>
@@ -161,7 +161,7 @@ const IngresosEgresos = props => {
                         })}
                     </Col>
                 </Row>
-                <hr style={{borderColor:'white',width:600}}/>
+                <hr style={{borderColor:'white',maxWidth:600}}/>
                 <Row sm={6} className="justify-content-center">
                     <Col className="text-left">
                         <b>Ganancias del turno</b>
@@ -176,7 +176,7 @@ const IngresosEgresos = props => {
     );
 
     const seccionResumenDia = (
-        <Row>
+        <Row className="mt-5 mt-lg-0">
             <Col>
                 <Row>
                     <Col>
@@ -225,7 +225,7 @@ const IngresosEgresos = props => {
                         })}
                     </Col>
                 </Row>
-                <hr style={{borderColor:'white',width:600}}/>
+                <hr style={{borderColor:'white',maxWidth:600}}/>
                 <Row sm={6} className="justify-content-center">
                     <Col className="text-left">
                         <b>Ganancias del turno</b>
@@ -275,7 +275,7 @@ const IngresosEgresos = props => {
                         })}
                     </Col>
                 </Row>
-                <hr style={{borderColor:'white',width:600}}/>
+                <hr style={{borderColor:'white',maxWidth:600}}/>
                 <Row sm={6} className="justify-content-center">
                     <Col className="text-left">
                         <b>Ganancias del turno</b>
@@ -286,10 +286,10 @@ const IngresosEgresos = props => {
                 </Row>
                 <Row sm={6} className="mt-4 justify-content-center">
                     <Col className="text-left">
-                        <h2>Ganancias del día</h2>
+                        <h4>Ganancias del día</h4>
                     </Col>
                     <Col className="text-right">
-                        <h2>${gananciasMatutino + gananciasVespertino}</h2>
+                        <h4>${gananciasMatutino + gananciasVespertino}</h4>
                     </Col>
                 </Row>
             </Col>
@@ -313,7 +313,7 @@ const IngresosEgresos = props => {
             {props.turnoActual === 1 || props.turnoActual === 3 ?
                 <div>
                     <Row className="justify-content-between">
-                        <Col sm={2}>
+                        <Col sm={3} >
                             <label htmlFor="small-radius-switch" style={{
                                 display:'flex',
                                 alignItems: "center",
@@ -380,7 +380,7 @@ const IngresosEgresos = props => {
 
                             </label>
                         </Col>
-                        <Col sm={2}>
+                        <Col sm={3} >
                             <Button
                                 style={{
                                     height:50,
