@@ -699,7 +699,7 @@ footer p a:hover {
 .sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: #7386D5;
+  background: #062337;
   color: #fff;
   margin-left: -250px;
   transition: all 0.5s;
@@ -707,14 +707,22 @@ footer p a:hover {
   position: fixed;
 }
 
+.sidebar hr {
+  border-top: 1px solid white;
+  margin: 0 !important;
+}
+
+.sidebar a.active{
+  background-color: #041825 !important;
+}
+
+.sidebar a {
+  color: white;
+}
+
 .sidebar.is-open {
   margin-left: 0;
   transition: .5s;
-}
-
-
-.sidebar-header {
-  background: #6d7fcc;
 }
 
 .sidebar-header h3{
@@ -728,7 +736,7 @@ footer p a:hover {
 }
 
 .menu-open {
-  background: #6d7fcc;
+  background: #04151F;
 }
 
 li a.dropdown-toggle::after {
@@ -756,12 +764,16 @@ li a.dropdown-toggle::after {
 }
 
 .side-menu::-webkit-scrollbar-thumb {
-  background: #5466B3;
+  background: #04151F;
   border-radius: 3px;
 }
 
 .side-menu::-webkit-scrollbar-thumb:hover {
-  background: #3A4C99;
+  background: #04151F;
+}
+
+.sidebar-header {
+  background-color: #041825;
 }
 
 /*=== Animations start here  ===*/
