@@ -112,11 +112,7 @@ const ModalInstructor = props => {
 
     };
 
-    const {
-        className
-    } = props;
-
-    return(<Modal isOpen={props.modalControl} toggle={() => props.toggleModal()} className={className}>
+    return(<Modal isOpen={props.modalControl} toggle={() => props.toggleModal()}>
         <ModalHeader toggle={() => props.toggleModal()}>Nuevo Instructor</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>

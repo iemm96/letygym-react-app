@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, input, FormText, Col } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, input } from 'reactstrap';
 import {fetchRecord} from "../../actions/fetchRecord";
 import {useForm} from "react-hook-form";
-import {storeRecord} from "../../actions/storeRecord";
 import {store} from "react-notifications-component";
 import {updateRecord} from "../../actions/updateRecord";
 

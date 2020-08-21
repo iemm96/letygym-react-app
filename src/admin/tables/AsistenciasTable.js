@@ -302,6 +302,7 @@ const AsistenciasTable = props => {
 
         }
     };
+
     return (
       <div>
           {modalMembresia ? <RenovarMembresia toggleMembresiaModal={toggleModal}

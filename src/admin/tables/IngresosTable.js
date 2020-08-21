@@ -6,7 +6,7 @@ import {Button, Col } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import { Row } from "reactstrap";
-import EliminarRegistroModal from "../modals/EliminarRegistroModal";
+import ModalEliminarRegistro from "../modals/ModalEliminarRegistro";
 import {url_base} from '../../constants/api_url';
 import MUIDataTable from "mui-datatables";
 import {muiTableOptions} from "../../constants/muiTableOptions";
@@ -272,7 +272,7 @@ class IngresosTable extends React.Component {
 
         const contentTable = ({ paginationProps, paginationTableProps }) => (
             <div>
-                <EliminarRegistroModal
+                <ModalEliminarRegistro
                     toggleDeleteModal={this.toggleDeleteModal}
                     titulo={this.state.title}
                     deleteRegister={this.deleteRegister}
