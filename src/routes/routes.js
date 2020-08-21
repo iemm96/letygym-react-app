@@ -12,8 +12,7 @@ const AppRoutes = () =>
             <Switch>
                 <Route path="/admin/index" component={Dashboard}/>
                 <Route path="/login" component={Login}/>
-
-                <Route path="/" component={Asistencia}/>
+                <Route path="/admin" component={Dashboard}/>
             </Switch>
         </BrowserRouter>
     </div>
