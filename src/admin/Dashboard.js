@@ -37,6 +37,7 @@ export default class Dashboard extends React.Component{
             isOpen: false,
             isOpenSidebar: false,
             turnoActual:0,
+            costoVisita:0,
             checked:true
         }
     }
@@ -74,7 +75,7 @@ export default class Dashboard extends React.Component{
 
     componentDidMount() {
 
-        fetch(`${api_url}getTurnoActual`, {
+        fetch(`${api_url}appStatus/1`, {
             // mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -91,9 +92,8 @@ export default class Dashboard extends React.Component{
 
             }).then(response => {
 
-                if(response.turno){
-
-                    this.setState({turnoActual:response.turno});
+                if(response.turnoActual){
+                    this.setState({turnoActual:response.turnoActual,costoVisita:response.costo_visita});
                 }
             }
         );
@@ -292,7 +292,7 @@ export default class Dashboard extends React.Component{
                             <Row className="pt-5 justify-content-center">
                                 <Col className="col-11">
                                     <div>
-                                        {this.state.activeTab === 2 ? <VistantesTable turnoActual={this.state.turnoActual}/> : ''}
+                                        {this.state.activeTab === 2 ? <VistantesTable costoVisita={this.state.costoVisita} turnoActual={this.state.turnoActual}/> : ''}
                                     </div>
                                 </Col>
                             </Row>
