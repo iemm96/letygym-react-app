@@ -9,34 +9,27 @@ import {fetchRecord} from "../../actions/fetchRecord";
 import {updateRecord} from "../../actions/updateRecord";
 import {store} from "react-notifications-component";
 import {storeRecord} from "../../actions/storeRecord";
+import {fetchRecords} from "../../actions/fetchRecords";
 
 const ModalSocia = props => {
     const { register,errors, handleSubmit } = useForm();
     const [record,setRecord] = useState(null);
     const [opcionesMembresias,setOpcionesMembresias] = useState(null);
     const [idMembresia,setIdMembresia] = useState(null);
-    const [fechaInicio,setFechaInicio] = useState(null);
-    const [fechaFin,setFechaFin] = useState(null);
-    const [membresiaActiva,setMembresiaActiva] = useState(null);
+    const [fechaInicio,setFechaInicio] = useState(new Date());
+    const [fechaFin,setFechaFin] = useState(new Date());
+    const [membresiaActiva,setMembresiaActiva] = useState(0);
 
     useEffect(() => {
+
         async function getRecord() {
             try {
-                const result = await fetchRecord(props.recordId,'membresias');
+                const result = await fetchRecord(props.selectedRecordId,'socios');
                 if(result) {
 
                     if(result.bActiva) {
                         setMembresiaActiva(true);
                     }
-
-                    let array = [];
-
-                    result.map((val) => {
-                        array.push({value:val.id,label:val.membresia});
-                    });
-
-                    setOpcionesMembresias(array);
-
                     setRecord(result);
                 }
             }catch (e) {
@@ -44,11 +37,53 @@ const ModalSocia = props => {
             }
         }
 
-        getRecord(props.recordId);
+        if(props.selectedRecordId) {
+            getRecord();
+        }
 
-    },[props.recordId]);
+    },[props.selectedRecordId]);
+
+    useEffect(() => {
+        getMembresias()
+    },[]);
+
+    async function getMembresias() {
+        try {
+            const result = await fetchRecords('membresias');
+            if(result) {
+
+                let array = [];
+
+                result.map((val) => {
+                    array.push({value:val.id,label:val.membresia});
+                });
+
+                setOpcionesMembresias(array);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+    }
 
     const onSubmit = async (data) => {
+
+        if(fechaFin) {
+            data.fecha_fin = fechaFin;
+        }
+
+        if(fechaInicio) {
+            data.fecha_inicio = fechaInicio;
+        }
+
+        if(idMembresia) {
+            data.id_membresia = idMembresia;
+        }
+
+        if(membresiaActiva) {
+            data.bActiva = 1;
+        }else{
+            data.bActiva = 0;
+        }
 
         if(record) {
 
@@ -56,7 +91,7 @@ const ModalSocia = props => {
 
                 data.id_mebresia = idMembresia;
 
-                const response = await updateRecord(data,'socios',props.recordId);
+                const response = await updateRecord(data,'sociosMembresias',props.recordId);
 
                 if(response) {
                     store.addNotification({
@@ -96,7 +131,7 @@ const ModalSocia = props => {
 
         }else{
             try {
-                const response = await storeRecord(data,'socios');
+                const response = await storeRecord(data,'socio');
                 if(response) {
                     store.addNotification({
                         title: "Correcto",
@@ -163,7 +198,7 @@ const ModalSocia = props => {
         </FormGroup>
     </div>;
     
-    return(<Modal isOpen={props.modalSocio} toggle={() => props.toggleModal()} className={props.className}>
+    return(<Modal isOpen={props.modalRecord} toggle={() => props.toggleModal()}>
         <ModalHeader toggle={() => props.toggleModal()}>{record ? 'Editar' : 'Nueva'} Socia</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>
@@ -173,10 +208,11 @@ const ModalSocia = props => {
                             <Label>* Nombre</Label>
                             <input type="text"
                                    name="nombre"
-                                   id=""
-                                   value={record ? record.nombre : undefined}
+                                   className="form-control"
+                                   defaultValue={record ? record.nombre : undefined}
                                    ref={register({ required: true })}
                             />
+                            {errors.nombre && <small>Ingresa un nombre</small>}
                         </FormGroup>
                     </Col>
                 </Row>
@@ -185,19 +221,21 @@ const ModalSocia = props => {
                         <Label>* Apellido Paterno</Label>
                         <input type="text"
                                name="apellidoPaterno"
-                               id=""
-                               value={record ? record.apellidoPaterno : undefined}
+                               className="form-control"
+                               defaultValue={record ? record.apellidoPaterno : undefined}
                                ref={register({ required: true })}
                         />
+                        {errors.apellidoPaterno && <small>Ingresa un apellido paterno</small>}
                     </Col>
                     <Col md={6}>
                         <Label>* Apellido Materno</Label>
                         <input type="text"
                                name="apellidoMaterno"
-                               id=""
-                               value={record ? record.apellidoMaterno : undefined}
+                               className="form-control"
+                               defaultValue={record ? record.apellidoMaterno : undefined}
                                ref={register({ required: true })}
                         />
+                        {errors.apellidoMaterno && <small>Ingresa un apellido materno</small>}
                     </Col>
                 </FormGroup>
                 <FormGroup>
@@ -206,8 +244,10 @@ const ModalSocia = props => {
                         <Label check>
                             <input type="radio"
                                    name="bActiva"
-                                   value="1"
+                                   defaultValue="1"
+                                   defaultChecked={membresiaActiva === 1}
                                    ref={register({ required: true })}
+                                   onChange={() => setMembresiaActiva(true)}
                             />{' '}
                             Si
                         </Label>
@@ -216,8 +256,10 @@ const ModalSocia = props => {
                         <Label check>
                             <input type="radio"
                                    name="bActiva"
-                                   value="0"
+                                   defaultValue="0"
                                    ref={register({ required: true })}
+                                   defaultChecked={membresiaActiva === 0}
+                                   onChange={() => setMembresiaActiva(false)}
                             />{' '}
                             No
                         </Label>

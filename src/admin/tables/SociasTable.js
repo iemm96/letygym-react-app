@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Col} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
-import ModalSocio from "../modals/ModalSocio";
+import ModalSocia from "../modals/ModalSocia";
 import { Row } from "reactstrap";
 import ModalEliminarRegistro from "../modals/ModalEliminarRegistro";
 import MUIDataTable from "mui-datatables";
@@ -105,7 +105,7 @@ const SociasTable = props => {
 
     return(
         <div>
-            {modalControl ? <ModalSocio
+            {modalControl ? <ModalSocia
                 toggleModal={() => {setModalControl(!modalControl)}}
                 modalRecord={modalControl}
                 selectedRecordId={selectedRecordId}
@@ -119,7 +119,7 @@ const SociasTable = props => {
                 deleteRegister={() => eliminarRegistro()}
             /> : '' }
 
-            <Row className="justify-content-end">
+            <Row className="mt-5 justify-content-end">
                 <Col sm={2}>
                     <Button
                         className="actionButton"
@@ -132,7 +132,7 @@ const SociasTable = props => {
             <Row className="mt-4">
                 <Col>
                     <MUIDataTable
-                        title={"Productos"}
+                        title={"Socias"}
                         data={records}
                         columns={columns}
                         options={muiTableOptions}
