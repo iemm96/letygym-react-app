@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Row, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Row, Button, Form, FormGroup, Label, Col } from 'reactstrap';
 import {useForm} from "react-hook-form";
 import {fetchRecord} from "../../actions/fetchRecord";
 import {updateRecord} from "../../actions/updateRecord";

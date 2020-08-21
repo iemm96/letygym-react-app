@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import {url_base} from '../../constants/api_url';
 import Select from "react-select";
 import moment from 'moment';
@@ -108,8 +108,8 @@ export default class RenovarMembresia extends React.Component{
     updateTotal = selectedMembresia => {
         var precio = 0;
         var membresiasPrecios = this.state.membresiasPrecios;
-        membresiasPrecios.map((val,index) => {
-            if(val.idMembresia == selectedMembresia) {
+        membresiasPrecios.map((val) => {
+            if(val.idMembresia === selectedMembresia) {
                 precio = val.precio;
             }
         });

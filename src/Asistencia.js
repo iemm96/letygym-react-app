@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import './styles/style.scss';
-import ListaResultados from "./ListaResultados";
 import ModalMembresia from "./ModalMembresia";
 import {url_base} from './constants/api_url';
 import {fetchRecords} from "./actions/fetchRecords";
@@ -11,7 +10,6 @@ import {faCheck} from "@fortawesome/free-solid-svg-icons";
 const api_url = url_base;
 const useForceUpdate = () => useState()[1];
 const Asistencia = () => {
-    let arrayResults2 = [];
     const [isHovering,setIsHovering] = useState(false);
     const [arrayResults,setArrayResults] = useState([]);
     const [arraySocias,setArraySocias] = useState([]);
