@@ -10,31 +10,24 @@ const ModalProducto = (props ) => {
     const { register,errors, handleSubmit } = useForm();
     const [record,setRecord] = useState(null);
     const [tipoProducto,setTipoProducto] = useState(1);
-    const [disabledButton,setDisabledButton] = useState(false);
 
     useEffect(() => {
 
-        //Obtiene los datos del registro
-        async function getRecord() {
-            try {
-                const resultadoRecord = await fetchRecord(props.idRecord);
-
-                setRecord(resultadoRecord);
-
-            }catch (e) {
-                console.log(e);
-            }
-        }
-
-        if(props.idRecord) {
-            //getRecord();
+        if(props.selectedRecordId) {
+            getRecord();
         }
     }, [props.idRecord]);
 
-    const {
-        buttonLabel,
-        className
-    } = props;
+    async function getRecord() {
+        try {
+            const resultadoRecord = await fetchRecord(props.idRecord);
+
+            setRecord(resultadoRecord);
+
+        }catch (e) {
+            console.log(e);
+        }
+    }
 
     const onSubmit = async (data) => {
 
@@ -116,8 +109,6 @@ const ModalProducto = (props ) => {
                     }
                 });
             }
-
-
         }
 
     };
@@ -140,7 +131,7 @@ const ModalProducto = (props ) => {
         </div>
     );
 
-    return(<Modal isOpen={props.modalRecord} toggle={() => props.toggleModal()} className={className}>
+    return(<Modal isOpen={props.modalRecord} toggle={() => props.toggleModal()}>
         <ModalHeader toggle={() => props.toggleModal()}>Nuevo Producto</ModalHeader>
         <ModalBody>
             <Form id="form" onSubmit={handleSubmit(onSubmit)}>
@@ -148,7 +139,12 @@ const ModalProducto = (props ) => {
                     <Col sm={8}>
                         <FormGroup>
                             <label>* Nombre del producto </label>
-                            <input class="form-control" type="text" name="producto" id="" ref={register({ required: true })}/>
+                            <input class="form-control"
+                                   type="text"
+                                   name="producto"
+                                   defaultValue={record ? record.producto : ''}
+                                   ref={register({ required: true })}
+                            />
                             {errors.nombre && <small>Ingresa un nombre para el producto</small>}
                         </FormGroup>
                     </Col>
@@ -157,7 +153,12 @@ const ModalProducto = (props ) => {
                     <Col sm={8}>
                         <FormGroup>
                             <label>* Cantidad </label>
-                            <input class="form-control"  type="number" name="cantidad" ref={register({ required: true })}/>
+                            <input class="form-control"
+                                   type="number"
+                                   name="cantidad"
+                                   ref={register({ required: true })}
+                                   defaultValue={record ? record.cantidad : ''}
+                            />
                             {errors.cantidad && <small>Ingresa una cantidad del producto</small>}
                         </FormGroup>
                     </Col>
@@ -166,7 +167,12 @@ const ModalProducto = (props ) => {
                     <Col sm={8}>
                         <FormGroup>
                             <label>* Precio al público p/Unidad</label>
-                            <input class="form-control" type="number" name="precio" id="" ref={register({ required: true })}/>
+                            <input class="form-control"
+                                   type="number"
+                                   name="precio"
+                                   ref={register({ required: true })}
+                                   defaultValue={record ? record.precio : ''}
+                            />
                             {errors.precio && <small>Ingresa el precio para el cliente del producto</small>}
                         </FormGroup>
                     </Col>
