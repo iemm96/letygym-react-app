@@ -176,8 +176,8 @@ const IngresosEgresos = props => {
     );
 
     const seccionResumenDia = (
-        <Row className="mt-5 mt-lg-0">
-            <Col>
+        <Row className="mt-5 mt-lg-0 justify-content-center">
+            <Col sm={4} className="">
                 <Row>
                     <Col>
                         <h2>Resumen del Día</h2>
@@ -188,8 +188,8 @@ const IngresosEgresos = props => {
                         <b>Turno Matutino</b>
                     </Col>
                 </Row>
-                <Row sm={6} className="mt-3 justify-content-center">
-                    <Col className="text-left">
+                <Row  className="mt-3 justify-content-center">
+                    <Col sm={6} className="text-left">
                         {recordsIngresosMatutino.map((value) => {
 
                             return (
@@ -197,7 +197,7 @@ const IngresosEgresos = props => {
                             )
                         })}
                     </Col>
-                    <Col className="text-right">
+                    <Col sm={6} className="text-right">
                         {recordsIngresosMatutino.map((value) => {
 
                             return (
@@ -206,8 +206,8 @@ const IngresosEgresos = props => {
                         })}
                     </Col>
                 </Row>
-                <Row sm={6} className="justify-content-center">
-                    <Col className="text-left">
+                <Row  className="justify-content-center">
+                    <Col sm={6} className="text-left">
                         {recordsEgresosMatutino.map((value) => {
 
                             return (
@@ -215,7 +215,7 @@ const IngresosEgresos = props => {
                             )
                         })}
                     </Col>
-                    <Col className="text-right">
+                    <Col sm={6} className="text-right">
                         {recordsEgresosMatutino.map((value) => {
 
 
@@ -226,8 +226,8 @@ const IngresosEgresos = props => {
                     </Col>
                 </Row>
                 <hr style={{borderColor:'white',maxWidth:600}}/>
-                <Row sm={6} className="justify-content-center">
-                    <Col className="text-left">
+                <Row  className="justify-content-center">
+                    <Col sm={6} className="text-left">
                         <b>Ganancias del turno</b>
                     </Col>
                     <Col className="text-right">
@@ -239,8 +239,8 @@ const IngresosEgresos = props => {
                         <b>Turno Vespertino</b>
                     </Col>
                 </Row>
-                <Row sm={6} className="mt-3 justify-content-center">
-                    <Col className="text-left">
+                <Row  className="mt-3 justify-content-center">
+                    <Col sm={6} className="text-left">
                         {recordsIngresosVespertino.map((value) => {
 
                             return (
@@ -248,7 +248,7 @@ const IngresosEgresos = props => {
                             )
                         })}
                     </Col>
-                    <Col className="text-right">
+                    <Col sm={6} className="text-right">
                         {recordsIngresosVespertino.map((value) => {
 
                             return (
@@ -257,8 +257,8 @@ const IngresosEgresos = props => {
                         })}
                     </Col>
                 </Row>
-                <Row sm={6} className="justify-content-center">
-                    <Col className="text-left">
+                <Row  className="justify-content-center">
+                    <Col sm={6} className="text-left">
                         {recordsEgresosVespertino.map((value) => {
 
                             return (
@@ -276,16 +276,16 @@ const IngresosEgresos = props => {
                     </Col>
                 </Row>
                 <hr style={{borderColor:'white',maxWidth:600}}/>
-                <Row sm={6} className="justify-content-center">
-                    <Col className="text-left">
+                <Row  className="justify-content-center">
+                    <Col sm={6} className="text-left">
                         <b>Ganancias del turno</b>
                     </Col>
                     <Col className="text-right">
                         <b>${gananciasVespertino}</b>
                     </Col>
                 </Row>
-                <Row sm={6} className="mt-4 justify-content-center">
-                    <Col className="text-left">
+                <Row  className="mt-4 justify-content-center">
+                    <Col sm={6} className="text-left">
                         <h4>Ganancias del día</h4>
                     </Col>
                     <Col className="text-right">
@@ -312,7 +312,7 @@ const IngresosEgresos = props => {
             {props.turnoActual === 2 ? seccionResumenTurnoMatutino : ''}
             {props.turnoActual === 1 || props.turnoActual === 3 ?
                 <div>
-                    <Row className="justify-content-between">
+                    <Row className="mt-4 mt-md-0 justify-content-between">
                         <Col sm={3} >
                             <label htmlFor="small-radius-switch" style={{
                                 display:'flex',
