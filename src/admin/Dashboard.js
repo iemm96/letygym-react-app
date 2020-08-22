@@ -98,7 +98,7 @@ export default class Dashboard extends React.Component{
 
                     return response.json();
                 } else {
-                    throw new Error('Something went wrong ...');
+                    console.log('error')
                 }
 
             }).then(response => {
@@ -120,7 +120,7 @@ export default class Dashboard extends React.Component{
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Something went wrong ...');
+                    console.log('error')
                 }
 
             }).then(response => {
