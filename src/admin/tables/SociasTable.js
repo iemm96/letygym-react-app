@@ -47,6 +47,11 @@ const SociasTable = props => {
     };
 
     const columns = [{
+        name: "nombre",
+        options: {
+            display: false,
+        }
+    },{
         name: "nombreCompleto",
         label: "Nombre",
         options: {
@@ -87,7 +92,7 @@ const SociasTable = props => {
                         <Button type="Button" onClick={() => {
                             setSelectedRecordId(value);
                             setModalEliminar(!modalEliminar);
-                            setTituloModal(tableMeta.rowData[1]);
+                            setTituloModal(tableMeta.rowData[0]);
                         }} className="mr-2 btnAction"><FontAwesomeIcon icon={faTrash}/>
                         </Button>
                         <Button type="Button" onClick={() => {
