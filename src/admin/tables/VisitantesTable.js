@@ -18,7 +18,7 @@ const VisitantesTable = props => {
     const [modalEliminar,setModalEliminar] = useState(false);
     const [selectedRecordId,setSelectedRecordId] = useState(null);
     const [tituloModal,setTituloModal] = useState('');
-    const [costoVisita,setCostoVisita] = useState(null);
+    const [costoVisita,setCostoVisita] = useState(props.costoVisita);
     const [isDisabled,setIsDisabled] = useState(true);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const VisitantesTable = props => {
             getRecords();
 
         }catch (e) {
-
+            console.log(e);
         }
     };
 
@@ -85,13 +85,6 @@ const VisitantesTable = props => {
             sort: false,
         }
     },{
-        name: "visitas",
-        label: "Visitas",
-        options: {
-            filter: false,
-            sort: false,
-        }
-    },{
         name: "id",
         label: "Acciones",
         options: {
@@ -116,7 +109,7 @@ const VisitantesTable = props => {
     return(
         <div>
             {modalControl ? <ModalVisitante
-                costoVisita={props.costoVisita}
+                costoVisita={costoVisita}
                 toggleModal={() => {setModalControl(!modalControl)}}
                 modalRecord={modalControl}
                 selectedRecordId={selectedRecordId}
@@ -136,17 +129,18 @@ const VisitantesTable = props => {
                         <InputGroupAddon addonType="prepend">
                             <InputGroupText>Visita $</InputGroupText>
                         </InputGroupAddon>
-                        <Input type="number" defaultValue={props.costoVisita} onChange={event => changeInputVisita(event)} />
+                        <Input type="number" defaultValue={costoVisita} onChange={event => changeInputVisita(event)} />
                         <InputGroupAddon addonType="append"><Button color="primary" disabled={isDisabled} onClick={() => updateCostoVisita()}>Actualizar</Button></InputGroupAddon>
                     </InputGroup>
                 </Col>
                 <Col className="mt-3 mt-sm-0" sm={3} >
-                    <Button
+                    {props.turnoActual === 1 || props.turnoActual === 3  ? <Button
                         className="actionButton"
                         onClick={() => setModalControl(!modalControl)}
                     >
                         Registrar Visita
-                    </Button>
+                    </Button> : '' }
+
                 </Col>
             </Row>
             <Row className="mt-4">
