@@ -16,11 +16,11 @@ const ModalProducto = (props ) => {
         if(props.selectedRecordId) {
             getRecord();
         }
-    }, [props.idRecord]);
+    }, [props.selectedRecordId]);
 
     async function getRecord() {
         try {
-            const resultadoRecord = await fetchRecord(props.idRecord);
+            const resultadoRecord = await fetchRecord(props.selectedRecordId,'productos');
 
             setRecord(resultadoRecord);
 
@@ -35,7 +35,7 @@ const ModalProducto = (props ) => {
 
             try {
 
-                const response = await updateRecord(data,'productos/update');
+                const response = await updateRecord(data,'productos',props.selectedRecordId);
 
                 if(response) {
                     store.addNotification({
@@ -211,7 +211,7 @@ const ModalProducto = (props ) => {
         </ModalBody>
         <ModalFooter>
             <Button color="secondary" onClick={() => props.toggleModal(4)}>Cancelar</Button>
-            <Button type="submit" form="form" color="primary">Agregar Producto</Button>{' '}
+            <Button type="submit" form="form" color="primary">{record ? 'Actualizar' : 'Agregar'} Producto</Button>{' '}
         </ModalFooter>
     </Modal>);
 };
