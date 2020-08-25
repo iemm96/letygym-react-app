@@ -49,7 +49,7 @@ const AsistenciasTable = props => {
 
           async function getSocias() {
               try {
-                  const resultadoSocias = await fetchRecords('socios');
+                  const resultadoSocias = await fetchRecords('socios/getRecords');
 
                   let opcionesSocias = [];
                   resultadoSocias.map((val) => {
@@ -251,7 +251,7 @@ const AsistenciasTable = props => {
             filter: true,
             sort: false,
             empty: true,
-            customBodyRender: (value, tableMeta, updateValue) => {
+            customBodyRender: (value, tableMeta) => {
                 return (
                     <div>
                         <Button type="Button" onClick={() => {
@@ -284,21 +284,21 @@ const AsistenciasTable = props => {
         })
     };
 
-    const eliminarRegistro = () => {
+    const eliminarRegistro = async () => {
         try {
 
             setModalEliminar(false);
 
             if(switchAsistencia) {
-                deleteRecord(selectedRecordId,'asistencias');
+                await deleteRecord(selectedRecordId,'asistencias');
             }else {
-                deleteRecord(selectedRecordId,'asistenciasInstructores')
+                await deleteRecord(selectedRecordId,'asistenciasInstructores');
             }
 
-            updateRecords();
+            await updateRecords();
 
         }catch (e) {
-
+            console.log(e);
         }
     };
 
@@ -315,6 +315,7 @@ const AsistenciasTable = props => {
               toggleDeleteModal={() => setModalEliminar(!modalEliminar)}
               deleteModal={modalEliminar}
               titulo={tituloModal}
+
               deleteRegister={() => eliminarRegistro()}
           /> : ''}
           <Row className="justify-content-between">
