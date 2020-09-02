@@ -29,7 +29,7 @@ const VisitantesTable = props => {
         try {
 
             setModalEliminar(false);
-            await deleteRecord(selectedRecordId,'socios');
+            await deleteRecord(selectedRecordId,'visitantesVisitas');
 
             getRecords();
 
