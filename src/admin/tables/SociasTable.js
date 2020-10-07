@@ -80,7 +80,7 @@ const SociasTable = props => {
             sort: false,
         }
     },{
-        name: "id",
+        name: "id_socio",
         label: "Acciones",
         options: {
             filter: true,
