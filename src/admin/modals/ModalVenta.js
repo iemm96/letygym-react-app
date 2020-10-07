@@ -50,7 +50,7 @@ const ModalVenta = props => {
 
             const response = await storeRecord(data,'ventasProductos');
 
-            if(response) {
+            if(!response?.error) {
                 store.addNotification({
                     title: "Correcto",
                     message: "Se ha registrado la venta",
@@ -66,6 +66,20 @@ const ModalVenta = props => {
                 });
                 props.toggleModal();
                 props.updateRecords();
+            }else{
+                store.addNotification({
+                    title: "Ocurrió un error al registrar la venta",
+                    message: response?.error,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 10000,
+                        onScreen: true
+                    }
+                });
             }
 
         }catch (e) {
